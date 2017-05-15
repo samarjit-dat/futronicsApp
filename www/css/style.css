@@ -1012,3 +1012,12 @@ h5.camp-btn {
  .profImage.good .noti{background-color: #4ddf51;}
  .profImage.both_null .noti{background-color: #14bfcc;}
  .profImage.bad .noti{background-color: red;}
+
+ /* 15.05.2017 */
+ .left { float: left;}
+ .right { float: right;}
+ .campaignNotSetup {text-align: center;color: yellow;font-size: 15px;padding: 5px;}
+ .user-report .col {background: #292c35;}
+ .user-report .col h5 {font-size: 20px;color: #fff;margin: 5px;}
+ .user-report .col button { background-color: #3aedc8;margin: 5px; }
+ .disabled { opacity: 0.5 !important;}

@@ -52,7 +52,7 @@
                        </div>
                   </div>
                </div>
-                <div class="load_more" ng-if="userListShowbeforeLogin.length > 0" ng-click="loadMore()">
+                <div id="loadMore" class="load_more" ng-if="userListShowbeforeLogin.length > 0" ng-click="loadMore()">
                     <span>Load more</span> 
                 </div>
 
@@ -91,7 +91,7 @@
                   </div>
                </div>
             </div>
-            <div class="view_all" ng-if="messages.length > 0" ng-click="goToChatPage()">
+            <div id="view_all" class="view_all" ng-if="messages.length > 0" ng-click="goToChatPage()">
                <span>View all</span> 
             </div>
          </div>

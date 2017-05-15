@@ -214,7 +214,7 @@ futronics.service('FakeVideoService',function($http,$q,URL,Loader,$localstorage,
      };
  });
 
- futronics.service('GlobalChatService',function($http,$q,URL,Loader){
+ futronics.service('GlobalChatService',function($http,$q,URL,Loader,$rootScope){
      this.addFriend = function(_data){
         Loader.showLoading();
         var defered=$q.defer();
@@ -264,6 +264,46 @@ futronics.service('FakeVideoService',function($http,$q,URL,Loader,$localstorage,
         $http({
             method: "POST",
             url: URL.BASE+"/reportUsers",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: _data
+        }).then(function(response){
+            Loader.hideLoading();
+            defered.resolve(response);
+        },function(error){
+            Loader.hideLoading();
+            console.log(error+"error");
+            defered.reject(error);
+        });
+
+        return defered.promise;
+     };
+
+     this.getReportUsersList = function(_data){
+        Loader.showLoading();
+        var defered=$q.defer();
+        $http({
+            method: "POST",
+            url: URL.BASE+"/allReportedUsersList",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: _data
+        }).then(function(response){
+            Loader.hideLoading();
+            defered.resolve(response);
+        },function(error){
+            Loader.hideLoading();
+            console.log(error+"error");
+            defered.reject(error);
+        });
+
+        return defered.promise;
+     };
+
+     this.getMutedTime = function(_data){
+        Loader.showLoading();
+        var defered=$q.defer();
+        $http({
+            method: "GET",
+            url: URL.BASE+"/userMuteApi",
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data: _data
         }).then(function(response){

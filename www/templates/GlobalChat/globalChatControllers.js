@@ -3,7 +3,7 @@ futronics.controller('globalChatControllers', function($scope,$ionicHistory,
     stateFactory,StorageService,check_GlobalCommunity,UserListService,$q, 
     $window,AccountService, $localstorage,$rootScope,$ionicPopup,ionPullUpFooterState,
     Loader, $timeout,$state,LogoutService,newsFeedServices,$ionicSlideBoxDelegate,$firebaseArray,
-    GlobalChatService,WeightLoseSuccessOrFail,MaintainService,$filter) {
+    GlobalChatService,WeightLoseSuccessOrFail,MaintainService,$filter,$interval) {
       
 
 $scope.newshow=1;
@@ -11,6 +11,7 @@ $scope.newsFeeds=[];
 $scope.showDivider = !($rootScope.showDivider);
 $scope.myVar = 'hideIt';
 $scope.messages = '';
+
 var newMessageArray = [];
 var muteUserIdList = $localstorage.getObject('muteChatUser');
 var count = 0;
@@ -23,16 +24,8 @@ $scope.messages = $firebaseArray(ref);
 
 // create a synchronized array
 
-// ref.once('value', function(snapshot) {
-//     snapshot.forEach(function(childSnapshot) {
-//         var childData = childSnapshot.val();
-//         if(muteUserIdList && muteUserIdList.indexOf(parseInt(childData.id)) === -1) {
-//             newMessageArray.push(childData);
-//         }else{
-//             newMessageArray.push(childData);
-//         }
-//     });
-//     $scope.messages = newMessageArray;
+// ref.once('child_removed', function(snapshot) {
+//     $scope.$apply()
 // });
 
 $scope.itemOnLongPress = function() {
@@ -265,8 +258,6 @@ $scope.floorValue =0;
         $localstorage.set('allUserDetails',JSON.stringify(res.data.result));      
             if(res.data.result.length!==0){
             for(var i=0;i<res.data.result.length;i++){
-                console.log(res.data.result.length)
-                  console.log(res.data.result[i]);
                 //   if(res.data.result[i].campaign.length>0 && res.data.result[i].profile_videos.length>0){ 
                 //        if(res.data.result[i].campaign[0].campaign_status==="1"){
                 //             count = 1;
@@ -398,19 +389,20 @@ $scope.floorValue =0;
         */
         
         $scope.addMessage = function(msg) {
-            var myChatObj = {
-                id : userInfo.result[0].user_id,
-                user_image : (userInfo.result.profile_videos.length == 0 || userInfo.result.profile_videos === undefined || userInfo.result.profile_videos === '') ? '' : userInfo.result.profile_videos[0].thumb_url,
-                text: $scope.campaign_text || msg,
-                createdAt: firebase.database.ServerValue.TIMESTAMP
-            };
+            if(msg){
+                var myChatObj = {
+                    id : userInfo.result[0].user_id,
+                    user_image : (userInfo.result.profile_videos.length == 0 || userInfo.result.profile_videos === undefined || userInfo.result.profile_videos === '') ? '' : userInfo.result.profile_videos[0].thumb_url,
+                    text: $scope.campaign_text || msg,
+                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                };
 
-            msgRef.$add(myChatObj);
-            // $scope.messages.push(myChatObj);
-            $scope.campaign_text = '';
-            $scope.$broadcast('scroll');
+                msgRef.$add(myChatObj);
+                // $scope.messages.push(myChatObj);
+                $scope.campaign_text = '';
+                $scope.$broadcast('scroll');
+            }
         };
-
     }
 
     $scope.goToChatPage = function(){
@@ -515,6 +507,21 @@ $scope.floorValue =0;
              return false;
         } 
     };
+    
+    // $interval(function(){
+    //     var now = Date.now();
+    //     var cutoff = now - (1 * 60 * 1000);
+    //     ref.on('value', function(snapshot) {
+    //         if(snapshot.val() !== null){
+    //             snapshot.forEach(function(childSnapshort){
+    //                 if(childSnapshort.val().createdAt < cutoff){
+    //                     snapshot.ref.remove();
+    //                 } 
+    //             });  
+    //         }
+    //     });
+    // },1000);
+
 });
 
 

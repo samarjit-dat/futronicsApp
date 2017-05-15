@@ -7,9 +7,10 @@ futronics.service("UserListService", function($http,$q, $localstorage,URL) {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data:data
         }).then(function(response){ 
-            //console.log('response');
-            //console.log(response);
-            
+            if(response.data.status == 2){
+                var loadMoreId = document.getElementById('loadMore');
+                loadMoreId.style.display = 'none';
+            }
             defered.resolve(response);
             return defered.promise; 
         },function(error){

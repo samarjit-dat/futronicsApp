@@ -198,10 +198,8 @@ futronics.controller('ProfileViewStatsCtrl',
     };  
      $scope.caloryPurchase=function(CaloryData){
         console.log(CaloryData);
-        
-      
          $ionicPopup.show({
-                    template: 'This is a confirmation that you are buying ' + CaloryData.caloryAmount + ' calories for $' + CaloryData.caloryPrice,                  
+                    template: 'This is a confirmation that you are buying ' + CaloryData.calories + ' calories for $' + CaloryData.cost,                  
                     scope: $scope,
                     cssClass:"custom-popup-confirm ",
                     buttons: [
@@ -234,7 +232,7 @@ futronics.controller('ProfileViewStatsCtrl',
         });
         $scope.Ok=function(){
            $ionicPopup.show({
-                    template:  CaloryData.caloryAmount + ' calories have been added to your calorie total!Go get the encourgement you need by steering your visitors in the right direction, and rewarding them for good advice!',                  
+                    template:  CaloryData.calories + ' calories have been added to your calorie total!Go get the encourgement you need by steering your visitors in the right direction, and rewarding them for good advice!',                  
                     scope: $scope,
                     cssClass:"custom-popup",
                     buttons: [
@@ -252,7 +250,7 @@ futronics.controller('ProfileViewStatsCtrl',
         };
         $scope.Cancel=function(){
             $ionicPopup.show({
-                    template: CaloryData.caloryAmount + 'calories have not been added to your Diet Money calorie total and you have not been charged $' + CaloryData.caloryPrice,                  
+                    template: CaloryData.calories + ' calories have not been added to your Diet Money calorie total and you have not been charged $' + CaloryData.cost,                  
                     scope: $scope,
                     cssClass:"custom-popup",
                     buttons: [

@@ -1,8 +1,11 @@
 futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountService,$localstorage,
-    $ionicModal,$sce,$ionicPopup, $timeout,$location,IMAGE,$firebaseArray,GlobalChatService,check_GlobalCommunity) {
+    $ionicModal,$sce,$ionicPopup, $timeout,$location,IMAGE,$firebaseArray,GlobalChatService,check_GlobalCommunity,
+    $interval) {
 
     $scope.myVar = 'hideIt';
     $scope.messages = '';
+    $scope.reportUsers = null;
+
     var newMessageArray = [];
     var muteUserIdList = $localstorage.getObject('muteChatUser');
 
@@ -14,12 +17,17 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     var userInfo = JSON.parse(localStorage.getItem('userInfo')).userInfo;
     var wallet = userInfo.wallet;
 
-    // alert(localStorage.getItem('isMaintain'));
-
     $scope.checkMember=function(){
         $scope.$broadcast('scroll');
         check_GlobalCommunity.check_memberOrNot();
     };
+
+    $ionicModal.fromTemplateUrl('reportUser.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal_report = modal;
+    });
 
     // create a synchronized array
     // ref.once('value', function(snapshot) {
@@ -32,6 +40,15 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     //     $scope.messages = newMessageArray;
     // });
 
+    if(localStorage.getItem('getMutedTime') === null || localStorage.getItem('getMutedTime') === undefined){
+        GlobalChatService.getMutedTime()
+        .then(function(res){
+            localStorage.setItem('getMutedTime',res.data.result.mute_time);
+        });
+    }else{
+        $rootScope.getMutedTime = localStorage.getItem('getMutedTime');
+    }
+    
     $scope.itemOnLongPress = function() {
         $scope.myVar = 'showIt'
         console.log('Long press');
@@ -105,7 +122,24 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                     text: 'Ok' ,
                     type: 'button-calm',
                     onTap: function(e) {
-                        var msg = parseInt($scope.muteUserId);
+                        // var msg = parseInt($scope.muteUserId);
+                        // var mutedListArray = [];
+                        // if((mutedListArray.length === 0  || mutedListArray ) && (!$localstorage.getObject('muteChatUser'))){
+                        //         mutedListArray.push(msg);
+                        //         $localstorage.setObject('muteChatUser',mutedListArray);
+                        // }else{
+                        //     mutedListArray = $localstorage.getObject('muteChatUser');
+                        //     if(mutedListArray.indexOf(msg) === -1){
+                        //         mutedListArray.push(msg);
+                        //         $localstorage.setObject('muteChatUser',mutedListArray);
+                        //     }
+                        // }
+
+                        var msg = {
+                            id : parseInt($scope.muteUserId),
+                            time : Date.now()
+                        };
+
                         var mutedListArray = [];
                         if((mutedListArray.length === 0  || mutedListArray ) && (!$localstorage.getObject('muteChatUser'))){
                                 mutedListArray.push(msg);
@@ -167,24 +201,39 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                     text: 'Ok' ,
                     type: 'button-calm',
                     onTap: function(e) {
-                        var dataJson = {
-                            user_who_report : loggedinUserId,
-                            user_who_is_reported : $scope.muteUserId
-                        }
+                        $scope.modal_report.show();
+                        var reportUserId = document.getElementById('userReport');
+                        reportUserId.style.height = window.innerHeight+'px';
 
-                        GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res){
-                            console.log("Report user");
-                            console.log(res);
-                        });
+                        GlobalChatService.getReportUsersList($rootScope.formatInputString({user_id : $rootScope.userId}))
+                            .then(function(res){
+                                $scope.reportUsers = res.data.result.all_user_reported;
+                            });
                     }
                 }]
             });
 
         }
 
+        $scope.closeReportUserModal = function(){
+            $scope.modal_report.hide();
+        }
+
         $scope.setChatUser = function (id) {
             $scope.muteUserId = id;
         };
+
+        $scope.report = function(id){
+            var dataJson = {
+                user_who_report : loggedinUserId,
+                user_who_is_reported : $scope.muteUserId
+            }
+            GlobalChatService.reportUser($rootScope.formatInputString(dataJson))
+                .then(function(res){
+                    console.log("Report user");
+                    console.log(res);
+                });
+        }
     }
 
     /**
@@ -199,13 +248,35 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
             createdAt: firebase.database.ServerValue.TIMESTAMP
         };
 
-        // console.log(myChatObj);
         msgRef.$add(myChatObj);
-        // $scope.messages.push(myChatObj);
         $scope.campaign_text = '';
         $scope.$broadcast('scroll');
-        // var profileChat = document.querySelector("#chatOnly .profile-chat");
-        // profileChat.className += ' paddingBottom56'; 
     };
+    var mutedTime = $rootScope.getMutedTime;
+    $interval(function(){
+        var now = Date.now();
+        var cutoff = now - (mutedTime * 60 * 1000);
+        if($localstorage.getObject('muteChatUser')){
+            $localstorage.getObject('muteChatUser').forEach(function(ele,index){
+                if(ele.time < cutoff) {
+                    $localstorage.remove('muteChatUser')[index];
+                }
+            });
+        }
+        // console.log($localstorage.getObject('muteChatUser'));
+    },1*1000);
 
+    // $interval(function(){
+    //     var now = Date.now();
+    //     var cutoff = now - (15 * 60 * 1000);
+    //     ref.on('value', function(snapshot) {
+    //         if(snapshot.val() !== null){
+    //             snapshot.forEach(function(childSnapshort){
+    //                 if(childSnapshort.val().createdAt < cutoff){
+    //                     snapshot.ref.remove();
+    //                 } 
+    //             });  
+    //         }
+    //     });
+    // },1000);
 });
