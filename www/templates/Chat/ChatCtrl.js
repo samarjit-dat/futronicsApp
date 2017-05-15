@@ -3,6 +3,8 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
 
     $scope.myVar = 'hideIt';
     $scope.messages = '';
+    $scope.reportUsers = null;
+
     var newMessageArray = [];
     var muteUserIdList = $localstorage.getObject('muteChatUser');
 
@@ -172,16 +174,18 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                     text: 'Ok' ,
                     type: 'button-calm',
                     onTap: function(e) {
-                        // var dataJson = {
-                        //     user_who_report : loggedinUserId,
-                        //     user_who_is_reported : $scope.muteUserId
-                        // }
-
-                        // GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res){
-                        //     console.log("Report user");
-                        //     console.log(res);
-                        // });
                         $scope.modal_report.show();
+                        var reportUserId = document.getElementById('userReport');
+                        reportUserId.style.height = window.innerHeight+'px';
+
+                        $scope.reportUsers = [
+                            { id: '1',name : 'Demo 1'},
+                            { id: '2',name : 'Demo 2'},
+                            { id: '3',name : 'Demo 3'},
+                            { id: '4',name : 'Demo 4'},
+                            { id: '5',name : 'Demo 5'}
+                        ];
+                        
                     }
                 }]
             });
@@ -195,6 +199,18 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         $scope.setChatUser = function (id) {
             $scope.muteUserId = id;
         };
+
+        $scope.report = function(id){
+            var dataJson = {
+                user_who_report : loggedinUserId,
+                user_who_is_reported : $scope.muteUserId
+            }
+
+            GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res){
+                console.log("Report user");
+                console.log(res);
+            });
+        }
     }
 
     /**

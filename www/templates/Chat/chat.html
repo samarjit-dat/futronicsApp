@@ -33,15 +33,16 @@
     <script id="reportUser.html" type="text/ng-template">
         <ion-header-bar style="background-image: url(img/body-background.jpg); background-size: cover;">
             <h1 class="title">Contact Us</h1> 
-            <button class="button button-icon ion-close" ng-click="closeReportUserModal()"></button>
+            <button class="button button-icon ion-close" style="color: #ddd;" ng-click="closeReportUserModal()"></button>
           </ion-header-bar>
           <ion-content style="background-image: url(img/body-background.jpg); background-size: cover;">
             
          <ion-list>
-            <div class="user-chat-table user-scroll" >
-               <div class="row noPadding" ng-repeat="users in userListShowbeforeLogin">
-                   <div class="col" ng-click="userprofile(users)">
-                      <h5 class="camp-btn">Demo</h5>
+            <div class="user-report user-scroll profile-chat" id="userReport">
+               <div class="row noPadding" ng-repeat="reportUser in reportUsers">
+                   <div class="col">
+                      <h5 class="left">{{reportUser.name}}</h5>
+                      <button class="button button-small right" ng-click="report(reportUser.id)">Report User</button>
                    </div>
               </div>
             </div>
