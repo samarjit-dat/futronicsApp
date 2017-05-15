@@ -8,7 +8,13 @@ futronics.controller('accountSettingsCtrl',
       $scope.isMaintainPhaseButton = localStorage.isMaintainPhaseButton;
     
     StorageService.storage();
-
+    $scope.endCampaignStats = 1;
+    $scope.endCampaign = 0;
+    if($rootScope.campaign_status == 0) {
+         $scope.endCampaignStats = 0;
+         $scope.endCampaign = 1;
+    }
+   
     $scope.endCampaignStatus = $rootScope.endCampaignStatus;
     
     if($rootScope.campaign_status == 2){
@@ -144,7 +150,8 @@ futronics.controller('accountSettingsCtrl',
                     localStorage.setItem('showGlobalChat_afterEndCampaign','_1');
                     localStorage.removeItem('campaignCompleteOrNot');
                     localStorage.setItem('endcampaign',"success");
-
+                    $scope.endCampaign = 1;
+                    $scope.endCampaignStats = 0;
                     $ionicPopup.show({
                         template: 'You successfully end your campaign',
                         title: '<p style="color:black"><b></b></p>',
