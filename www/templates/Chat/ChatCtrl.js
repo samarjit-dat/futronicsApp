@@ -14,12 +14,17 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     var userInfo = JSON.parse(localStorage.getItem('userInfo')).userInfo;
     var wallet = userInfo.wallet;
 
-    // alert(localStorage.getItem('isMaintain'));
-
     $scope.checkMember=function(){
         $scope.$broadcast('scroll');
         check_GlobalCommunity.check_memberOrNot();
     };
+
+    $ionicModal.fromTemplateUrl('reportUser.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal_report = modal;
+    });
 
     // create a synchronized array
     // ref.once('value', function(snapshot) {
@@ -167,19 +172,24 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                     text: 'Ok' ,
                     type: 'button-calm',
                     onTap: function(e) {
-                        var dataJson = {
-                            user_who_report : loggedinUserId,
-                            user_who_is_reported : $scope.muteUserId
-                        }
+                        // var dataJson = {
+                        //     user_who_report : loggedinUserId,
+                        //     user_who_is_reported : $scope.muteUserId
+                        // }
 
-                        GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res){
-                            console.log("Report user");
-                            console.log(res);
-                        });
+                        // GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res){
+                        //     console.log("Report user");
+                        //     console.log(res);
+                        // });
+                        $scope.modal_report.show();
                     }
                 }]
             });
 
+        }
+
+        $scope.closeReportUserModal = function(){
+            $scope.modal_report.hide();
         }
 
         $scope.setChatUser = function (id) {
