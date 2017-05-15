@@ -1,0 +1,55 @@
+
+<ion-view class="body-bg" view-title="Account" style="background-image: url(img/body-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+   <ion-header-bar class="screenBackground">
+        <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="globalChat"></button>
+   </ion-header-bar>
+  <ion-content>
+  <div class="full-height">
+    <div class="account-block">
+     <h3 ng-class="{ 'gold-text': $root.isMaintain == 'true'}">Account & Settings</h3>
+     <div class="content">
+     <ul>
+      <li ng-if="isMaintainPhaseButton =='false'">
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="C_hide == '0' && endCampaignStatus" ng-click="hideCampaign(0)">Hide my campaign</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="C_show == '1' && endCampaignStatus" ng-click="hideCampaign(1)">Show my campaign</button>
+      </li>
+      <li ng-if="isMaintainPhaseButton =='true'">
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="C_hide == '0' && endCampaignStatus" ng-click="hideCampaign(0)">Hide my Maintenance</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="C_show == '1' && endCampaignStatus" ng-click="hideCampaign(1)">Show my Maintenance</button>
+       </li>
+      <li ng-if="isMaintainPhaseButton =='false'">
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="endCampaignStatus" ng-click="end_campaign()">End my campaign</button>
+      </li>
+      <li>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="!endCampaignStatus" ng-click="wouldUWantToStartCampaign()">Start new campaign</button>
+      </li>
+      
+       <li ng-if="isMaintainPhaseButton =='true'">
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-click="end_campaign()">End Maintenance Phase</button>
+      </li>
+      
+       
+       
+       <li>
+      <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ui-sref="contactAdmin">Contact Admin</button>
+      </li>
+
+      <li>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="newsOn=='1'" ng-click="newsFeed(1)">News Feed on </button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="newsOff=='0'" ng-click="newsFeed(0)">News Feed off </button>
+      </li>
+      <li>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-click="viewStats()">View My Stats</button>
+      </li>
+      
+       <!--<li ng-if="isMaintainPhaseButton =='false'">
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-click="maintainPhase()">Go To Maintenance Phase</button>
+      </li>-->
+     </ul>
+     </div>
+    </div>
+    </div>
+     
+  </ion-content>
+</ion-view>
+ 

@@ -1,0 +1,149 @@
+<ion-view id="profileViewMyStats" view-title="" style="background-image: url(img/calorie-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+    <ion-content cache-view="false">
+      <div class="bar bar-header">
+         
+         <h1 class="title">Profile</h1> 
+         
+         <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="globalChat"></button>
+         <button ui-sref="account_settings" class="ion-ios-gear setting-icon"></button>
+      </div>
+
+ 
+      <div class="content has-header profile-block">
+         <div class="profile-inner" id="profileImg">
+            
+            <div class="profile-content profile-main">
+                <span class="profile-image" ng-class="{ 'profile-image-m': $root.isMaintain == 'true'}">
+                   
+                   <img src="{{mainImage}}" class="profile-image circle" id="profileMainImage" alt="" ng-click="openMainImageVideoModal()"
+                         image-exist/>
+                </span>
+                <div class="profile-des">
+                   
+                    <ion-slide-box class="profile-slider">
+                        <ion-slide ng-repeat="profImage in profileImages track by $index">
+                          <img ng-repeat="pImage in profImage" ng-if="pImage['profile_image']" src="{{pImage['profile_image']}}" class="circle circleImage" alt="" image-swap/>
+                          <img ng-repeat="pImage in profImage" ng-if="pImage['thumb_url']" src="{{pImage['thumb_url']}}" data-video-url="{{pImage['video_url']}}" class="circle circleImage" alt="" image-swap/>
+                        </ion-slide>
+                    </ion-slide-box>
+					
+                    <h4 >My Stats</h4>
+                    <div class="rating">
+                       <span class="rating-full">calorie <strong><i class="ion-android-star"></i> {{total_calorie_have || 0}} </strong></span> 
+                       <span class="rating-give">given <strong><i class="ion-android-star"></i> {{total_calorie_given || 0}} </strong></span> 
+                    </div>
+                </div>
+               
+            </div>
+         </div>
+         
+          
+          <div class="profile-details">
+            <ul>
+               <li>
+                  <h5>Weight</h5>
+                  <img ng-src="img/weight.svg" alt="" change-svg><span>{{my_details.userInfo.result.campaign[0].current_weight || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Height</h5>
+                  <img ng-src="img/height.svg" alt="" change-svg><span>{{my_details.userInfo.result.campaign[0].campaign_height || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Goal</h5>
+                  <img ng-src="img/goal.svg" alt="" change-svg><span>{{my_details.userInfo.result.campaign[0].proposed_weight || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Duration</h5>
+                  <img ng-src="img/duration.svg" alt="" change-svg><span>{{my_details.userInfo.result.campaign[0].campaign_duration || '0'}}</span>
+               </li>
+            </ul>
+         </div>
+
+        <div class="profile-addmore" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">
+            <ul>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()">+ Support Others</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ui-sref="upload-video">+ Post Update</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ui-sref="myCampaign">+ Market Campaign</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ui-sref="addFund">+ Add Funds</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ui-sref="globalChat">+ Global Chat</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="myContribution()">+ Contributed Campaigns</button></li>
+            </ul>
+        </div>
+
+            <ion-list class="view-my-stats">
+            <div class="user-chat-table user-scroll" >
+               <div class="row"  >
+                    <div >Total Value of MY Diet Money Account (Campaign + Calories + Cash) $ {{ViewMyStatsData.total_value_of_my_diet_money_account || 0}} </div>
+               </div>
+               <div class="row"  >
+                    <div >Campaigns Contributed To: {{ViewMyStatsData.campaign_contributed_to_count || 0 }} <button ui-sref="myContribution" class="stats-btn"
+                    ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">view Campaigns</button></div>
+               </div>
+                <div class="row"  >
+                    <div >Total Funds Contributed : $ {{ViewMyStatsData.total_fund_contributed || 0}}</div>
+               </div>
+                <div class="row"  >
+                    <div >Total Money Made From Contributed Campaigns : $ {{ViewMyStatsData.total_money_made_from_contributed_campaign || 0}}  </div>
+               </div>
+                <div class="row"  >
+                    <div >Total Potential Money to be made : $ {{ViewMyStatsData.total_potential_money_to_be_made || 0}} </div>
+               </div>
+                <div class="row"  >
+                    <div >Total Calories To: {{ViewMyStatsData.total_calories_to || 0}} <button class="stats-btn" ng-click="purchaseCalory()"
+                    ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Purchase Calories</button> </div>
+               </div>
+                <div class="row"  >
+                    <div >Total Sponsors Aquired : {{ViewMyStatsData.total_sponsored_aquired || 0}} <button class="stats-btn"  ui-sref="sponsorsAcquired"
+                    ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Sponsors List</button> </div>
+               </div>
+                <div class="row"  >
+                    <div >Total Calories Received : {{ViewMyStatsData.total_calories_received || 0}} <button class="stats-btn"  ng-click="withdrawCalory()"
+                    ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Withdraw Calories</button> </div>
+               </div>
+                <div class="row"  >
+                    <div >Cash: $ {{ViewMyStatsData.cash_now_in_wallet || 0}} <button class="stats-btn"  ng-click="withdrawCash()"
+                    ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Withdraw Cash</button></div>
+               </div>
+                <div class="row"  >
+                   <button class="button button-stable" ui-sref="account_settings">exit</button>
+               </div>
+
+            </div>
+            
+         </ion-list>
+            
+        </div>
+        
+    </ion-content>
+    <script type="text/ng-template" id="videoModalScript.html">
+        <ion-modal-view>
+          <ion-header-bar style="border-color: #101010; background-color: #141415;">
+           
+            <h1 class="title">Video modal</h1>
+            <button class="button button-clear button-primary" ng-click="closeModal()">Cancel</button>
+          </ion-header-bar>
+          <ion-content style="background:#333">
+            <div class="embed-responsive embed-responsive-16by9">
+              <video id="video-player" class="centerme" autoplay="true" loop ng-src={{modal_video.videoUrl}}></video>
+            </div>
+          </ion-content>
+        </ion-modal-view>
+    </script>
+    
+    <script id="purchaseCalory.html" type="text/ng-template">
+        <ion-header-bar style="background-image: url(img/body-background.jpg); background-size: cover;">
+            <h1 class="title"></h1>
+             
+            <button class="button button-icon ion-close"  ng-click="closePurchaseCaloryModal()"></button>
+            
+          </ion-header-bar>
+          <ion-content style="background-image: url(img/body-background.jpg); background-size: cover;">
+            <div class="card purchaseCaloryHolder" ng-click="caloryPurchase(caloryData)" ng-repeat="caloryData in modal_purchaseCalory.caloryData">
+                <img  ng-src="{{caloryData.image}}"/>
+                <div class="purchaseCaloryAmount">{{caloryData.calories}} Calories</div>
+                <div class="purchaseCaloryPrice">${{caloryData.cost}}</div>
+             </div>              
+          </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

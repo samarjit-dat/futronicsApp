@@ -1,0 +1,33 @@
+<ion-view view-title="Account" style="background-image: url(img/body-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+  <ion-content>
+      
+ <div class="bar bar-header">	
+        <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="profile"></button>
+<!--         <h1 class="title">Market your Campaign</h1>-->
+         
+ </div>
+    <div class="padding black-bg-color">
+        <h4>Market Your Campaign</h4>
+        <div class="text-block">
+          <textarea name="" placeholder="Hello, help me achieve  my weight loss goal by  sponsoring my campaign!"></textarea>
+          <ion-list>
+            <ul class="checkbox-block">
+                <li ng-repeat="socialList in socialLists"><ion-checkbox ng-model="checkItems[socialList.text]"><span ng-class="{ 'gold-text': $root.isMaintain == 'true'}">{{socialList.text}}</span></ion-checkbox></li>
+                <!--<li ><ion-checkbox ng-model="checked_2" ><span ng-class="{ 'gold-text': $root.isMaintain == 'true'}">Twitter</span></ion-checkbox></li>
+                <li ><ion-checkbox ng-model="checked_3" ><span ng-class="{ 'gold-text': $root.isMaintain == 'true'}">Text Message</span></ion-checkbox></li>
+                <li ><ion-checkbox ng-model="checked_4" ><span ng-class="{ 'gold-text': $root.isMaintain == 'true'}">Email</span></ion-checkbox></li>-->
+            </ul>           
+          </ion-list>
+          <div class="account-fund-form">
+              <input value="Market Campaign" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" ng-click="shareContent()" type="submit">
+          </div>
+        </div>
+        <div class="text-block">
+            <h3>Share this App</h3>
+            <div class="account-fund-form">
+              <input value="Share" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" ng-click="shareApp()" type="submit">
+          </div>
+        </div>
+    </div>
+  </ion-content>
+</ion-view>

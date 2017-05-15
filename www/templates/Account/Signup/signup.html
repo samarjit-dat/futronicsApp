@@ -1,0 +1,106 @@
+<ion-view view-title="Signup" class="screenBackground">
+   <ion-header-bar class="screenBackground">
+      <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="globalChat"></button>
+   </ion-header-bar>
+   <ion-content>
+      <div class="signup-block">
+         <div class="heading">
+            <h4>How it works</h4>
+         </div>
+         <div class="signup-details">
+            <ul>
+               <li ng-click="commit()">
+                  <img ng-src="img/commit.svg" alt="" change-svg> 
+                  <h5>Commit</h5>
+               </li>
+               <li ng-click="Market()">
+                  <img ng-src="img/progress.svg" alt="" change-svg>
+                  <h5>Market</h5>
+               </li>
+               <li ng-click="lose_Weight()">
+                  <img ng-src="img/weight.svg" alt="" change-svg> 
+                  <h5>Lose weight</h5>
+               </li>
+               <li ng-click="doubleYourMoney()">
+                  <img ng-src="img/currency.svg" alt="" change-svg>
+                  <h5>Double Your Money</h5>
+               </li>
+            </ul>
+         </div>
+         <div class="padding form-block">
+            <form method="post" name="form" class="form" ng-submit="signup(data)" role="form">
+                <div class="list" ng-if="isMaintainPhaseButton =='false' && start_new != 'active' || startnewEmpty == 'blank' ">
+                  <input type="text" placeholder="User Name" name="username"  id="username"   class="form-control" ng-model="data.username" disallow-spaces  required>
+                  <span ng-show="form.username.$dirty && form.username.$invalid && !form.username.$pristine" class="input-validation-message" >Username is required</span>
+                </div>
+                <div class="list" ng-if="isMaintainPhaseButton =='false' && start_new != 'active' || startnewEmpty == 'blank'">
+                  <input type="password" placeholder="Password" name="password" ng-model="data.password" id="password" class="form-control"  ng-minlength="6"  disallow-spaces   required>
+                   <span ng-show="form.password.$error.required && !form.password.$pristine" class="input-validation-message ">Password is required</span>
+                   <span ng-show="form.password.$error.minlength" class="input-validation-message text-center">At least 6 characters</span>
+                </div>
+                <div class="list" ng-if="isMaintainPhaseButton =='false' && start_new != 'active' || startnewEmpty == 'blank'">
+                  <input type="password" placeholder="Retype Password" name="rpassword" ng-model="data.rpassword" ng-pattern="data.password" class="form-control" ng-minlength="6" required   >
+                    <span ng-show="form.rpassword.$error.required && !form.rpassword.$pristine" class="input-validation-message ">Confirm Password is required</span>
+                   <span ng-show="form.rpassword.$error.pattern" class="input-validation-message text-center">Password not matched</span>
+               </div>
+               <div class="list" ng-if="isMaintainPhaseButton =='false' && start_new != 'active' || startnewEmpty == 'blank'">
+                  <input type="email" placeholder="Email" name="email" ng-model="data.email" id="email" class="form-control"  disallow-spaces ng-pattern = '/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i' required>
+                  <span ng-show="form.email.$error.required  && !form.email.$pristine" class="input-validation-message ">Email is required</span>
+                  <span ng-show="form.email.$error.pattern " class="input-validation-message text-center">Email not valid!</span>
+               </div>
+               <h4>Credit / Banking Information</h4>
+               <div class="list" ng-if="isMaintainPhaseButton =='false' &&  start_new === 'active' || startnewEmpty == 'blank'">
+                  <input type="text" placeholder="Card Number" name="cardNumber" ng-model="data.cardNumber" ng-pattern="/^[0-9]{16}$/" id="cardNumber" class="form-control" ng-minlength="16" disallow-spaces ng-pattern="" required>
+                  <span ng-show="form.cardNumber.$error.required && !form.cardNumber.$pristine" class="input-validation-message text-center">Card Number is required</span>
+                  <span ng-show="form.cardNumber.$error.pattern" class="input-validation-message text-center">Enter 16 digit valid number</span>
+               </div>
+               <div class="list" ng-if="isMaintainPhaseButton =='true' &&  start_new === 'active'">
+                   <p class="card-text">Would you like to use the same credit or debit card as in the weight-loss phase, or would you like to input a new card?</p>
+                  <input type="text" placeholder="Card Number" name="cardNumber" ng-model="data.cardNumber" ng-pattern="/^[0-9]{16}$/" id="cardNumber" class="form-control" ng-minlength="16" disallow-spaces ng-pattern="" required>
+                  <span ng-show="form.cardNumber.$error.required && !form.cardNumber.$pristine" class="input-validation-message text-center">Card Number is required</span>
+                  <span ng-show="form.cardNumber.$error.pattern" class="input-validation-message text-center">Enter 16 digit valid number</span>
+               </div>
+               <div class="list">
+                  <input type="text" placeholder="Address" name="address" ng-model="data.address" id="address" class="form-control"  disallow-spaces required>
+                   <span ng-show="form.address.$dirty && form.address.$error.required && !form.address.$pristine" class="input-validation-message">Address is required</span>
+               </div>
+               <div class="list">
+                  <input type="text" placeholder="City/State/Zip" name="location" ng-model="data.location"  id="location" class="form-control"  disallow-spaces required>
+                  <span ng-show="form.location.$dirty && form.location.$error.required && !form.location.$pristine" class="input-validation-message">location is required</span>
+               </div>
+               <div class="list" >
+               <input type="text"  placeholder="CVV" name="cvv" ng-model="data.cvv"  id="cvv" ng-pattern="/^[0-9]{3}$/" class="form-control ng-invalid-pattern" ng-minlength="3"  disallow-spaces required>
+               <span ng-show="form.cvv.$error.required && !form.cvv.$pristine" class="input-validation-message">CVV is required</span>
+               <span ng-show="form.cvv.$error.pattern &&  !form.cvv.$pristine" class="input-validation-message">Only 3 numbers are allowed</span>
+               
+               </div>
+               <div class="signup-range">
+                    <div class="signup-select">
+                        Select your deposit 
+                    </div>
+
+                   <div class="signup-ammount" style="margin-top: -20px;">
+                       <ion-list-header>
+                          <ion-badge _ngcontent-cbo-6="" color="secondary" class="badge-wp badge-wp-secondary">
+                            <h4 ng-model="slider.value">$ {{ slider.value || 0 }}</h4>
+                          </ion-badge>
+                       </ion-list-header>
+                    </div>
+                   
+                    <div class="left">
+                       <ion-range _ngcontent-cbo-6="" class="range-wp ng-valid ng-touched ng-dirty">
+                          <rzslider ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" rz-slider-model="slider.value"   rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>
+                       </ion-range>
+                    </div>
+                    <div class="right">
+                      <ion-toggle style="top: -55px !important;" ng-model="roller.checked" ng-change="rollerChange()"></ion-toggle>
+                    </div>
+               </div>
+               <div class="contribute-btn">
+                  <button ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"  class="button button-block button-calm" type="submit" ng-disabled="form.$invalid">Start Your Campaign</button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </ion-content>
+</ion-view>

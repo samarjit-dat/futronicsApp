@@ -1,0 +1,197 @@
+
+<ion-view view-title="Account" style="background-image: url(img/calorie-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+ <ion-content scroll="true">
+<div class="bar bar-header">
+<button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ng-click="myOwnProfile()"></button>
+         <h1 class="title">Contribution</h1>
+         <!--<button class="button icon search ion-ios-search"></button>-->
+</div>
+
+<div class="content has-header profile-block">
+<div class="profile-inner">
+
+    <div ng-if="$root.isMaintain == 'false'">
+        <div class="profile-image" ng-if ="single_user.profile_videos.length > 0">
+            <img ng-src="{{single_user.profile_videos[0].thumb_url}}" class="circle" alt="">
+        </div>
+        <div class="profile-image" ng-if ="single_user.profile_videos.length == 0">
+            <img ng-src="{{noImage}}" class="circle" alt="">
+        </div>
+
+        <div class="profile-content">
+            <h4 ng-bind="single_user.user_details.username"></h4>
+
+            <div class="rating">
+            <span class="rating-full">calorie <strong><i class="ion-android-star"></i> {{total_calorie_have || 0}}</strong></span> 
+            <span class="rating-give">give n <strong><i class="ion-android-star"></i>{{total_calorie_given || 0}}</strong></span> 
+            </div>
+        </div>
+    </div>
+
+    
+
+    <div ng-if="$root.isMaintain == null">
+        <div class="profile-image" ng-class="{ 'profile-image-m': $root.isMaintain == 'true'}" ng-if ="single_user.profile_videos.length > 0">
+            <img ng-src="{{single_user.profile_videos[0].thumb_url}}" class="circle" alt="">
+        </div>
+        <div class="profile-image" ng-class="{ 'profile-image-m': $root.isMaintain == 'true'}" ng-if ="single_user.profile_videos.length == 0">
+            <img ng-src="{{noImage}}" class="circle" alt="">
+        </div>
+
+        <div class="profile-content">
+            <h4 ng-bind="single_user.user_details.username"></h4>
+
+            <div class="rating">
+            <span class="rating-full">calorie <strong><i class="ion-android-star"></i> 100</strong></span>
+            <span class="rating-give">give n <strong><i class="ion-android-star"></i> 5</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="$root.isMaintain == 'true'">
+        <div class="profile-image" ng-class="{ 'profile-image-m': $root.isMaintain == 'true'}" ng-if ="single_user.profile_videos.length > 0">
+            <img ng-src="{{single_user.profile_videos[0].thumb_url}}" class="circle" alt="">
+        </div>
+        <div class="profile-image" ng-class="{ 'profile-image-m': $root.isMaintain == 'true'}" ng-if ="single_user.profile_videos.length == 0">
+            <img ng-src="{{noImage}}" class="circle" alt="">
+        </div>
+
+        <div class="profile-content">
+            <h4 ng-bind="single_user.user_details.username"></h4>
+
+            <div class="rating">
+            <span class="rating-full">calorie <strong><i class="ion-android-star"></i> 100</strong></span>
+            <span class="rating-give">give n <strong><i class="ion-android-star"></i> 5</strong></span>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="profile-details">
+<ul>
+<li>
+<h5>Weight</h5>
+<img ng-src="img/weight.svg" alt="" change-svg><span>{{single_user.campaign[0].current_weight || '0'}}</span>
+</li>
+<li>
+<h5>Height</h5>
+<img ng-src="img/height.svg" alt="" change-svg><span>{{single_user.campaign[0].campaign_height || '0'}}</span>
+</li>
+<li>
+<h5>Goal</h5>
+<img ng-src="img/goal.svg" alt="" change-svg><span>{{single_user.campaign[0].proposed_weight || '0'}}</span>
+</li>
+<li>
+<h5>Duration</h5>
+<img ng-src="img/duration.svg" alt="" change-svg><span>{{single_user.campaign[0].campaign_duration || '0'}}</span>
+</li>
+</ul>
+</div>
+<div class="profile-addmore" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">
+<ul>
+<!--<li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-disabled="otheruserId!=='{{uid}}'">+ Support Others</button></li>-->
+<!--<li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-disabled="otheruserId!=='{{uid}}'">+ Post Update</button></li>-->
+<!--<li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-disabled="otheruserId!=='{{uid}}'">+ Market Campaign</button></li>-->
+<!--<li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-disabled="otheruserId!=='{{uid}}'">+ Add Funds</button></li>-->
+<!--<li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-disabled="otheruserId!=='{{uid}}'">+ Global Chat</button></li>-->
+<!--<li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-disabled="otheruserId!=='{{uid}}'">+ Contributed Campaigns</button></li>-->
+
+  <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()">+ Support Others</button></li>
+  <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="chekSignup==1" ui-sref="upload-video" >+ Post Update</button></li>
+  <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ui-sref="myCampaign">+ Market Campaign</button></li>
+  <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"   ui-sref="addFund">+ Add Funds</button></li>
+  <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ui-sref="globalChat">+ Global Chat</button></li>
+  <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-click="myContribution()"  >+ Contributed Campaigns</button></li>
+
+</ul>
+
+<!--<ul>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()" ng-if="myProfile=='1'" ng-disabled="otheruserId!=='{{uid}}'">+ Support Others</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()" ng-if="myProfile=='0'">+ Support Others</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='1'" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ui-sref="upload-video">+ Post Update</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' " ng-if="myProfile=='0'"  ui-sref="upload-video">+ Post Update</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ng-if="myProfile=='1'" ui-sref="myCampaign">+ Market Campaign</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1'" ng-if="myProfile=='0'" ui-sref="myCampaign">+ Market Campaign</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ng-if="myProfile=='1'" >+ Add Funds</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' " ng-if="myProfile=='0'" ui-sref="addFund">+ Add Funds</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1'" ui-sref="globalChat">+ Global Chat</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='1'" ng-disabled="otheruserId!=='{{uid}}'">+ Contributed Campaigns</button></li>
+    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='0'" ng-click="myContribution()"  >+ Contributed Campaigns</button></li>
+</ul>-->
+</div>
+<div class="contribution">
+<div class="row">
+<div class="col col-75 left"><h5>Number of contributors</h5></div>
+<div class="col col-25 right"><h5 ng-bind="single_user.total_contributor"></h5></div>
+</div>
+<div class="row">
+<div class="col col-75 left"><h5>Total current funds</h5></div>
+<div class="col col-25 right"><h5>${{walletValue}}</h5></div>
+</div>
+<div class="row">
+<div class="col col-75 left"><h5>remaining funding needed</h5></div>
+<div class="col col-25 right"><h5>$0.00</h5></div>
+</div>
+<div class="row calculate">
+<div class="col col-75 left"><h5>Contributing amount</h5></div>
+<div class="col col-25 right"><h5 ng-model="slider.value">
+        ${{slider.value || 0}}</h5></div>
+</div>
+<div class="padding">
+<ion-range _ngcontent-cbo-6="" class="range-wp ng-valid ng-touched ng-dirty">
+<div class="range-block range-slider range-energized">
+<!--<div class="range-bar"></div>
+<div class="range-bar range-bar-active" style="right: 62.55%;"></div>
+<div class="range-knob-handle" role="slider" style="left: 37.45%;">
+<div class="range-knob"></div>-->
+<ion-range _ngcontent-cbo-6="" class="range-wp ng-valid ng-touched ng-dirty contribution-slider">
+
+    <rzslider  rz-slider-model="slider.value"  rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>
+</ion-range>
+
+</div>
+
+</ion-range>
+</div>
+
+    <div class="right">
+     <ion-toggle ng-model="roller.checked" ng-change="rollerChange()">
+     </ion-toggle>
+</div>
+<div class="contribute-btn">
+<button class="button button-stable" ui-sref="campaignBrowse">Exit</button>
+<button class="button button-calm" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"
+ng-disabled="slider.value > walletValue || slider.value === 0" ng-click="goToThanksContribution()">Contribute</button>
+</div>
+</div>
+
+</div>
+
+<!--</div>-->
+  </ion-content>
+     <ion-pull-up-footer class="bar-calm" initial-state="minimized"  max-height="265" on-expand="onFooterExpand()" on-collapse="onFooterCollapse()" state="footerState" default-behavior="show" >
+        <ion-pull-up-handle
+        ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"
+            icon-expand="ion-chevron-up" icon-collapse="ion-chevron-down" width="100" height="25" style="border-radius: 25px 25px 0 0">
+        </ion-pull-up-handle>
+
+        <ion-pull-up-content scroll="false" class="footerContent">
+        <div class="page-footer"  >
+            <a class="button" ng-click="logout()" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Logout</a>
+            <a class="button" ng-click="myOwnProfile()" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Profile</a>
+            <p class="ac-bal">Account Balance: <span class="amount">&nbsp; ${{my_details_other_profile.userInfo.result.wallet || '0'}}</span>
+            </p>
+            <div class="p-sec">
+               <p>Weight Loss Progress</p>
+               <div class="p-bar"><span class="skill" style="width:{{total_progress || '0'}}%"></span></div>
+            </div>
+            <div class="p-sec">
+               <p>Goal Duration</p>
+               <div class="p-bar"><span class="skill"></span></div>
+               <p>No. of campaign funded <span >  {{my_details_other_profile.userInfo.result.total_campaign || '0'}}</span></p>
+            </div>
+         </div>
+        </ion-pull-up-content>
+    </ion-pull-up-footer>
+</ion-view>

@@ -1,0 +1,40 @@
+
+<ion-view class="body-bg" view-title="Account" style="background-image: url(img/body-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+   <ion-header-bar class="screenBackground">
+        <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="account_settings"></button>
+   </ion-header-bar>
+  <ion-content class="confirm-login-content">
+  
+      
+    <span class="confirm-text">Type In Your Login Credentials To Confirm Campaign End</span>
+     <form method="post"  style="width:95%;" name="form" ng-submit="login_endCampaign()" role="form" >
+        <div class="list">
+           <label class="item item-input">
+           <input type="text" placeholder="User Name" name="username" ng-model="data.username" id="username" class="form-control"    required  >
+            <span ng-show="form.username.$touched && form.username.$invalid " class="input-validation-message">Username is required</span>
+           </label>
+        </div>
+        <div class="list">
+           <label class="item item-input">
+           <input type="password" placeholder="Password" name="password" ng-model="data.password" id="password" class="form-control"  ng-minlength="6"  disallow-spaces required ng-pattern="/^[^\s]+$/">
+           <span ng-show="form.password.$error.required && !form.password.$pristine" class="input-validation-message">Password is required</span>
+                         <span ng-show="form.password.$error.minlength" class="input-validation-message">At least 6 characters</span>
+           </label>
+        </div>
+        <div class="list">
+           <label class="item item-input">
+           <input type="password" placeholder="Retype Password" name="cnfpassword" ng-model="data.cnfpassword" id="cnfpassword" class="form-control"  disallow-spaces required ng-pattern="data.password">
+           <span ng-show="form.cnfpassword.$error.required && !form.cnfpassword.$pristine" class="input-validation-message">Password is required</span>
+                         <span ng-show="form.cnfpassword.$error.pattern" class="input-validation-message">Password not matched</span>
+           </label>
+        </div>
+    
+     <div class="confirm-login-btn">
+          <button class="button  button-calm" type="submit" ui-sref="account_settings" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Go Back</button>
+        <button class="button  button-calm" type="submit" ng-disabled="form.$invalid" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Submit</button>
+     </div>
+    </form>
+         
+  </ion-content>
+</ion-view>
+ 

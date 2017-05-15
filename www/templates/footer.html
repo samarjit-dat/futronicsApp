@@ -1,0 +1,26 @@
+<ion-bottom-sheet-view>
+         <ion-header-bar align-title="left">
+            <h1 class="title">New Particle</h1>
+            <button class="button button-icon icon ion-android-close" ng-click="modal.hide()"></button>
+        </ion-header-bar>
+        <ion-content class="padding">
+          <div class="page-footer">
+            <div class="cross">
+               <a href="#">
+               <i class="ion-close icon"></i>
+               </a>
+            </div>
+            <a class="button" ui-sref="login">Log in</a>
+            <a class="button" ng-click="signUp()">My Campaign</a>
+            <p class="ac-bal">Account Balance: <span class="amount">&nbsp; $289.65</span></p>
+            <div class="p-sec">
+               <p>Weight Loss Progress</p>
+               <div class="p-bar"><span class="skill"></span></div>
+            </div>
+            <div class="p-sec">
+               <p>Goal Duration</p>
+               <div class="p-bar"><span class="skill"></span></div>
+            </div>
+         </div>
+        </ion-content>
+</ion-bottom-sheet-view>

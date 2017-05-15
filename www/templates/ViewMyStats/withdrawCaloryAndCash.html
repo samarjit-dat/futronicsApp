@@ -1,0 +1,48 @@
+<ion-view class="body-bg pane" view-title="Account" style="background-image: url(img/body-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+  <ion-content scroll="false">
+        
+    <div class="withdraw-calory-cash content has-header profile-block ">
+        <p class="yellow-bg">Withdraw calories and Cash:</p>
+            <div class="content pad-bottom">
+                
+                <div class="calory-slide" ng-if="showCashAndCalory === 2">  
+                    <div class="row" style="color:#ffff00;">
+                        <span class="col" style="text-align: left; padding:0;font-weight:bold;">Calories:</span>
+                        <span class="col price-cal" style="text-align: left;">{{slider.val || 0}}</span>
+                        <span class="col" ng-click="allCalories()" style="color:#fff; border:3px solid #ffff00;border-radius:10px">All</span>
+                    </div>
+                    <ion-range _ngcontent-cbo-6="" class="range-wp ng-valid ng-touched ng-dirty">
+
+                        <rzslider  rz-slider-model="slider.val"   rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>
+                    </ion-range>   
+                </div>
+                <div class="gap20" ></div>
+                <div class="cash-slide" ng-if="showCashAndCalory === 1">
+                    <div class="row" style="color:#ffff00;">
+                        <span class="col" style="text-align: left; padding:0;font-weight:bold;">Cash:</span>
+                        <span class="col price-cal" style="text-align: left;">{{slider.value}}</span>
+                        <span class="col" ng-click="allCash()" style="color:#fff; border:3px solid #ffff00;border-radius:10px">All</span>
+                    </div>
+                    <ion-range _ngcontent-cbo-6="" class="range-wp ng-valid ng-touched ng-dirty">
+
+                        <rzslider  rz-slider-model="slider.value"   rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>
+                    </ion-range> 
+                </div>
+                  <div class="row" style="color:#ffff00;">
+                      <span class="col" style="text-align: left;"></span>
+                      <span class="col" style="text-align: center;">Total:</span>
+                      <span class="col" style="color:#fff; border:3px solid #ffff00;">${{slider.val+slider.value}}</span>
+                     
+                  </div>
+             
+             </div>
+            <div class="text-center btn-select">
+               <a  class="button button-calm button-medium" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" style="buttom: 65PX;" ng-click="selectCashAndCalories(showCashAndCalory)">Select</a>
+           </div>
+        </div>
+         
+      
+ 
+  </ion-content>
+  
+</ion-view>

@@ -1,0 +1,47 @@
+<ion-view class="body-bg" view-title="Login"  style=" background-image: url(img/body-background.jpg)!important;
+   
+    background-position: 0 0; 
+    background-size: cover;">
+   <ion-header-bar class="screenBackground">
+      <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="globalChat"></button>
+   </ion-header-bar>
+   <ion-content scroll="false">
+      <div class="full-height">
+         <div class="form-block login-block">
+            <div class="logo">
+               <h1 ng-class="{ 'gold-text': $root.isMaintain == 'true'}" >LOGO</h1>
+            </div>
+            <form method="post"  name="form" ng-submit="login(data)" role="form">
+               <div class="list">
+                  <input type="text" ng-if="$root.isMaintain == 'false'" placeholder="User Name" name="username" ng-model="data.username" id="username" class="form-control"    required  >
+
+                   <input type="text" ng-if="$root.isMaintain == 'true'" style="background-image: url('../img/username.m.svg')" placeholder="User Name" name="username" ng-model="data.username" id="username" class="form-control"    required  >
+                    
+               </div>
+                <span ng-show="form.username.$touched && form.username.$invalid " class="input-validation-message">Username is required</span>
+                  
+               <div class="list">
+
+                  <input type="password" ng-if="$root.isMaintain == 'false'" placeholder="Password" name="password" ng-model="data.password" id="password" class="form-control"  ng-minlength="6"  disallow-spaces required ng-pattern="/^[^\s]+$/">
+                 
+                 <input type="password" ng-if="$root.isMaintain == 'true'" style="background-image: url('../img/Password.m.svg')" placeholder="Password" name="password" ng-model="data.password" id="password" class="form-control"  ng-minlength="6"  disallow-spaces required ng-pattern="/^[^\s]+$/">
+               </div>
+                
+                  <span ng-show="form.password.$error.required && !form.password.$pristine" class="input-validation-message">Password is required</span>
+                 
+                  <span ng-show="form.password.$error.minlength" class="input-validation-message">At least 6 characters</span>
+           
+            <div class="login-text">
+               <a href="#" class="sign">Sign in with fingerprint.</a>
+               <p>Forgot username or password? <a href="#" class="click">Tab here.</a></p>
+               <p ng-if="$root.isMaintain == 'false'">If not registered yet. <a ui-sref="signup" class="click">Register Now.</a></p>
+               
+            </div>
+            <div class="login-btn">
+               <button ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"  class="button button-block button-calm" type="submit" ng-disabled="form.$invalid">Submit</button>
+            </div>
+                 </form>
+         </div>
+      </div>
+   </ion-content>
+</ion-view>

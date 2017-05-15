@@ -1,0 +1,410 @@
+<ion-view view-title="" style="background-image: url(img/calorie-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+    <ion-content scroll="false">
+      <div class="bar bar-header">
+
+         <h1 class="title">Profile</h1>
+
+         <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="globalChat"></button>
+         <button ng-if="show_gear==1" ui-sref="account_settings" ng-click="check_campaignId()" class="ion-ios-gear setting-icon"></button>
+      </div>
+
+<!--    <ion-slide-box   on-slide-changed="slideHasChanged($index)" show-pager="true" ng-if="items" >
+            <ion-slide  ng-repeat="i in items">
+
+                   <div  class="video">
+              <img class="full-image" style="height:200px" ng-src="{{i.image}}" />
+              <a href="https://www.youtube.com/embed/I0riVRmp6G0"></a>
+          </div>
+
+
+            </ion-slide>
+    </ion-slide-box>-->
+
+      <div class="content has-header profile-block">
+         <div class="profile-inner" id="profileImg">
+
+            <div class="profile-content profile-main">
+                <span class="profile-image" ng-class="{ 'profile-image-m': $root.isMaintain == 'true'}">
+
+                    <img src="{{mainImage}}" class="profile-image circle" id="{{videoId || 'profileImage'}}" alt="" ng-click="openMainImageVideoModal()" image-exist/>
+                     <div ng-if="video_countdown" class="timer-part" countdown='' date='{{video_countdown}}'></div>
+                </span>
+
+                <div class="profile-des">
+
+                    <ion-slide-box class="profile-slider">
+                        <ion-slide ng-repeat="profImage in profileImages track by $index">
+                          <div 
+                            class="profImage" ng-repeat="pImage in profImage" 
+                            ng-class="{ 'good' : pImage['user_whose_video_good'] !== null , 'bad' : pImage['user_whose_video_fake'] !== null ,'both_null' : pImage['user_whose_video_fake'] == null && pImage['user_whose_video_good'] == null }"
+                            >
+                            <!--<img ng-repeat="pImage in profImage" ng-if="pImage['profile_image']" id="{{pImage['user_videos_id']}}" src="{{pImage['profile_image']}}" class="circle circleImage" alt="#1" image-swap/>-->
+                            <img ng-if="pImage['thumb_url']" id="{{pImage['user_videos_id']}}" src="{{pImage['thumb_url']}}" data-video-url="{{pImage['video_url']}}" class="circle circleImage" alt="#1" image-swap/>
+                            <span ng-if="pImage['thumb_url']" class="noti">1</span>
+                          </div>
+                        </ion-slide>
+                    </ion-slide-box>
+
+                    <h4 >{{individual_user_details.user_details.username || 'My' }} campaign</h4>
+                    <span ng-if="profile_complete_show_progress==='1' || referState==='1' " class="progress">Progress <strong>50%</strong></span>
+
+                    <div ng-if="$root.isMaintain == 'true'">
+                      <img class="batch" alt="" ng-src="img/Batch.png">
+                    </div>
+
+                     <div class="rating">
+                       <span class="rating-full">calorie <strong><i class="ion-android-star"></i> {{ total_calorie_have || 0 }}</strong></span> 
+                       <span class="rating-give">given <strong><i class="ion-android-star"></i> {{ total_calorie_given || 0 }}</strong></span> 
+                    </div>
+                </div>
+
+            </div>
+         </div>
+         <div class="profile-details" ng-if="myProfile=='1'">
+            <ul>
+               <li>
+                  <h5>Weight</h5>
+                  <img ng-src="img/weight.svg" alt="" change-svg><span >{{individual_user_details.campaign[0].current_weight || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Height</h5>
+                  <img ng-src="img/height.svg" alt="" change-svg><span >{{individual_user_details.campaign[0].campaign_height || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Goal</h5>
+                  <img ng-src="img/goal.svg" alt="" change-svg><span >{{individual_user_details.campaign[0].proposed_weight || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Duration</h5>
+                  <img ng-src="img/duration.svg" alt="" change-svg><span >{{individual_user_details.campaign[0].campaign_duration || '0'}}</span>
+               </li>
+            </ul>
+         </div>
+
+          <div class="profile-details" ng-if="myProfile=='0'">
+            <ul>
+               <li>
+                  <h5>Weight</h5>
+                  <img ng-src="img/weight.svg" alt="" change-svg><span >{{my_details.userInfo.result.campaign[0].current_weight || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Height</h5>
+                  <img ng-src="img/height.svg" alt="" change-svg><span >{{my_details.userInfo.result.campaign[0].campaign_height || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Goal</h5>
+                  <img ng-src="img/goal.svg" alt="" change-svg><span >{{my_details.userInfo.result.campaign[0].proposed_weight || '0'}}</span>
+               </li>
+               <li>
+                  <h5>Duration</h5>
+                  <img ng-src="img/duration.svg" alt="" change-svg><span >{{my_details.userInfo.result.campaign[0].campaign_duration || '0'}}</span>
+               </li>
+            </ul>
+         </div>
+<!--          ui-sref="campaignBrowse"-->
+         <div class="profile-addmore" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">
+<!--            <ul>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()" ng-if="myProfile=='1'" ng-disabled="otheruserId!=='{{uid}}'">+ Support Others</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()" ng-if="myProfile=='0'">+ Support Others</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='1'" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ui-sref="upload-video">+ Post Update</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' " ng-if="myProfile=='0'"  ui-sref="upload-video">+ Post Update</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ng-if="myProfile=='1'" ui-sref="myCampaign">+ Market Campaign</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1'" ng-if="myProfile=='0'" ui-sref="myCampaign">+ Market Campaign</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ng-if="myProfile=='1'" >+ Add Funds</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' " ng-if="myProfile=='0'" ui-sref="addFund">+ Add Funds</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1'" ui-sref="globalChat">+ Global Chat</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='1'" ng-disabled="otheruserId!=='{{uid}}'">+ Contributed Campaigns</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='0'" ng-click="myContribution()"  >+ Contributed Campaigns</button></li>
+            </ul>-->
+
+            <ul>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()"  >+ Support Others</button></li>
+             
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='1'" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ui-sref="upload-video">+ Post Update</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' " ng-if="myProfile=='0'"  ui-sref="upload-video">+ Post Update</button></li>
+               
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ui-sref="myCampaign">+ Market Campaign</button></li>
+              
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"   ui-sref="addFund">+ Add Funds</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ui-sref="globalChat">+ Global Chat</button></li>
+              
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-click="myContribution()"  >+ Contributed Campaigns</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="!endCampaignStatus" ng-click="startNewCampaign()"  >+ Start new campaign</button></li>
+            </ul>
+
+         </div>
+
+
+            <div class="profile-chat profile-scroll" id="profileChat"
+               ng-if="myProfile=='1'">
+<!--               on-long-press="itemOnLongPress(message)" on-touch-end="itemOnTouchEnd()" -->
+            <div class="list" ng-repeat="message in messages">
+                  <div class="item item-avatar">
+                    <img ng-src="{{message.user_image || 'img/no-user.png'}}" alt="" image-exists>
+
+                    <div class="avater-content">
+                        <div ng-model="message.text">
+                            {{message.text}}
+                        </div>
+                    </div>
+                  </div>
+              </div>
+         </div>
+
+<!--         <div class="profile-chat user-scroll" id="profileChat" ng-show="unCompleteCampaign==='0'" ng-if="myProfile=='0'">
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>That is a great campaign <a class="user" href="#">user3</a>. Try eating before 4pm, may help.</p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>I concur</p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>Thanks <a class="user" href="#">user1</a></p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>Here's a star for that tip <a class="user" href="#">user1</a></p>
+                  </div>
+               </div>
+            </div>
+         </div>-->
+
+
+
+
+
+
+<!--         <div class="profile-chat user-scroll" id="profileChat" ng-if="myProfile=='1'">
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>That is a great campaign <a class="user" href="#">user3</a>. Try eating before 4pm, may help.</p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>I concur</p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>Thanks <a class="user" href="#">user1</a></p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>Here's a star for that tip <a class="user" href="#">user1</a></p>
+                  </div>
+               </div>
+            </div>
+         </div>-->
+
+         <div class="profile-endcampaign" ng-show="unCompleteCampaign==='1' && completeOrNot==='{{uid}}'" ng-if="myProfile=='0' || myProfile == undefined" id="">
+                
+                <div ng-if="referStae == 1 || referStae == 2">
+                    <p style="color:yellow">Your campaign is not fully set up yet</p>
+                    <p class="inCompleteCampaignMessage">Please Complete Your Campaign Setup to unlock all of our key features,<br/>tools and community</p>
+                </div>
+
+                <p class="inCompleteCampaignMessage" ng-if="referStae==3">Your campaign is not fully set up yet, please complete your campaign setup to unlock all Diet Monet features</p>
+
+                <a ng-if="referStae==1"  style="color:yellow" class="completeCampaignBtn" ng-click="completeCampaign()">Upload video to complete profile</a>
+                <a ng-if="referStae==2" style="color:yellow" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
+                <a ng-if="referStae==3" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the campaign here</a>
+
+         </div>
+         <div class="profile-chat profile-scroll" id="profileChat"
+               ng-show="hideOption==1">
+<!--               on-long-press="itemOnLongPress(message)" on-touch-end="itemOnTouchEnd()" -->
+            <div class="list" ng-repeat="message in messages">
+                  <div class="item item-avatar">
+                    <img ng-src="{{message.user_image || 'img/no-user.png'}}" alt="" image-exists>
+
+                    <div class="avater-content">
+                        <div ng-model="message.text">
+                            {{message.text}}
+                            <div class="hideIt"
+                              style="float: right; margin: 5px; margin: -20px 0 0 160px; position: absolute;display: -webkit-inline-box;">
+                              <div style="margin: 10px;" class="ion-android-delete" ng-click="messages.$remove(message)"></div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+         </div>
+<!--        <div class="profile-chat user-scroll" id="profileChat" ng-show="unCompleteCampaign==='1' && completeOrNot==='_1' " ng-if="myProfile=='0'">
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>That is a great campaign <a class="user" href="#">user3</a>. Try eating before 4pm, may help.</p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>I concur</p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>Thanks <a class="user" href="#">user1</a></p>
+                  </div>
+               </div>
+            </div>
+            <div class="list">
+               <div class="item item-avatar">
+                  <img ng-src="img/no-user.png">
+                  <div class="avater-content">
+                     <p>Here's a star for that tip <a class="user" href="#">user1</a></p>
+                  </div>
+               </div>
+            </div>
+         </div>-->
+
+
+          <!-- ng-show="unCompleteCampaign==='1' && completeOrNot==='_1' " ng-if="myProfile=='0'" -->
+         <div class="profile-chat profile-scroll" id="profileChat"
+               ng-show="unCompleteCampaign !== '1' && completeOrNot !== '{{uid}}'" ng-if="myProfile=='0' || myProfile == undefined">
+<!--               on-long-press="itemOnLongPress(message)" on-touch-end="itemOnTouchEnd()" -->
+            <div class="list" ng-repeat="message in messages">
+                  <div class="item item-avatar">
+                    <img ng-src="{{message.user_image || 'img/no-user.png'}}" alt="" image-exists>
+
+                    <div class="avater-content">
+                        <div ng-model="message.text">
+                            {{message.text}}
+                            <div class="hideIt"
+                              style="float: right; margin: 5px; margin: -20px 0 0 160px; position: absolute;display: -webkit-inline-box;">
+                              <div style="margin: 10px;" class="ion-android-delete" ng-click="messages.$remove(message)"></div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+         </div>
+
+      </div>
+
+   </ion-content>
+
+   <!-- ng-class="{ 'fixed-chatting': myProfile == '0' }" -->
+    <ion-footer-bar class="fixed-chatting" >
+        <div class="profile-more-fld" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" >
+            <div class="left">
+               <a href="#"><i class="icon ion-plus" ng-class="{ 'gold-icon': $root.isMaintain == 'true'}"></i></a>
+            </div>
+            <div class="right">
+               <input type="text" ng-model="campaign_text" ng-click="checkMember()" class="inputBox" placeholder="Add Comment" >
+               <input type="submit" ng-click="addMessage(campaign_text); campaign_text = ''" value="Send">
+            </div>
+         </div>
+    </ion-footer-bar>
+
+     <ion-pull-up-footer class="bar-calm" initial-state="minimized"  max-height="265" on-expand="onFooterExpand()" on-collapse="onFooterCollapse()" state="footerState" default-behavior="show" >
+        <ion-pull-up-handle
+        ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"
+        icon-expand="ion-chevron-up" icon-collapse="ion-chevron-down" width="100" height="25" style="border-radius: 25px 25px 0 0">
+        </ion-pull-up-handle>
+
+        <ion-pull-up-content scroll="false" class="footerContent">
+<!--         <div class="page-footer"  >
+
+            <a class="button" ng-click="logout()">Logout</a>
+            <a class="button" ui-sref="profile">Profile</a>
+            <p class="ac-bal">Account Balance: <span class="amount">&nbsp; ${{wallet}}</span></p>
+           <div class="p-sec">
+               <p>Weight Loss Progress</p>
+               <div class="p-bar"><span class="skill" style="width:{{total_progress}}%"></span></div>
+            </div>
+            <div class="p-sec">
+               <p>Goal Duration</p>
+               <div class="p-bar"><span class="skill"></span></div>
+
+               <p>No. of campaign funded <span>  {{total_campaign}}</span></p>
+            </div>
+         </div> -->
+
+
+             <div class="page-footer">
+
+            <a class="button" ng-click="logout()" ng-if="check=='1'" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Logout</a>
+<!--            <a class="button" ui-sref="profile" ng-if="check=='1'">Profile</a>-->
+            <a class="button" ui-sref="login" ng-if="check=='0'" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Log in</a>
+<!--            <a class="button" ng-click="signUp()" ng-if="check=='0'">My Campaign</a>-->
+            <p class="ac-bal">Account Balance: <span class="amount" ng-if="check=='0'">&nbsp; $xxx.xx</span>
+<!--            <span class="amount" ng-if="check=='1'">&nbsp; ${{my_details.userInfo.result.wallet}}</span>-->
+            <span class="amount" ng-if="check=='1'">&nbsp; ${{my_details_other_profile.userInfo.result.wallet}}</span>
+            </p>
+            <div class="p-sec">
+               <p>Weight Loss Progress</p>
+               <div class="p-bar"><span class="skill" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" style="width:{{total_progress}}%"></span></div>
+            </div>
+            <div class="p-sec">
+               <p>Goal Duration</p>
+               <div class="p-bar"><span class="skill" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"></span></div>
+
+               <p ng-if="check=='0'">No. of campaign funded <span >0</span></p>
+               <p ng-if="check=='1'">No. of campaign funded <span >  {{my_details_other_profile.userInfo.result.total_campaign || '0'}}</span></p>
+
+
+            </div>
+
+
+         </div>
+        </ion-pull-up-content>
+    </ion-pull-up-footer>
+
+    <script type="text/ng-template" id="videoModalScript.html">
+        <ion-modal-view>
+          <ion-header-bar style="border-color: #101010; background-color: #141415;">
+            <button ng-show="other_user_id!='{{uid}}'" style="height: 30px;font-size: 20px;" ng-if="myProfile!=0" class="button button-assertive" ng-click="fakeVideo()" >Fake video</button>
+            <button ng-show="other_user_id!='{{uid}}'" style="height: 30px;font-size: 20px;margin-left: 30px;" ng-if="myProfile!=0" ng-click="goodVideo()" class="button button-balanced" >Good</button>
+            <button  class="button button-dark" ng-click="closeModal()">Cancel</button>
+          </ion-header-bar>
+          <ion-content style="background:#333" id="video-player-container">
+            <div class="embed-responsive embed-responsive-16by9">
+              <video id="video-player"  class="centerme" autoplay="true" type="video/mp4" ng-src="{{modal_video.videoUrl}}" controls> </video>
+            </div>
+          </ion-content>
+        </ion-modal-view>
+  </script>
+
+   <script id='reportPopupFake.html' type='text/ng-template' >
+        <div ng-repeat="list in fakelist track by list.id">
+            <ion-radio class="wrapping-list" ng-model="choice.value" ng-change="fakeResponseList(list.id)" ng-value="'1'"> {{list.fake_video_options}}</ion-radio>
+        </div>
+   </script>
+</ion-view>

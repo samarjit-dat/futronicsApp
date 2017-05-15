@@ -1,0 +1,50 @@
+<ion-view class="body-bg" view-title="Account" style="background-image: url(img/body-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+  <ion-content>
+  <div class="bar bar-header">
+	 <!-- <ion-badge _ngcontent-cbo-6="" color="secondary" class="badge-wp badge-wp-secondary"><h3 class="head">40%</h3></ion-badge>-->
+	  <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="profile"></button>
+  </div>
+    <div class="full-height">
+        <div class="account-block">
+            <div class="content">
+              <h3 >Update Your Campaign</h3>
+              <button ng-class="{ 'gold-border': $root.isMaintain == 'true'}" class="button icon ion-upload round-button">Upload Video</button>
+              <h4 class="highlight-text">Please upload an updated video every 1-4 days.</h4>
+              <p><u>Video requirements:</u> <br/>
+                 ~30 seconds duration <br />
+                 No baggy clothes <br />
+                 Stable shots <br />
+                 Well lits area
+              </p>
+              <div class="account-fund-form">
+                <input type="submit" ui-sref="upload-video" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" value="Submit">
+             </div>
+           </div>
+        </div>
+    </div>
+  </ion-content>
+    <ion-pull-up-footer class="bar-calm" initial-state="minimized"  max-height="265" on-expand="onFooterExpand()" on-collapse="onFooterCollapse()" state="footerState" default-behavior="show" >
+            <ion-pull-up-handle 
+              ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"
+            icon-expand="ion-chevron-up" icon-collapse="ion-chevron-down" width="100" height="25" style="border-radius: 25px 25px 0 0">
+            </ion-pull-up-handle>
+
+            <ion-pull-up-content scroll="false" class="footerContent">
+            <div class="page-footer"  >
+                <a class="button" ng-click="logout()" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Logout</a>
+                <a class="button" ng-click="myOwnProfile()" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">Profile</a>
+                <p class="ac-bal">Account Balance: <span class="amount">&nbsp; ${{my_details_other_profile.userInfo.result.wallet || '0'}}</span>
+                </p>
+                <div class="p-sec">
+                   <p>Weight Loss Progress</p>
+                   <div class="p-bar"><span class="skill" style="width:{{total_progress || '0'}}%"></span></div>
+                </div>
+                <div class="p-sec">
+                   <p>Goal Duration</p>
+                   <div class="p-bar"><span class="skill"></span></div>
+                   <p>No. of campaign funded <span >  {{my_details_other_profile.userInfo.result.total_campaign || '0'}}</span></p>
+                </div>
+             </div>  
+            </ion-pull-up-content>
+        </ion-pull-up-footer>
+</ion-view>
