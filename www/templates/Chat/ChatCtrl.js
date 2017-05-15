@@ -122,7 +122,24 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                     text: 'Ok' ,
                     type: 'button-calm',
                     onTap: function(e) {
-                        var msg = parseInt($scope.muteUserId);
+                        // var msg = parseInt($scope.muteUserId);
+                        // var mutedListArray = [];
+                        // if((mutedListArray.length === 0  || mutedListArray ) && (!$localstorage.getObject('muteChatUser'))){
+                        //         mutedListArray.push(msg);
+                        //         $localstorage.setObject('muteChatUser',mutedListArray);
+                        // }else{
+                        //     mutedListArray = $localstorage.getObject('muteChatUser');
+                        //     if(mutedListArray.indexOf(msg) === -1){
+                        //         mutedListArray.push(msg);
+                        //         $localstorage.setObject('muteChatUser',mutedListArray);
+                        //     }
+                        // }
+
+                        var msg = {
+                            id : parseInt($scope.muteUserId),
+                            time : Date.now()
+                        };
+
                         var mutedListArray = [];
                         if((mutedListArray.length === 0  || mutedListArray ) && (!$localstorage.getObject('muteChatUser'))){
                                 mutedListArray.push(msg);
@@ -235,6 +252,19 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         $scope.campaign_text = '';
         $scope.$broadcast('scroll');
     };
+    var mutedTime = $rootScope.getMutedTime;
+    $interval(function(){
+        var now = Date.now();
+        var cutoff = now - (mutedTime * 60 * 1000);
+        if($localstorage.getObject('muteChatUser')){
+            $localstorage.getObject('muteChatUser').forEach(function(ele,index){
+                if(ele.time < cutoff) {
+                    $localstorage.remove('muteChatUser')[index];
+                }
+            });
+        }
+        // console.log($localstorage.getObject('muteChatUser'));
+    },1*1000);
 
     // $interval(function(){
     //     var now = Date.now();
