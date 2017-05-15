@@ -1,7 +1,8 @@
 futronics.controller('accountSettingsCtrl',
     function($scope,StorageService,$ionicPopup,$rootScope,
     AccountService,Loader,$state,$localstorage,endcampaign,
-    TimeAndDateFactory,HideCampaign,MaintainService,ShowCampaign,check_hideOrShow){
+    TimeAndDateFactory,HideCampaign,MaintainService,ShowCampaign,check_hideOrShow,
+    AfterEndCampaign){
      /* ******************** UserId from LocalStorage start***********************  */
     
       $scope.isMaintainPhase = localStorage.isMaintainPhase;
@@ -11,10 +12,33 @@ futronics.controller('accountSettingsCtrl',
     $scope.endCampaignStats = 1;
     $scope.endCampaign = 0;
     $scope.campaign_id=localStorage.getItem('campaign_id');
-    if($rootScope.campaign_status == 0) {
-         $scope.endCampaignStats = 0;
-         $scope.endCampaign = 1;
+    console.log($scope.campaign_id+"campaignid");
+    if($rootScope.isMaintain == 'false'){
+        var data={
+           user_id:$rootScope.userId,
+           campaign_id:$scope.campaign_id
+        }; 
+    }else {
+        if(localStorage.getItem('maintainId'))
+            var maintainId = localStorage.getItem('maintainId');
+        var data={
+           user_id:$rootScope.userId,
+           maintence_id:maintainId
+        }; 
     }
+    var data=$rootScope.formatInputString(data);
+
+    AfterEndCampaign.afterEndCampaignSetValues(data).then(function(response){
+        console.log('afterendcampaing')
+        console.log(response);
+        if($rootScope.campaign_status == 0) {
+         $scope.endCampaignStats = response.data.result.endCampaignStats;
+          //$scope.endCampaignStats = 0;
+         $scope.endCampaign = response.data.result.endCampaign;
+        // $scope.endCampaign =1;
+    }
+    });
+    
    
     $scope.endCampaignStatus = $rootScope.endCampaignStatus;
     
@@ -126,7 +150,10 @@ futronics.controller('accountSettingsCtrl',
                             campain_start_date: $rootScope.campaign_date[0],
                             campain_close_requested_day_date:TimeAndDateFactory.getTodayDate(),
                             user_id:$rootScope.userId,
-                            campaign_id:$scope.campaign_id
+                            campaign_id:$scope.campaign_id,
+                            endCampaignStats:$scope.endCampaignStats,
+                            endCampaign:$scope.endCampaign
+
                         }; 
                     } else {
                        if(localStorage.getItem('maintainStartDate'))
@@ -138,7 +165,9 @@ futronics.controller('accountSettingsCtrl',
                                 maintence_start_date: maintain_start_date,
                                 maintence_close_requested_day_date:TimeAndDateFactory.getTodayDate(),
                                 user_id:$rootScope.userId,
-                                maintence_id:maintainId
+                                maintence_id:maintainId,
+                                endCampaignStats:$scope.endCampaignStats,
+                                endCampaign:$scope.endCampaign
                             }; 
                     }
                     var data=$rootScope.formatInputString(data);
@@ -284,17 +313,20 @@ futronics.controller('accountSettingsCtrl',
     check_hideOrShow.hideShowLocalStorageValue(data).then(function(response){
         console.log('hschk');
         console.log(response);
+        if(response.data.status == 1){
             if($localstorage.get('hideShowCampaign')){
-                if($localstorage.get('hideShowCampaign')==0){
-                    $scope.C_hide = 0;
-                    $scope.C_show = 0;
+                    if($localstorage.get('hideShowCampaign')==0){
+                        $scope.C_hide = 0;
+                        $scope.C_show = 0;
+                    }else{
+                        $scope.C_hide = 1;
+                        $scope.C_show = 1;
+                    }
                 }else{
-                    $scope.C_hide = 1;
-                    $scope.C_show = 1;
+                        $scope.C_hide = 0; 
                 }
-            }else{
-                    $scope.C_hide = 0; 
-            }
+        }
+            
     });
     
    

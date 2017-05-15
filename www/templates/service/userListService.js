@@ -96,7 +96,7 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                         if(localStorage.getItem('currentSate')){
                            
                             var _state=localStorage.getItem('currentSate');
-                          
+                           
                             if( _state=='upload-video' ){
                                // $rootScope.referState=1;
                                  localStorage.setItem("refrstate",1);
@@ -106,6 +106,13 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                 //$rootScope.referState=2;
                                
                                  localStorage.setItem("refrstate",2);
+                            }else if((_state=='campaignBrowse') || (_state=='contribution') 
+                            ||  (_state=='thanksAfterContribution') ||  (_state=='profileViewStats') ||  (_state=='withdrawCaloryAndCash')
+                            ||  (_state=='globalChat')  ||  (_state=='chat') ||  (_state=='account_settings') 
+                            ||  (_state=='endCampaignProfile')  ||  (_state=='contactAdmin') ||  (_state=='myContribution') 
+                            ||  (_state=='myContributionUserProfile')  ||  (_state=='addFund') 
+                            ||  (_state=='sponsorsAcquired')  ||  (_state=='mySponsorsUserProfile')){
+                                 localStorage.setItem("refrstate",3);
                             }else{
                                 
                                 if(localStorage.getItem('actualState')){

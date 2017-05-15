@@ -642,3 +642,30 @@ futronics.service('check_hideOrShow',function($rootScope,$q, $localstorage,URL,L
         });
     };
 });
+
+futronics.service('AfterEndCampaign',function($rootScope,$q, $localstorage,URL,Loader,$http){
+    this.afterEndCampaignSetValues=function(data){
+        var hideshow_storagevalue;
+         if($rootScope.isMaintain == 'false'){
+             end_storagevalue = "/checkIfCampaignCloseStatsWeightLoss";
+        }else {
+             end_storagevalue = "/checkIfCampaignCloseStatsMaintence";
+        }
+      var defered=$q.defer();
+      return $http({
+            method: "POST",
+            url: URL.BASE+end_storagevalue,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data:data
+        }).then(function(response){
+            console.log(response+"end_storagevalue");
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        },function(error){
+            Loader.hideLoading();
+            console.log(error+"error");
+            defered.reject(error);
+        });
+    };
+});
