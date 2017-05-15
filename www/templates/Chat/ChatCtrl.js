@@ -40,6 +40,15 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     //     $scope.messages = newMessageArray;
     // });
 
+    if(localStorage.getItem('getMutedTime') === null || localStorage.getItem('getMutedTime') === undefined){
+        GlobalChatService.getMutedTime()
+        .then(function(res){
+            localStorage.setItem('getMutedTime',res.data.result.mute_time);
+        });
+    }else{
+        $rootScope.getMutedTime = localStorage.getItem('getMutedTime');
+    }
+    
     $scope.itemOnLongPress = function() {
         $scope.myVar = 'showIt'
         console.log('Long press');
@@ -179,19 +188,10 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                         var reportUserId = document.getElementById('userReport');
                         reportUserId.style.height = window.innerHeight+'px';
 
-                        $scope.reportUsers = [
-                            { user_id: '1',user_name : 'Demo 1'},
-                            { user_id: '2',user_name : 'Demo 2'},
-                            { user_id: '3',user_name : 'Demo 3'},
-                            { user_id: '4',user_name : 'Demo 4'},
-                            { user_id: '5',user_name : 'Demo 5'}
-                        ];
-
-                        // GlobalChatService.getReportUsersList()
-                        //     .then(function(res){
-                        //         $scope.reportUsers = res.data.result.all_user_reported;
-                        //     });
-                        
+                        GlobalChatService.getReportUsersList($rootScope.formatInputString({user_id : $rootScope.userId}))
+                            .then(function(res){
+                                $scope.reportUsers = res.data.result.all_user_reported;
+                            });
                     }
                 }]
             });
@@ -207,15 +207,15 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         };
 
         $scope.report = function(id){
-            console.log(id);
-            // var dataJson = {
-            //     user_who_report : loggedinUserId,
-            //     user_who_is_reported : $scope.muteUserId
-            // }
-            // GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res){
-            //     console.log("Report user");
-            //     console.log(res);
-            // });
+            var dataJson = {
+                user_who_report : loggedinUserId,
+                user_who_is_reported : $scope.muteUserId
+            }
+            GlobalChatService.reportUser($rootScope.formatInputString(dataJson))
+                .then(function(res){
+                    console.log("Report user");
+                    console.log(res);
+                });
         }
     }
 
@@ -236,17 +236,17 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         $scope.$broadcast('scroll');
     };
 
-    $interval(function(){
-        var now = Date.now();
-        var cutoff = now - (1 * 60 * 1000);
-        ref.on('value', function(snapshot) {
-            if(snapshot.val() !== null){
-                snapshot.forEach(function(childSnapshort){
-                    if(childSnapshort.val().createdAt < cutoff){
-                        snapshot.ref.remove();
-                    } 
-                });  
-            }
-        });
-    },1000);
+    // $interval(function(){
+    //     var now = Date.now();
+    //     var cutoff = now - (15 * 60 * 1000);
+    //     ref.on('value', function(snapshot) {
+    //         if(snapshot.val() !== null){
+    //             snapshot.forEach(function(childSnapshort){
+    //                 if(childSnapshort.val().createdAt < cutoff){
+    //                     snapshot.ref.remove();
+    //                 } 
+    //             });  
+    //         }
+    //     });
+    // },1000);
 });

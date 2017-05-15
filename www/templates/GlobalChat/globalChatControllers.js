@@ -508,19 +508,19 @@ $scope.floorValue =0;
         } 
     };
     
-    $interval(function(){
-        var now = Date.now();
-        var cutoff = now - (1 * 60 * 1000);
-        ref.on('value', function(snapshot) {
-            if(snapshot.val() !== null){
-                snapshot.forEach(function(childSnapshort){
-                    if(childSnapshort.val().createdAt < cutoff){
-                        snapshot.ref.remove();
-                    } 
-                });  
-            }
-        });
-    },1000);
+    // $interval(function(){
+    //     var now = Date.now();
+    //     var cutoff = now - (1 * 60 * 1000);
+    //     ref.on('value', function(snapshot) {
+    //         if(snapshot.val() !== null){
+    //             snapshot.forEach(function(childSnapshort){
+    //                 if(childSnapshort.val().createdAt < cutoff){
+    //                     snapshot.ref.remove();
+    //                 } 
+    //             });  
+    //         }
+    //     });
+    // },1000);
 
 });
 
