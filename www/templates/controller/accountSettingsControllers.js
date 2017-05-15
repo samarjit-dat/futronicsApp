@@ -1,7 +1,7 @@
 futronics.controller('accountSettingsCtrl',
     function($scope,StorageService,$ionicPopup,$rootScope,
     AccountService,Loader,$state,$localstorage,endcampaign,
-    TimeAndDateFactory,HideCampaign,MaintainService,ShowCampaign){
+    TimeAndDateFactory,HideCampaign,MaintainService,ShowCampaign,check_hideOrShow){
      /* ******************** UserId from LocalStorage start***********************  */
     
       $scope.isMaintainPhase = localStorage.isMaintainPhase;
@@ -10,6 +10,7 @@ futronics.controller('accountSettingsCtrl',
     StorageService.storage();
     $scope.endCampaignStats = 1;
     $scope.endCampaign = 0;
+    $scope.campaign_id=localStorage.getItem('campaign_id');
     if($rootScope.campaign_status == 0) {
          $scope.endCampaignStats = 0;
          $scope.endCampaign = 1;
@@ -52,7 +53,7 @@ futronics.controller('accountSettingsCtrl',
     }else{
         $scope.campaign_duration=0;
     }
-    $scope.campaign_id=localStorage.getItem('campaign_id');
+   
     /* ******************** UserId from LocalStorage end***********************  */
     $scope.end_campaign=function(){
         console.clear()
@@ -265,18 +266,38 @@ futronics.controller('accountSettingsCtrl',
     }else{
       $scope.newsOff='0'; 
     }
-    
-    if($localstorage.get('hideShowCampaign')){
-        if($localstorage.get('hideShowCampaign')==0){
-            $scope.C_hide=0;
-            $scope.C_show=0;
-        }else{
-            $scope.C_hide=1;
-            $scope.C_show=1;
-        }
-    }else{
-      $scope.C_hide='0'; 
+    if($rootScope.isMaintain == 'false'){
+        var data={
+           user_id:$rootScope.userId,
+           campaign_id:$scope.campaign_id
+        }; 
+    }else {
+        if(localStorage.getItem('maintainId'))
+            var maintainId = localStorage.getItem('maintainId');
+        var data={
+           user_id:$rootScope.userId,
+           maintence_id:maintainId
+        }; 
     }
+    var data=$rootScope.formatInputString(data);
+
+    check_hideOrShow.hideShowLocalStorageValue(data).then(function(response){
+        console.log('hschk');
+        console.log(response);
+            if($localstorage.get('hideShowCampaign')){
+                if($localstorage.get('hideShowCampaign')==0){
+                    $scope.C_hide = 0;
+                    $scope.C_show = 0;
+                }else{
+                    $scope.C_hide = 1;
+                    $scope.C_show = 1;
+                }
+            }else{
+                    $scope.C_hide = 0; 
+            }
+    });
+    
+   
     $scope.newsFeed=function(data){
         $rootScope.showDivider = data;
         if(data==1){
@@ -331,12 +352,19 @@ futronics.controller('accountSettingsCtrl',
                             ]
                         });
                     } else {
+                        var hide_show;
+                         if(v==1){
+                              hide_show = 0;
+                         } else {
+                              hide_show = 1;
+                         }
                          if($rootScope.isMaintain == 'false'){
                             var data={
                                 campain_start_date: $rootScope.campaign_date[0],
                                 campain_show_requested_day_date:TimeAndDateFactory.getTodayDate(),
                                 user_id:$rootScope.userId,
-                                campaign_id:$scope.campaign_id
+                                campaign_id:$scope.campaign_id,
+                                hideshowcampaign:hide_show
                             }; 
                         }else {
                           
@@ -349,7 +377,8 @@ futronics.controller('accountSettingsCtrl',
                                 maintence_start_date: maintain_start_date,
                                 maintence_show_requested_day_date:TimeAndDateFactory.getTodayDate(),
                                 user_id:$rootScope.userId,
-                                maintence_id:maintainId
+                                maintence_id:maintainId,
+                                hideshowcampaign:hide_show
                             }; 
                         }
                     var data=$rootScope.formatInputString(data);
@@ -430,12 +459,19 @@ futronics.controller('accountSettingsCtrl',
                         });
                     } else {
                          Loader.showLoading();
+                            var hide_show;
+                            if(v==1){
+                                hide_show = 0;
+                            } else {
+                                hide_show = 1;
+                            }
                             if($rootScope.isMaintain == 'false'){
                                 var data={
                                     campain_start_date: $rootScope.campaign_date[0],
                                     campain_hide_requested_day_date:TimeAndDateFactory.getTodayDate(),
                                     user_id:$rootScope.userId,
-                                    campaign_id:$scope.campaign_id
+                                    campaign_id:$scope.campaign_id,
+                                    hideshowcampaign:hide_show
                                 }; 
                             } else {
                                 if(localStorage.getItem('maintainStartDate'))
@@ -447,7 +483,8 @@ futronics.controller('accountSettingsCtrl',
                                     maintence_start_date: maintain_start_date,
                                     maintence_hide_requested_day_date:TimeAndDateFactory.getTodayDate(),
                                     user_id:$rootScope.userId,
-                                    maintence_id:maintainId
+                                    maintence_id:maintainId,
+                                    hideshowcampaign:hide_show
                                 }; 
                             }
                     var data=$rootScope.formatInputString(data);

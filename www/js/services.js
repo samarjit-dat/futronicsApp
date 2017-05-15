@@ -614,3 +614,31 @@ futronics.service('check_GlobalCommunity',function($rootScope,$ionicPopup,$state
         }
     };
 });
+
+futronics.service('check_hideOrShow',function($rootScope,$q, $localstorage,URL,Loader,$http){
+    this.hideShowLocalStorageValue=function(data){
+        var hideshow_storagevalue;
+         if($rootScope.isMaintain == 'false'){
+             hideshow_storagevalue = "/checkIfHideShowCampaignWeightLoss";
+        }else {
+             hideshow_storagevalue = "/checkIfHideShowCampaignMaintence";
+        }
+      var defered=$q.defer();
+    return $http({
+            method: "POST",
+            url: URL.BASE+hideshow_storagevalue,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data:data
+        }).then(function(response){
+            console.log(response+"hideshow_storagevalue");
+            Loader.hideLoading();
+            $localstorage.set("hideShowCampaign",response.data.result.weight_loss_hide_show_status);
+            defered.resolve(response);
+            return defered.promise;
+        },function(error){
+            Loader.hideLoading();
+            console.log(error+"error");
+            defered.reject(error);
+        });
+    };
+});
