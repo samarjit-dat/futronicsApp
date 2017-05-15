@@ -40,9 +40,9 @@
          <ion-list>
             <div class="user-report user-scroll profile-chat" id="userReport">
                <div class="row noPadding" ng-repeat="reportUser in reportUsers">
-                   <div class="col">
-                      <h5 class="left">{{reportUser.name}}</h5>
-                      <button class="button button-small right" ng-click="report(reportUser.id)">Report User</button>
+                   <div class="col" ng-class="{disabled : reportUser.user_reported == true }">
+                      <h5 class="left">{{reportUser.user_name}}</h5>
+                      <button class="button button-small right" ng-click="report(reportUser.user_id)">Report User</button>
                    </div>
               </div>
             </div>

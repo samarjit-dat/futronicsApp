@@ -1,5 +1,6 @@
 futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountService,$localstorage,
-    $ionicModal,$sce,$ionicPopup, $timeout,$location,IMAGE,$firebaseArray,GlobalChatService,check_GlobalCommunity) {
+    $ionicModal,$sce,$ionicPopup, $timeout,$location,IMAGE,$firebaseArray,GlobalChatService,check_GlobalCommunity,
+    $interval) {
 
     $scope.myVar = 'hideIt';
     $scope.messages = '';
@@ -179,12 +180,17 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                         reportUserId.style.height = window.innerHeight+'px';
 
                         $scope.reportUsers = [
-                            { id: '1',name : 'Demo 1'},
-                            { id: '2',name : 'Demo 2'},
-                            { id: '3',name : 'Demo 3'},
-                            { id: '4',name : 'Demo 4'},
-                            { id: '5',name : 'Demo 5'}
+                            { user_id: '1',user_name : 'Demo 1'},
+                            { user_id: '2',user_name : 'Demo 2'},
+                            { user_id: '3',user_name : 'Demo 3'},
+                            { user_id: '4',user_name : 'Demo 4'},
+                            { user_id: '5',user_name : 'Demo 5'}
                         ];
+
+                        // GlobalChatService.getReportUsersList()
+                        //     .then(function(res){
+                        //         $scope.reportUsers = res.data.result.all_user_reported;
+                        //     });
                         
                     }
                 }]
@@ -201,15 +207,15 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         };
 
         $scope.report = function(id){
-            var dataJson = {
-                user_who_report : loggedinUserId,
-                user_who_is_reported : $scope.muteUserId
-            }
-
-            GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res){
-                console.log("Report user");
-                console.log(res);
-            });
+            console.log(id);
+            // var dataJson = {
+            //     user_who_report : loggedinUserId,
+            //     user_who_is_reported : $scope.muteUserId
+            // }
+            // GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res){
+            //     console.log("Report user");
+            //     console.log(res);
+            // });
         }
     }
 
@@ -225,13 +231,22 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
             createdAt: firebase.database.ServerValue.TIMESTAMP
         };
 
-        // console.log(myChatObj);
         msgRef.$add(myChatObj);
-        // $scope.messages.push(myChatObj);
         $scope.campaign_text = '';
         $scope.$broadcast('scroll');
-        // var profileChat = document.querySelector("#chatOnly .profile-chat");
-        // profileChat.className += ' paddingBottom56'; 
     };
 
+    $interval(function(){
+        var now = Date.now();
+        var cutoff = now - (1 * 60 * 1000);
+        ref.on('value', function(snapshot) {
+            if(snapshot.val() !== null){
+                snapshot.forEach(function(childSnapshort){
+                    if(childSnapshort.val().createdAt < cutoff){
+                        snapshot.ref.remove();
+                    } 
+                });  
+            }
+        });
+    },1000);
 });

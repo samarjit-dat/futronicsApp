@@ -277,6 +277,27 @@ futronics.service('FakeVideoService',function($http,$q,URL,Loader,$localstorage,
 
         return defered.promise;
      };
+
+     this.getReportUsersList = function(_data){
+        Loader.showLoading();
+        var defered=$q.defer();
+
+        $http({
+            method: "POST",
+            url: URL.BASE+"/allReportedUsersList",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: _data
+        }).then(function(response){
+            Loader.hideLoading();
+            defered.resolve(response);
+        },function(error){
+            Loader.hideLoading();
+            console.log(error+"error");
+            defered.reject(error);
+        });
+
+        return defered.promise;
+     };
  });
 
 
