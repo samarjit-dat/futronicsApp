@@ -7,7 +7,7 @@ futronics.controller('globalChatControllers', function($scope,$ionicHistory,
       
 $scope.newshow=1;
 $scope.newsFeeds=[];
-$scope.showDivider = ($rootScope.showDivider === undefined) ? $rootScope.showDivider = false : !($rootScope.showDivider);
+($rootScope.showDivider === undefined) ? $scope.showDivider = false : $scope.showDivider = !($rootScope.showDivider);
 $scope.myVar = 'hideIt';
 $scope.messages = '';
 
