@@ -1023,20 +1023,23 @@ h5.camp-btn {
  .disabled { opacity: 0.5 !important;}
 
  /*================= 16-05-17 ==================*/
- .contribuationBtn { padding-bottom: 40px !important; display: inline-block;background: none !important;}
- .profile-chat .list{ margin: 0 ;}
- @media only screen and (max-width:413px){
-  .platform-android .profile-chat { height: 196px;}
-  .platform-android.platform-android5 .profile-chat { height: 269px;}
- }
-  @media only screen and (max-width:360px){
-  .platform-android .profile-chat { height: 177px;}
- }
- @media only screen and (max-width:320px){
-.platform-android #global_chat .user-chat-table.user-scroll {
-    height: 100px !important;
+#profileViewMyStats .user-chat-table .row { display: inline-block; }
+#profileViewMyStats .user-chat-table .row button { float: right; }
+.contribuationBtn { padding-bottom: 40px !important; display: inline-block;background: none !important;}
+.profile-chat .list{ margin: 0 ;}
+
+@media only screen and (max-width:413px){
+    .platform-android .profile-chat { height: 196px;}
+    .platform-android.platform-android5 .profile-chat { height: 269px;}
 }
-.platform-android.platform-ios #global_chat .user-chat-table.user-scroll {
-    height: 190px !important;
+@media only screen and (max-width:360px){
+    .platform-android .profile-chat { height: 177px;}
 }
- }
+@media only screen and (max-width:320px){
+    .platform-android #global_chat .user-chat-table.user-scroll {
+        height: 100px !important;
+    }
+    .platform-android.platform-ios #global_chat .user-chat-table.user-scroll {
+        height: 190px !important;
+    }
+}
