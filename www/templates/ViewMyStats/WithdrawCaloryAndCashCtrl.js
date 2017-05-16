@@ -4,50 +4,57 @@ futronics.controller('WithdrawCaloryAndCashCtrl',
     $window,$localstorage,$ionicPopup,URL,$location,IMAGE,$stateParams,CaloryService ) {
 
 
-    var user_id = JSON.parse(localStorage.getItem('userInfo')).userInfo.result[0].user_id;
-
-    $scope.showCashAndCalory = $stateParams.showCashAndCalory;
-    $rootScope.slidingAmountcalory=0;
-
-        $rootScope.slider = {
-        val: $rootScope.slidingAmount || 0,
-
-        options:{
-
-            floor: 0,ceil: 600,step: 1,
-            translate: function(val) {return '$'+ val ;},
-            id: 'slideEnded',onEnd: $scope.myEndListener
-        }
-    }
-
+    var user_info = JSON.parse(localStorage.getItem('userInfo')),
+        user_id = user_info.userInfo.result[0].user_id,
+        user_cash= user_info.userInfo.result[0].wallet,
+        user_cal= user_info.userInfo.result[0].calorie;
 
     $scope.$on("$ionicView.enter", function() {
        $scope.slider.val=0;
        $scope.slider.value=0;
-       //$scope.totalAmount=0;
-
     });
+
+    $scope.showCashAndCalory = $stateParams.showCashAndCalory;
+    $rootScope.slidingAmountcalory=0;
+
+    if($scope.showCashAndCalory === 1 ){
+        $rootScope.slider = {
+            val: $rootScope.slidingAmount || 0,
+            options:{
+                floor: 0,ceil: user_cash,step: 1,
+                translate: function(val) {return '$'+ val ;},
+                id: 'slideEnded',onEnd: $scope.myEndListener
+            }
+        }
+    }else if($scope.showCashAndCalory === 2){
+        $rootScope.slider = {
+            val: $rootScope.slidingAmount || 0,
+            options:{
+                floor: 0,ceil: user_cal,step: 1,
+                translate: function(val) {return val ;},
+                id: 'slideEnded',onEnd: $scope.myEndListener
+            }
+        }
+    }
+
     $scope.$on("slideEnded", function() {
 
         $rootScope.slidingAmountcalory= $scope.slider.val;
         console.log($rootScope.slidingAmount);
-        //alert($scope.slider.val);
-
-
     });
     $scope.allCalories=function(){
         $scope.slider.val= $rootScope.slider.options.ceil;
     };
 
-    $rootScope.slidingAmountCash=0;
-        $rootScope.slider = {
-        value: $rootScope.slidingAmount || 0,
-        options:{
-            floor: 0,ceil: 600,step: 1,
-            translate: function(value) {return '$'+ value ;},
-            id: 'slideEnded',onEnd: $scope.myEndListener
-        }
-    }
+    // $rootScope.slidingAmountCash=0;
+    //     $rootScope.slider = {
+    //     value: $rootScope.slidingAmount || 0,
+    //     options:{
+    //         floor: 0,ceil: user_cash,step: 1,
+    //         translate: function(value) {return '$'+ value ;},
+    //         id: 'slideEnded',onEnd: $scope.myEndListener
+    //     }
+    // }
 
     $scope.$on("slideEnded", function() {
 
@@ -88,6 +95,10 @@ futronics.controller('WithdrawCaloryAndCashCtrl',
 
                 var user_info = JSON.parse(localStorage.getItem("userInfo"));
                 user_info.userInfo.result.calories = res.data.result.updated_calorie_amount;
+                
+                user_info.userInfo.result.user_info[0].wallet = res.data.result.updated_money_amount;
+                user_info.userInfo.result.wallet = res.data.result.updated_money_amount;
+
                 var update_userInfo=JSON.stringify(user_info);
                 localStorage.setItem("userInfo",update_userInfo);
                 console.log(JSON.parse(localStorage.getItem("userInfo")));

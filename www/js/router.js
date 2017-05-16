@@ -77,9 +77,9 @@ futronics.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvide
   })
   .state('withdrawCaloryAndCash', {
     url: '/withdrawCaloryAndCash',
-        params :{
-          showCashAndCalory : null  
-        },
+    params :{
+      showCashAndCalory : null  
+    },
     templateUrl: 'templates/ViewMyStats/withdrawCaloryAndCash.html',
     controller: 'WithdrawCaloryAndCashCtrl'
   
