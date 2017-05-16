@@ -110,10 +110,6 @@ futronics.controller('ProfileViewStatsCtrl',
     /* *****  user own profle start **** */
          $scope.my_details='';
          $scope.my_details=JSON.parse(localStorage.getItem('userInfo'));
-         console.log('my_details');
-         //console.log($scope.my_details.userInfo.result.campaign);
-         console.log($scope.my_details);
-         
          
           $scope.my_details.userInfo.result.profile_images.forEach(function(ele){
             var requiredParams = [];
@@ -183,7 +179,7 @@ futronics.controller('ProfileViewStatsCtrl',
     $scope.closeModal = function(){
       $scope.modal_video.hide();
     };
-         
+    console.log(JSON.parse(localStorage.getItem("userInfo")));
     $scope.purchaseCalory=function(){
        $scope.modal_purchaseCalory.show();
        CaloryService.getCaloryList().then(function(res){
@@ -222,6 +218,15 @@ futronics.controller('ProfileViewStatsCtrl',
                             user_who_purchase : $scope.my_details.userInfo.result[0].user_id
                          };
                          CaloryService.purchaseCalory($rootScope.formatInputString(dataJson)).then(function(res){
+                            
+
+                              var user_info = JSON.parse(localStorage.getItem("userInfo"));
+                             user_info.userInfo.result.user_info[0].calorie = res.data.result.current_calorie_amount;
+                              
+                              user_info.userInfo.result.user_info[0].wallet = res.data.result.wallet_money;
+                              user_info.userInfo.result.wallet = res.data.result.wallet_money;
+                              
+                              console.log(user_info);
                              return;
                          });
 
