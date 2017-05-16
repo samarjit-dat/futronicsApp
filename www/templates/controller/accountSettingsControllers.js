@@ -125,7 +125,10 @@ futronics.controller('accountSettingsCtrl',
             scope: $scope,
             buttons: [
               { text: 'No' ,
-                type: 'button-dark'},  
+                type: 'button-dark',
+                onTap: function(e) {
+                 $scope.disable_btn = 0;
+              }},  
               { text: 'Yes' ,
               type: 'button-calm',
              

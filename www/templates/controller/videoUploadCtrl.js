@@ -41,7 +41,7 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                 $scope.btnDisabled = false;
                 navigator.createThumbnail($scope.path, function(err, imageData) {
                     if (err) throw err;
-                   $timeout(function(){ $scope.data = imageData;},1000);
+                   $timeout(function(){ $scope.videoSnapshot = imageData;},1000);
                    
                 });
             }
