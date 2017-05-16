@@ -159,10 +159,20 @@
      <ion-toggle ng-model="roller.checked" ng-change="rollerChange()">
      </ion-toggle>
 </div>
-<div class="contribute-btn">
-<button class="button button-stable" ui-sref="campaignBrowse">Exit</button>
-<button class="button button-calm" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"
-ng-disabled="slider.value > walletValue || slider.value === 0" ng-click="goToThanksContribution()">Contribute</button>
+<!--<div class="contribute-btn">
+    <button class="button button-stable" ui-sref="campaignBrowse">Exit</button>
+    <button class="button button-calm" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"
+    ng-disabled="slider.value > walletValue || slider.value === 0" ng-click="goToThanksContribution()">Contribute</button>
+</div>-->
+<div class="row contribuationBtn">
+    <button class="button button-stable left" ui-sref="campaignBrowse">Exit</button>
+    <button class="button button-calm right" 
+            style="margin-left: 25px;"
+            ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" 
+            ng-disabled="slider.value > walletValue || slider.value === 0" 
+            ng-click="goToThanksContribution()">
+    Contribute
+    </button>
 </div>
 </div>
 

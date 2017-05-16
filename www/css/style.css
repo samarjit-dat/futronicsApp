@@ -1023,6 +1023,7 @@ h5.camp-btn {
  .disabled { opacity: 0.5 !important;}
 
  /*================= 16-05-17 ==================*/
+ .contribuationBtn { padding-bottom: 40px !important; display: inline-block;background: none !important;}
  .profile-chat .list{ margin: 0 ;}
  @media only screen and (max-width:413px){
   .platform-android .profile-chat { height: 196px;}
