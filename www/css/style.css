@@ -1027,11 +1027,8 @@ h5.camp-btn {
 #profileViewMyStats .user-chat-table .row button { float: right; }
 .contribuationBtn { padding-bottom: 40px !important; display: inline-block;background: none !important;}
 .profile-chat .list{ margin: 0 ;}
-.profile-addmore ul li {
-    display: inline-block;
-    padding: 0 1px;
-    margin-top: 2px;
-}
+.profile-addmore ul li {display: inline-block;padding: 0 1px;margin-top: 2px;}
+.profile-endcampaign p { padding: 0 0 0 5px; }
 .profile-endcampaign {height: 290px;}
 .profile-addmore ul li button { font-size: 8px; }
 @media only screen and (max-width:413px){

@@ -317,7 +317,7 @@ futronics.controller('ProfileCtrl',
             }
                 $state.go('campaignBrowse');
         };
-
+    $scope.referStae = 1;
     /************************** video open on modal **************************************/
     $scope.openMainImageVideoModal = function(){
 
