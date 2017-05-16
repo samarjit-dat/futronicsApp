@@ -366,7 +366,7 @@
 <!--            <a class="button" ng-click="signUp()" ng-if="check=='0'">My Campaign</a>-->
             <p class="ac-bal">Account Balance: <span class="amount" ng-if="check=='0'">&nbsp; $xxx.xx</span>
 <!--            <span class="amount" ng-if="check=='1'">&nbsp; ${{my_details.userInfo.result.wallet}}</span>-->
-            <span class="amount" ng-if="check=='1'">&nbsp; ${{my_details_other_profile.userInfo.result.wallet}}</span>
+            <span class="amount" ng-if="check=='1'">&nbsp; ${{my_details_other_profile.userInfo.result.wallet || 0}}</span>
             </p>
             <div class="p-sec">
                <p>Weight Loss Progress</p>

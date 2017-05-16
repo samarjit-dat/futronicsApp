@@ -61,13 +61,14 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
     };
     
     $scope.signup = function(data) {
+       
         
         if($stateParams.fromEndCampaign){
             var userData = JSON.parse(localStorage.getItem('userInfo'));
-            userData = userData.userInfo.result[0];
+            userDataa = userData.userInfo.result[0];
 
             var _data={
-                user_id: userData.user_id,
+                user_id: userDataa.user_id,
                 card_no : data.cardNumber,
                 cvv_code : data.cvv,
                 city_zip : data.location,
@@ -83,6 +84,8 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
                 if(res.data.status === 1){
                     userData.wallet = res.data.result.current_updated_amount_in_wallet;
                     localStorage.setItem("userInfo",JSON.stringify(userData));
+                    localStorage.setItem("disableStartnewcampaign",userDataa.user_id+"disabled");
+                    $state.go('campaignBrowse');
                 }
             })
         }else{
@@ -99,7 +102,7 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
                 });
                 }else{
                 Loader.showLoading();
-
+               
                 $scope.data={
                     username:data.username,
                     user_password:data.password,

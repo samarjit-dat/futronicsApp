@@ -126,7 +126,7 @@ $ionicPopup, $timeout,ionPullUpFooterState,$location,IMAGE,stateFactory) {
                       onTap: function(e) {
                             localStorage.setItem('startnew','active');
                           
-                              $state.go("signup",{motivationAmount : $scope.slider.value,fromEndCampaign : true});
+                              $state.go("signup",{motivationAmount : $scope.slider.value,fromEndCampaign : 1});
                               
                                   return;
                               }

@@ -94,7 +94,7 @@ futronics.controller('WithdrawCaloryAndCashCtrl',
             });
         }
          $ionicPopup.show({
-                    template: '$'+ (parseInt($scope.slider.val) + parseInt($scope.slider.value) )+' is being deposited back to your back account.You can see your current balance in my stats page <br/><br/>Sincerely,<br/><br/>DietMoney Team',
+                    template: '$'+ (parseInt($scope.slider.val) + parseInt($scope.slider.value) )+' is being deposited back to your bank account.You can see your current balance in my stats page <br/><br/>Sincerely,<br/><br/>DietMoney Team',
                     scope: $scope,
                     cssClass:"custom-popup",
                     buttons: [

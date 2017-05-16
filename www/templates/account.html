@@ -10,22 +10,22 @@
      <div class="content">
      <ul>
       <li ng-if="isMaintainPhaseButton =='false'">
-        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="C_hide == '0'" ng-hide="endCampaign==1" ng-click="hideCampaign(0)">Hide my campaign</button>
-        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="C_show == '1'" ng-hide="endCampaign==1" ng-click="hideCampaign(1)">Show my campaign</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-disabled="disable_btn==1" ng-if="C_hide == '0'" ng-hide="endCampaign==1" ng-click="hideCampaign(0)">Hide my campaign</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-disabled="disable_btn==1"  ng-if="C_show == '1'" ng-hide="endCampaign==1" ng-click="hideCampaign(1)">Show my campaign</button>
       </li>
       <li ng-if="isMaintainPhaseButton =='true'">
-        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="C_hide == '0'" ng-hide="endCampaign==1" ng-click="hideCampaign(0)">Hide my Maintenance</button>
-        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-if="C_show == '1'" ng-hide="endCampaign==1" ng-click="hideCampaign(1)">Show my Maintenance</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-disabled="disable_btn==1" ng-if="C_hide == '0'" ng-hide="endCampaign==1" ng-click="hideCampaign(0)">Hide my Maintenance</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-disabled="disable_btn==1" ng-if="C_show == '1'" ng-hide="endCampaign==1" ng-click="hideCampaign(1)">Show my Maintenance</button>
        </li>
       <li ng-if="isMaintainPhaseButton =='false'">
-        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-hide="endCampaign==1" ng-click="end_campaign()">End my campaign</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-disabled="disable_btn==1" ng-hide="endCampaign==1" ng-click="end_campaign()">End my campaign</button>
       </li>
       <li>
-        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-show="endCampaignStats==0" ng-click="wouldUWantToStartCampaign()">Start new campaign</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-disabled="startnewcampaign_disable" ng-show="endCampaignStats==0" ng-click="wouldUWantToStartCampaign()">Start new campaign</button>
       </li>
       
        <li ng-if="isMaintainPhaseButton =='true'">
-        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-click="end_campaign()">End Maintenance Phase</button>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-disabled="disable_btn==1" ng-click="end_campaign()">End Maintenance Phase</button>
       </li>
       
        

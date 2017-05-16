@@ -10,6 +10,7 @@ futronics.service("UserListService", function($http,$q, $localstorage,URL) {
             if(response.data.status == 2){
                 var loadMoreId = document.getElementById('loadMore');
                 loadMoreId.style.display = 'none';
+               
             }
             defered.resolve(response);
             return defered.promise; 
@@ -108,11 +109,8 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                
                                  localStorage.setItem("refrstate",2);
                             }else if((_state=='campaignBrowse') || (_state=='contribution') 
-                            ||  (_state=='thanksAfterContribution') ||  (_state=='profileViewStats') ||  (_state=='withdrawCaloryAndCash')
-                            ||  (_state=='globalChat')  ||  (_state=='chat') ||  (_state=='account_settings') 
-                            ||  (_state=='endCampaignProfile')  ||  (_state=='contactAdmin') ||  (_state=='myContribution') 
-                            ||  (_state=='myContributionUserProfile')  ||  (_state=='addFund') 
-                            ||  (_state=='sponsorsAcquired')  ||  (_state=='mySponsorsUserProfile')){
+                            ||  (_state=='thanksAfterContribution') ){
+                                   
                                  localStorage.setItem("refrstate",3);
                             }else{
                                 

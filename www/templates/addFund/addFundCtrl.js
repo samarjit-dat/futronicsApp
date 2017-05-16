@@ -86,7 +86,7 @@ futronics.controller('addFundCtrl',
                     
                     if(response==undefined){
                         $ionicPopup.show({
-                                    template: 'Sorry!!!Something went wrong,Try again',
+                                    template: 'Sorry!!!you entered password may not be matched',
                                     title: '<p style="color:black"><b>Error!!!</b></p>',
                                     scope: $scope,
                                     buttons: [

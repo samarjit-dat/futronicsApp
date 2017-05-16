@@ -7,7 +7,7 @@ futronics.controller('globalChatControllers', function($scope,$ionicHistory,
       
 $scope.newshow=1;
 $scope.newsFeeds=[];
-$scope.showDivider = ($rootScope.showDivider === undefined) ? $rootScope.showDivider = false : !($rootScope.showDivider);
+($rootScope.showDivider === undefined) ? $scope.showDivider = false : $scope.showDivider = !($rootScope.showDivider);
 $scope.myVar = 'hideIt';
 $scope.messages = '';
 
@@ -316,6 +316,14 @@ $scope.floorValue =0;
             var data=$rootScope.formatInputString(data);
 
             UserListService.userListOnLoad(data).then(function(res){
+                console.log(res);
+                if(res.data.result.length == 0 || res.data.message == "No result found" && res.data.status == 2){
+                     
+                      if($rootScope.previousState !='login' && $rootScope.previousState !=''){
+                        toastr.error('No more data available');
+                      }
+                    
+                }
                var all_details =  $localstorage.getObject('allUserDetails');
                
 
