@@ -136,24 +136,29 @@ if(showNews==1){
 }else{
     $scope.newshow=1;
 }
+
+// if($rootScope.userId == '' || $rootScope.userId === undefined){
+//     document.getElementById('view_all').style.display = 'none';
+// }
+
 $rootScope.slidingAmount=0;
 $scope.steps =5;
 $scope.floorValue =0;
 
-        $rootScope.slider = {
-            value: 0,
-            options: {
-              floor: $scope.floorValue,
-              ceil: 1000,
-              step: $scope.steps,
-              translate: function(value) {
-                    return '&dollar;' + value;
-                 },
-                id: 'slideEnded',    
-                onEnd: $scope.myEndListener,
-                value:0
-            }
-        };
+$rootScope.slider = {
+    value: 0,
+    options: {
+        floor: $scope.floorValue,
+        ceil: 1000,
+        step: $scope.steps,
+        translate: function(value) {
+            return '&dollar;' + value;
+            },
+        id: 'slideEnded',    
+        onEnd: $scope.myEndListener,
+        value:0
+    }
+};
             
 
   $scope.signUp = function() {

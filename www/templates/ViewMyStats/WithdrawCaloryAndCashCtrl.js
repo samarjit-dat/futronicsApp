@@ -94,7 +94,7 @@ futronics.controller('WithdrawCaloryAndCashCtrl',
                 console.log(" Calory ");
 
                 var user_info = JSON.parse(localStorage.getItem("userInfo"));
-                user_info.userInfo.result.calories = res.data.result.updated_calorie_amount;
+                user_info.userInfo.result.user_info[0].calorie = res.data.result.updated_calorie_amount;
                 
                 user_info.userInfo.result.user_info[0].wallet = res.data.result.updated_money_amount;
                 user_info.userInfo.result.wallet = res.data.result.updated_money_amount;
