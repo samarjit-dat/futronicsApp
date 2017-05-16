@@ -229,16 +229,16 @@
          <div class="profile-endcampaign" ng-show="unCompleteCampaign==='1' && completeOrNot==='{{uid}}'" ng-if="myProfile=='0' || myProfile == undefined" id="">
                 
                 <div ng-if="referStae == 1 || referStae == 2" >
-                    <p style="color:yellow;font-size: 12px;">Your campaign is not fully set up yet</p>
+                    <p style="color:yellow;font-size: 14px;">Your campaign is not fully set up yet</p>
                     <p class="inCompleteCampaignMessage">Please Complete Your Campaign Setup to unlock all of our key features,tools and community</p>
                 </div>
 
                 <p class="inCompleteCampaignMessage" ng-if="referStae==3">Your campaign is not fully set up yet, please complete your campaign setup to unlock all Diet Monet features</p>
-
-                <a ng-if="referStae==1"  style="color:yellow" class="completeCampaignBtn" ng-click="completeCampaign()">Upload video to complete profile</a>
-                <a ng-if="referStae==2" style="color:yellow" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
-                <a ng-if="referStae==3" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the campaign here</a>
-
+                <div style="width: 300px; margin: 0 auto;">
+                    <a ng-if="referStae==1"  style="color:yellow" class="completeCampaignBtn" ng-click="completeCampaign()">Upload video to complete profile</a>
+                    <a ng-if="referStae==2" style="color:yellow" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
+                    <a ng-if="referStae==3" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the campaign here</a>
+                </div>
          </div>
          <div class="profile-chat profile-scroll" id="profileChat"
                ng-show="hideOption==1">

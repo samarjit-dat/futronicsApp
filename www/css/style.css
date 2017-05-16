@@ -999,7 +999,7 @@ h5.camp-btn {
 .videoCircleBorderGood { border: 2px solid #4ddf51;}
 #profileViewMyStats .user-chat-table { height: 290px !important; }
 .inCompleteCampaignMessage { color: yellow; background: #3f424a;padding: 5px;font-size: 11px;border-radius: 5px;}
-.completeCampaignBtn { font-size: 10px;display: inline-block;color: #fff;background: #10888e; padding: 3px; border-radius: 5px;}
+.completeCampaignBtn { width: 100%;text-align: center;font-size: 13px;display: inline-block;color: #fff;background: #10888e; padding: 3px; border-radius: 5px;}
 
 /* 10.05.2017 */
 .profImage{display: inline-block; vertical-align: middle; margin-right:10px; position: relative;}
@@ -1028,9 +1028,15 @@ h5.camp-btn {
 .contribuationBtn { padding-bottom: 40px !important; display: inline-block;background: none !important;}
 .profile-chat .list{ margin: 0 ;}
 .profile-addmore ul li {display: inline-block;padding: 0 1px;margin-top: 2px;}
-.profile-endcampaign p { padding: 0 0 0 5px; }
+.profile-endcampaign p { padding: 0 0 0 5px; font-size: 13px; }
 .profile-endcampaign {height: 290px;}
 .profile-addmore ul li button { font-size: 8px; }
+.profile-addmore {padding: 0 5px 5px; }
+.centerButtons {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;    
+}
 @media only screen and (max-width:413px){
     .platform-android .profile-chat { height: 196px;}
     .platform-android.platform-android5 .profile-chat { height: 269px;}
