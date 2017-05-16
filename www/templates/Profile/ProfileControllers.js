@@ -898,18 +898,18 @@ futronics.controller('ProfileCtrl',
 
        var _videoId = $scope.videoId || $scope.video_id;
 
-       if(goodVideo !== null && fakeVideo !== null){
+       if(goodVideo !== null || fakeVideo !== null){
             if(videoPlayerContainer.classList.contains('videoBorderGood')){
                 videoPlayerContainer.classList.remove('videoBorderGood');
             }else if(videoPlayerContainer.classList.contains('videoBorderFake')){
                 videoPlayerContainer.classList.remove('videoBorderFake');
             }
 
-            if(goodVideo.indexOf(_videoId) > -1){
+            if(goodVideo !== null && goodVideo.indexOf(_videoId) > -1){
                 videoPlayerContainer.className += ' videoBorderGood'; 
             }
 
-            if(fakeVideo.indexOf(_videoId) > -1){
+            if(fakeVideo !== null && fakeVideo.indexOf(_videoId) > -1){
                 videoPlayerContainer.className += ' videoBorderFake'; 
             }
        }

@@ -474,8 +474,11 @@ futronics.controller('accountSettingsCtrl',
            // subTitle: 'Please enter your weight using a point to indicate decimals',
             scope: $scope,
             buttons: [
-              { text: 'No' ,
-                type: 'button-dark'},  
+                { text: 'No' ,
+                type: 'button-dark',
+                onTap: function(e) {
+                 $scope.disable_btn = 0;
+              }},   
               { text: 'Yes' ,
               type: 'button-calm',
 
