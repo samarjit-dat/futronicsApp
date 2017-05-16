@@ -75,7 +75,7 @@
          <div ng-if="showDivider" class="showDivider" ng-class="{ 'gold-border': $root.isMaintain == 'true'}"></div>
           <div class="profile-chat user-scroll" scroll-to-top>
              <!-- open-chat-popup on-long-press="itemOnLongPress()" on-touch-end="itemOnTouchEnd()" -->
-            <div class="list" ng-repeat="message in messages | limitTo: -5 ">
+            <div class="list" ng-repeat="message in messages | limitTo: -1 ">
                <div class="item item-avatar">
                   <img ng-src="{{message.user_image || 'img/no-user.png'}}" alt="" image-exists>
                   <!-- ng-click="messages.$remove(message)" -->
