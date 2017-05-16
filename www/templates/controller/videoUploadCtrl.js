@@ -1,7 +1,7 @@
 futronics.controller('VideoUploadCtrl', 
 function($scope,$rootScope,StorageService,$cordovaFileTransfer, 
     $cordovaFile,$ionicPopup,$cordovaDevice,$cordovaCapture,$cordovaCamera, 
-    $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage)  {
+    $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage,$timeout)  {
     
     stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
     
