@@ -625,6 +625,29 @@ futronics.service('CaloryHaveOrGiven',function($http,$q,URL,Loader,$localstorage
  });
  
 
+futronics.service('FakeOrGood',function($http,$q,URL,Loader,$localstorage){
+     this.getArrayList=function(data){
+        Loader.showLoading();
+        var defered=$q.defer();
+        $http({
+            method: "POST",
+            url: URL.BASE+"/allFakeGoodUsersThatSomeoneDo",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data:data
+        }).then(function(response){
+            console.log(response);
+            Loader.hideLoading();
+            defered.resolve(response);
+            
+        },function(error){
+            Loader.hideLoading();
+            console.log(error+"error");
+            defered.reject(error);
+        });
+         return defered.promise;
+     };
+ });
+
 futronics.service('check_GlobalCommunity',function($rootScope,$ionicPopup,$state){
     this.check_memberOrNot=function(){
         

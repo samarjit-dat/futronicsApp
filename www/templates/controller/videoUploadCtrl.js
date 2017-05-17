@@ -1,10 +1,11 @@
 futronics.controller('VideoUploadCtrl', 
 function($scope,$rootScope,StorageService,$cordovaFileTransfer, 
     $cordovaFile,$ionicPopup,$cordovaDevice,$cordovaCapture,$cordovaCamera, 
-
-    $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage,$timeout)  {
+$ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage,$timeout)  {
 
   
+
+
     
     stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
     
@@ -120,6 +121,23 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                console.log("********");
                console.log($rootScope.to_id);
                console.log(JSON.parse(data.response));
+               
+                var _data = JSON.parse(data.response).result;
+                console.log(_data)
+                alert(_data.data.message)
+                if(_data.length == 0){
+
+                    $ionicPopup.show({
+                        title: _data.data.message,
+                        scope: $scope,
+                        buttons: [{   text: 'Ok' ,
+                                type: 'button-calm',
+                                onTap: function(e) {
+                                    return;
+                                }
+                            }]
+                    });
+                }
 
                 Loader.hideLoading();
                 $ionicPopup.show({
@@ -134,34 +152,7 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                             type: 'button-calm',
                             onTap: function(e) {
 
-                                var _data = JSON.parse(data.response).result;
-                                console.log(_data)
-                                alert(_data.data.message);
-                                alert(_data.message);
-                                if(_data.length == 0){
-                                    $ionicPopup.show({
-                                        title: _data.data.message,
-                                        scope: $scope,
-                                        buttons: [{   text: 'Ok' ,
-                                                type: 'button-calm',
-                                                onTap: function(e) {
-                                                    return;
-                                                }
-                                            }]
-                                    });
-                                }
-
-                                //console.log("mainyain",_data.maintence_campaign_all_video);
-                                if(_data.length == 0){
-                                    $ionicPopup.show({
-                                        title: _data.data.message,
-                                       
-                                        scope: $scope,
-                                        buttons: [ {   text: 'Ok' ,
-                                                type: 'button-calm',
-                                            }]
-                                    });
-                                }
+                               
                                 var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
                                 userInfo.userInfo.result.campaign = _data.campaign;
                                 if(_data.maintence_campaign_all_video) {

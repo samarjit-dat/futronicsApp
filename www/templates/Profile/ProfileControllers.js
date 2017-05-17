@@ -3,7 +3,7 @@ futronics.controller('ProfileCtrl',
     $ionicHistory,StorageService,$ionicModal,$sce,$http,$state,
     $window,$localstorage,$ionicPopup,URL,$location,IMAGE,stateFactory,LogoutService,
     FakeVideoService,GoodVideoService,FakevideoReportList,$firebaseArray,$stateParams,
-    CaloryHaveOrGiven) {
+    CaloryHaveOrGiven,FakeOrGood) {
     
   
     var privateMsgSetupFlag = 0;
@@ -34,7 +34,13 @@ futronics.controller('ProfileCtrl',
     }
 
     $scope.fakelist = [];
-    
+
+    FakeOrGood.getArrayList($rootScope.formatInputString({user_id: $rootScope.user_id || $rootScope.userId}))
+    .then(function(res){
+        (res.data.result.all_users_marked_good.length > 0) ? localStorage.setItem('goodVideo',res.data.result.all_users_marked_good) : localStorage.setItem('goodVideo','');
+        (res.data.result.all_users_marked_fake.length > 0) ? localStorage.setItem('fakeVideo',res.data.result.all_users_marked_fake) : localStorage.setItem('fakeVideo','');
+    });
+
     /* ************************* Show User List Start************************************************ */
     $ionicModal.fromTemplateUrl('videoModalScript.html', {
           scope: $scope,
@@ -356,13 +362,13 @@ futronics.controller('ProfileCtrl',
     $scope.fakeVideo = function() {
         
         if(localStorage.getItem('fakeVideo')){
-            var fakeid = JSON.parse(localStorage.getItem('fakeVideo'));
+            var fakeid = localStorage.getItem('fakeVideo');
             var flag_fake,good_flag;
             if(fakeid.indexOf($scope.video_id)>-1){
                  flag_fake = 1;
             }else {
                 if(localStorage.getItem('goodVideo')) {
-                    var goodid = JSON.parse(localStorage.getItem('goodVideo'));
+                    var goodid = localStorage.getItem('goodVideo');
                     if(goodid.indexOf($scope.video_id)>-1){
                         good_flag = 3;
                     } else {
@@ -402,7 +408,7 @@ futronics.controller('ProfileCtrl',
             }
         } else {
             if(localStorage.getItem('goodVideo')){
-                var goodid = JSON.parse(localStorage.getItem('goodVideo'));
+                var goodid = localStorage.getItem('goodVideo');
                 if(goodid.indexOf($scope.video_id)>-1){
                     good_flag = 3;
                 } else {
@@ -493,11 +499,13 @@ futronics.controller('ProfileCtrl',
                                                 if(response.data.status==1){
                                                 var f_id = $scope.video_id;
                                                 if(!localStorage.getItem('fakeVideo')){
-                                                    localStorage.setItem('fakeVideo',JSON.stringify([f_id]));
+                                                    localStorage.setItem('fakeVideo',[f_id]);
+                                                    // localStorage.setItem('fakeVideo',JSON.stringify([f_id]));
                                                 }else {
-                                                    fakeVideo = JSON.parse(localStorage.getItem('fakeVideo'));
+                                                    fakeVideo = localStorage.getItem('fakeVideo');
                                                     fakeVideo.push(f_id);
-                                                    localStorage.setItem('fakeVideo',JSON.stringify(fakeVideo));
+                                                    localStorage.setItem('fakeVideo',fakeVideo);
+                                                    // localStorage.setItem('fakeVideo',JSON.stringify(fakeVideo));
                                                 }
                                                 $scope.fakeButton = $scope.video_id;
                                                 $scope.goodButton = $scope.video_id;
@@ -598,13 +606,13 @@ futronics.controller('ProfileCtrl',
     var goodVideo = [];
     $scope.goodVideo = function() {
        if(localStorage.getItem('fakeVideo')){
-            var fakeid = JSON.parse(localStorage.getItem('fakeVideo'));
+            var fakeid = localStorage.getItem('fakeVideo');
             var flag_fake,good_flag;
             if(fakeid.indexOf($scope.video_id)>-1){
                  flag_fake = 1;
             }else {
                 if(localStorage.getItem('goodVideo')) {
-                    var goodid = JSON.parse(localStorage.getItem('goodVideo'));
+                    var goodid = localStorage.getItem('goodVideo');
                     if(goodid.indexOf($scope.video_id)>-1){
                          good_flag = 3;
                     } else {
@@ -658,7 +666,7 @@ futronics.controller('ProfileCtrl',
                     });
                 } else {
                  if(localStorage.getItem('goodVideo')) {
-                    var goodid = JSON.parse(localStorage.getItem('goodVideo'));
+                    var goodid = localStorage.getItem('goodVideo');
 
                     if(goodid.indexOf($scope.video_id)>-1){
                         good_flag = 3;
@@ -738,11 +746,11 @@ futronics.controller('ProfileCtrl',
                                         if(response.data.status==1){
                                             var g_id = $scope.video_id;
                                             if(!localStorage.getItem('goodVideo')){
-                                                localStorage.setItem('goodVideo',JSON.stringify([g_id]));
+                                                localStorage.setItem('goodVideo',[g_id]);
                                             }else {
-                                                goodVideo = JSON.parse(localStorage.getItem('goodVideo'));
+                                                goodVideo = localStorage.getItem('goodVideo');
                                                 goodVideo.push(g_id);
-                                                localStorage.setItem('goodVideo',JSON.stringify(goodVideo));
+                                                localStorage.setItem('goodVideo',goodVideo);
                                             }
                                             $ionicPopup.show({
                                                 template: 'Thank you for your report, the '+$scope.individual_user_details.user_details.username+' will be benifited to get your valuable response.',
@@ -854,7 +862,6 @@ futronics.controller('ProfileCtrl',
     };
 
     $scope.videoLength = imgObj.length;
-    console.log($scope.profileImages,$scope.videoLength)
 
     $scope.startNewCampaign = function(){
         $scope.slider = {
@@ -896,15 +903,20 @@ futronics.controller('ProfileCtrl',
        var videoPlayerContainer = document.querySelector('.modal-backdrop .active #video-player-container');
        var videoDataId = document.querySelector("[data-video-url]");
 
-       var goodVideo = JSON.parse(localStorage.getItem('goodVideo'));
-       var fakeVideo = JSON.parse(localStorage.getItem('fakeVideo'));
+       var goodVideo = localStorage.getItem('goodVideo');
+       var fakeVideo = localStorage.getItem('fakeVideo');
 
-       var _videoId = $scope.videoId || $scope.video_id;
+    //    var goodVideo = JSON.parse(localStorage.getItem('goodVideo'));
+    //    var fakeVideo = JSON.parse(localStorage.getItem('fakeVideo'));
+
 
 
      
 
-       if(goodVideo || fakeVideo ){
+       var _videoId = $scope.videoId || $scope.video_id;
+       console.log(goodVideo,_videoId);
+       console.log(fakeVideo,_videoId);
+         if(goodVideo || fakeVideo ){
 
             if(videoPlayerContainer.classList.contains('videoBorderGood')){
                 videoPlayerContainer.classList.remove('videoBorderGood');

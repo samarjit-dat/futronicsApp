@@ -58,7 +58,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
 
         $timeout(function() {
             $scope.myVar = 'hideIt';
-        },30000);
+        }, 2 * 60 * 1000);
 
         console.log('Touch end');
     }
@@ -95,6 +95,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                                 user_info.userInfo.result.calories = res.data.result.provider_current_calorie_amount;
                                 var update_userInfo=JSON.stringify(user_info);
                                 localStorage.setItem("userInfo",update_userInfo);
+                                toastr.success('Callory added successfully');
                             });
                             return;
 
@@ -144,11 +145,13 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                         if((mutedListArray.length === 0  || mutedListArray ) && (!$localstorage.getObject('muteChatUser'))){
                                 mutedListArray.push(msg);
                                 $localstorage.setObject('muteChatUser',mutedListArray);
+                                toastr.success('User muted successfully');
                         }else{
                             mutedListArray = $localstorage.getObject('muteChatUser');
                             if(mutedListArray.indexOf(msg) === -1){
                                 mutedListArray.push(msg);
                                 $localstorage.setObject('muteChatUser',mutedListArray);
+                                toastr.success('User muted successfully');
                             }
                         }
                     }
@@ -179,6 +182,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                         GlobalChatService.addFriend($rootScope.formatInputString(dataJson)).then(function(res){
                             console.log("Add Friend");
                             console.log(res);
+                            toastr.success('Friend added successfully');
                         });
                     }
                 }]
@@ -190,8 +194,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
             $ionicPopup.show({
                 template: '<div style="text-align: center">Report user?</div>',
                 scope: $scope,
-                buttons: [
-                { 
+                buttons: [{ 
                     text: 'Cancle' ,
                     type: 'button-dark',
                     onTap: function(e) {
@@ -204,7 +207,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
                         $scope.modal_report.show();
                         var reportUserId = document.getElementById('userReport');
                         reportUserId.style.height = window.innerHeight+'px';
-
+                        console.log($rootScope.userId)
                         GlobalChatService.getReportUsersList($rootScope.formatInputString({user_id : $rootScope.userId}))
                             .then(function(res){
                                 $scope.reportUsers = res.data.result.all_user_reported;
@@ -224,14 +227,17 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         };
 
         $scope.report = function(id){
+
             var dataJson = {
                 user_who_report : loggedinUserId,
-                user_who_is_reported : $scope.muteUserId
+                user_who_is_reported : id
             }
             GlobalChatService.reportUser($rootScope.formatInputString(dataJson))
                 .then(function(res){
                     console.log("Report user");
                     console.log(res);
+                    $scope.modal_report.hide();
+                    toastr.success('User reported successfully');
                 });
         }
     }
@@ -259,11 +265,12 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         if($localstorage.getObject('muteChatUser')){
             $localstorage.getObject('muteChatUser').forEach(function(ele,index){
                 if(ele.time < cutoff) {
+                    console.log("Delete mute user successfully");
                     $localstorage.remove('muteChatUser')[index];
                 }
+                console.log(ele);
             });
         }
-        // console.log($localstorage.getObject('muteChatUser'));
     },1*1000);
 
     // $interval(function(){
