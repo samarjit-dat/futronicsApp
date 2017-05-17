@@ -134,25 +134,29 @@ futronics.directive('openChatPopup', function($timeout) {
 
     var contentDOM = $elm.children().children();
 
-   $elm.bind('touchstart', function(evt) {
-    $scope.longPress = true;
-    $timeout(function() {
-     if ($scope.longPress) {
-    $scope.setChatUser($scope.message.id);
-      $scope.$apply(function() {
-       $scope.$eval($attrs.onLongPress);
-      });
-     }
-    }, 1000);
-   });
+    $elm.bind('touchmove', function(evt) {
+        evt.preventDefault();
+    });
+    
+    $elm.bind('touchstart', function(evt) {
+        $scope.longPress = true;
+        $timeout(function() {
+            if ($scope.longPress) {
+                $scope.setChatUser($scope.message.id);
+                $scope.$apply(function() {
+                    $scope.$eval($attrs.onLongPress);
+                });
+            }
+        }, 1000);
+    });
 
    $elm.bind('touchend', function(evt) {
-    $scope.longPress = false;
-    if ($attrs.onTouchEnd) {
-     $scope.$apply(function() {
-      $scope.$eval($attrs.onTouchEnd)
-     });
-    }
+        $scope.longPress = false;
+        if ($attrs.onTouchEnd) {
+            $scope.$apply(function() {
+                $scope.$eval($attrs.onTouchEnd)
+            });
+        }
    });
   }
  };
