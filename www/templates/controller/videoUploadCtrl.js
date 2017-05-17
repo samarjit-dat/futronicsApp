@@ -135,6 +135,20 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
 
                                 var _data = JSON.parse(data.response).result;
                                 console.log(_data)
+
+                                if(_data.length == 0){
+                                    $ionicPopup.show({
+                                        title: _data.message,
+                                        scope: $scope,
+                                        buttons: [{   text: 'Ok' ,
+                                                type: 'button-calm',
+                                                onTap: function(e) {
+                                                    return;
+                                                }
+                                            }]
+                                    });
+                                }
+
                                 //console.log("mainyain",_data.maintence_campaign_all_video);
                                 var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
                                 userInfo.userInfo.result.campaign = _data.campaign;

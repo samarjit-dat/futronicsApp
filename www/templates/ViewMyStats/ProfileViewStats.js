@@ -219,13 +219,15 @@ futronics.controller('ProfileViewStatsCtrl',
                          };
                          CaloryService.purchaseCalory($rootScope.formatInputString(dataJson)).then(function(res){
                             
-
+                              console.log("Purchase calory");
                               var user_info = JSON.parse(localStorage.getItem("userInfo"));
-                             user_info.userInfo.result.user_info[0].calorie = res.data.result.current_calorie_amount;
+                              console.log(user_info);
+                              user_info.userInfo.result.user_info[0].calorie = res.data.result.current_calorie_amount;
                               
                               user_info.userInfo.result.user_info[0].wallet = res.data.result.wallet_money;
                               user_info.userInfo.result.wallet = res.data.result.wallet_money;
                               
+                              $localstorage.setObject("userInfo",user_info);
                               console.log(user_info);
                              return;
                          });
