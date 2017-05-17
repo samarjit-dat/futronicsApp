@@ -148,6 +148,7 @@ futronics.controller('ProfileCtrl',
     $scope.mainImage =  IMAGE.BASE_IMAGE;
 
      if(localStorage.getItem('viewIndividualProfile_globalChat')!=null){
+         
          privateMsgSetupFlag = 1;
          $scope.otherProfile=1;
          $scope.myProfile=0;
@@ -163,6 +164,9 @@ futronics.controller('ProfileCtrl',
         //     imgObj.push(requiredParams);
         //   });
             console.log($scope.individual_user_details)
+          if($scope.individual_user_details.campaign.length!==0){
+             $scope.status=$scope.individual_user_details.campaign[0].campaign_status;
+          }
           if($scope.individual_user_details.profile_videos.length > 0){
               $scope.individual_user_details.profile_videos.forEach(function(ele){
 
@@ -209,6 +213,7 @@ futronics.controller('ProfileCtrl',
      /* *****  user own profle start **** */
 
      if(localStorage.getItem('myProfile')!=null){
+        
          privateMsgSetupFlag = 2;
          $scope.totalCampaign='';
          $scope.myProfile=0;
