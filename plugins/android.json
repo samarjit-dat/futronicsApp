@@ -43,6 +43,9 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
         },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
+        },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
         },
@@ -52,6 +55,9 @@
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
+        },
+        "es6-promise-plugin": {
             "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
         }
     }
