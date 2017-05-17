@@ -112,10 +112,6 @@ if(localStorage.getItem('userInfo')){
     }
 }
 
-    $scope.setChatUser = function (id) {
-        $scope.muteUserId = id;
-    };
-
 newsFeedServices.news().then(function(response){
     $timeout(function(){
     for(var i=0;i<response.data.result.length;i++){

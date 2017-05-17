@@ -132,18 +132,18 @@ futronics.directive('openChatPopup', function($timeout) {
     },
   link: function($scope, $elm, $attrs,$ctrl) {
 
-      var contentDOM = $elm.children().children();
+    var contentDOM = $elm.children().children();
 
    $elm.bind('touchstart', function(evt) {
     $scope.longPress = true;
     $timeout(function() {
      if ($scope.longPress) {
-            $scope.setChatUser($scope.message.id);
+    $scope.setChatUser($scope.message.id);
       $scope.$apply(function() {
        $scope.$eval($attrs.onLongPress);
       });
      }
-    }, 600);
+    }, 1000);
    });
 
    $elm.bind('touchend', function(evt) {

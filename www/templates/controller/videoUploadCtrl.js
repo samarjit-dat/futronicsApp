@@ -2,7 +2,6 @@ futronics.controller('VideoUploadCtrl',
 function($scope,$rootScope,StorageService,$cordovaFileTransfer, 
     $cordovaFile,$ionicPopup,$cordovaDevice,$cordovaCapture,$cordovaCamera, 
     $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage,
-    
     $timeout)  {
     
     stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
@@ -119,6 +118,22 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                console.log("********");
                console.log($rootScope.to_id);
                console.log(JSON.parse(data.response));
+               
+                var _data = JSON.parse(data.response).result;
+                console.log(_data)
+
+                if(_data.length == 0){
+                    $ionicPopup.show({
+                        title: _data.message,
+                        scope: $scope,
+                        buttons: [{   text: 'Ok' ,
+                                type: 'button-calm',
+                                onTap: function(e) {
+                                    return;
+                                }
+                            }]
+                    });
+                }
 
                 Loader.hideLoading();
                 $ionicPopup.show({
@@ -134,20 +149,6 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                             onTap: function(e) {
 
                                 var _data = JSON.parse(data.response).result;
-                                console.log(_data)
-
-                                if(_data.length == 0){
-                                    $ionicPopup.show({
-                                        title: _data.message,
-                                        scope: $scope,
-                                        buttons: [{   text: 'Ok' ,
-                                                type: 'button-calm',
-                                                onTap: function(e) {
-                                                    return;
-                                                }
-                                            }]
-                                    });
-                                }
 
                                 //console.log("mainyain",_data.maintence_campaign_all_video);
                                 var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
