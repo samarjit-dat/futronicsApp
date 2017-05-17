@@ -2,7 +2,7 @@
     <ion-content scroll="false">
       <div class="bar bar-header">
 
-         <h1 class="title">Profile</h1>
+         <h1 class="title">Profile </h1>
 
          <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="globalChat"></button>
          <button ng-if="show_gear==1" ui-sref="account_settings" ng-click="check_campaignId()" class="ion-ios-gear setting-icon"></button>
@@ -39,8 +39,8 @@
                             ng-class="{ 'good' : pImage['user_whose_video_good'] !== null , 'bad' : pImage['user_whose_video_fake'] !== null ,'both_null' : pImage['user_whose_video_fake'] == null && pImage['user_whose_video_good'] == null }"
                             >
                             <!--<img ng-repeat="pImage in profImage" ng-if="pImage['profile_image']" id="{{pImage['user_videos_id']}}" src="{{pImage['profile_image']}}" class="circle circleImage" alt="#1" image-swap/>-->
-                            <img ng-if="pImage['thumb_url']" id="{{pImage['user_videos_id']}}" src="{{pImage['thumb_url']}}" data-video-url="{{pImage['video_url']}}" class="circle circleImage" alt="#1" image-swap/>
-                            <span ng-if="pImage['thumb_url']" class="noti">1</span>
+                            <img ng-if="pImage['thumb_url']" id="{{pImage['user_videos_id']}}" src="{{pImage['thumb_url']}}" data-video-url="{{pImage['video_url']}}" class="circle circleImage" image-swap/>
+                            <span ng-if="pImage['thumb_url']" class="noti">{{(videoLength+1) - ($index+1)}}</span>
                           </div>
                         </ion-slide>
                     </ion-slide-box>

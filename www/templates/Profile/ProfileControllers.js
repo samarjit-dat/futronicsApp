@@ -352,7 +352,6 @@ futronics.controller('ProfileCtrl',
     $scope.fakeResponseList = function(listid) {
         $scope.fakeTypeId = listid;
     };
-
     var fakeVideo = [];
     $scope.fakeVideo = function() {
         
@@ -854,6 +853,9 @@ futronics.controller('ProfileCtrl',
         }
     };
 
+    $scope.videoLength = imgObj.length;
+    console.log($scope.profileImages,$scope.videoLength)
+
     $scope.startNewCampaign = function(){
         $scope.slider = {
             value: 0,
@@ -892,24 +894,42 @@ futronics.controller('ProfileCtrl',
        // remove multiple video modal instance
 
        var videoPlayerContainer = document.querySelector('.modal-backdrop .active #video-player-container');
+       var videoDataId = document.querySelector("[data-video-url]");
 
        var goodVideo = JSON.parse(localStorage.getItem('goodVideo'));
        var fakeVideo = JSON.parse(localStorage.getItem('fakeVideo'));
 
        var _videoId = $scope.videoId || $scope.video_id;
 
-       if(goodVideo !== null || fakeVideo !== null){
+
+     
+
+       if(goodVideo || fakeVideo ){
+
             if(videoPlayerContainer.classList.contains('videoBorderGood')){
                 videoPlayerContainer.classList.remove('videoBorderGood');
             }else if(videoPlayerContainer.classList.contains('videoBorderFake')){
                 videoPlayerContainer.classList.remove('videoBorderFake');
             }
 
-            if(goodVideo !== null && goodVideo.indexOf(_videoId) > -1){
+            if(goodVideo && goodVideo.indexOf(_videoId) > -1){
+                if(videoDataId.parentElement.classList.contains('good')||videoDataId.parentElement.classList.contains('both_null')){
+                    videoDataId.parentElement.classList.remove('both_null');
+                    videoDataId.parentElement.classList.remove('good');
+                }
+                videoDataId.parentElement.className += ' good';
+                // console.log("1",videoDataId.parentElement);
                 videoPlayerContainer.className += ' videoBorderGood'; 
             }
 
-            if(fakeVideo !== null && fakeVideo.indexOf(_videoId) > -1){
+            if(fakeVideo && fakeVideo.indexOf(_videoId) > -1){
+                if(videoDataId.parentElement.classList.contains('bad')||videoDataId.parentElement.classList.contains('both_null')){
+                    videoDataId.parentElement.classList.remove('both_null');
+                    videoDataId.parentElement.classList.remove('bad');
+                }
+                videoDataId.parentElement.className += ' bad';
+                // console.log("2",videoDataId);
+
                 videoPlayerContainer.className += ' videoBorderFake'; 
             }
        }

@@ -134,6 +134,7 @@ futronics.config(['$ionicConfigProvider',function($ionicConfigProvider){
     $ionicConfigProvider.views.maxCache(0);
     $ionicConfigProvider.scrolling.jsScrolling(false);
 }]);
+
 futronics.filter('unique', function() {
    return function(collection, keyname) {
       var output = [], 
