@@ -64,7 +64,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     }
 
     if(localStorage.getItem('userInfo')){
-            var loggedinUserId = userInfo.result[0].user_id;
+        var loggedinUserId = userInfo.result[0].user_id;
 
         $scope.giveCalory = function(){
 
