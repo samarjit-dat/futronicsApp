@@ -54,7 +54,7 @@ futronics.controller('marketmycampaignControllers', function($scope,$cordovaSoci
                 case 'Text Message':
                     console.log("share in text message");
                     $cordovaSocialSharing
-                        .shareViaSMS(message, subject)
+                        .shareViaSMS(message, '0612345678')
                         .then(function(result) {
                             // Success!
                             console.log("Success");
