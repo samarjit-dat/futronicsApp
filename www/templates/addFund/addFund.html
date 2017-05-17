@@ -1,4 +1,4 @@
-<ion-view class="body-bg pane" view-title="Account" style="background-image: url(img/body-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
+<ion-view id="addFund" class="body-bg pane" view-title="Account" style="background-image: url(img/body-background.jpg); background-repeat: no-repeat; background-position: 0 0; background-size: cover;">
   <ion-content>
    <div class="bar bar-header">
              <!-- <ion-badge _ngcontent-cbo-6="" color="secondary" class="badge-wp badge-wp-secondary"><h3 class="head">40%</h3></ion-badge>-->
@@ -20,10 +20,7 @@
                       
                     <rzslider  rz-slider-model="slider.value"   rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>
                 </ion-range> 
-                <div class="right">
-                    <ion-toggle ng-model="roller.checked" ng-change="rollerChange()">
-                    </ion-toggle>
-                </div>
+                <div class=""> <ion-toggle ng-model="roller.checked" ng-change="rollerChange()"></ion-toggle></div>
                 </div>
                 
               </div>
