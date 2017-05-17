@@ -143,7 +143,7 @@ futronics.directive('openChatPopup', function($timeout) {
        $scope.$eval($attrs.onLongPress);
       });
      }
-    }, 600);
+    }, 1500);
    });
 
    $elm.bind('touchend', function(evt) {

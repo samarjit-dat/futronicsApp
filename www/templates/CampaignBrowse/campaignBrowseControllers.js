@@ -14,6 +14,8 @@ futronics.controller('campaignBrowseControllers',
     ContributionServices.whomeIContributed($rootScope.formatInputString({user_id : $rootScope.userId}))
         .then(function(res){
             contributedIdList = res.data.result.all_contributors;
+            console.clear();
+            console.log(res);
             console.log(contributedIdList);
         })
         .catch(function(err){
@@ -174,7 +176,7 @@ futronics.controller('campaignBrowseControllers',
     }
 
       $scope.goToContribution=function(single_user){
-
+        console.log(contributedIdList)
           if(localStorage.getItem('endcampaign')){
                 localStorage.setItem('campaignCompleteOrNot',$rootScope.userId);
                 localStorage.removeItem('showGlobalChat_afterEndCampaign');
@@ -222,7 +224,7 @@ futronics.controller('campaignBrowseControllers',
                     }]
                 });
             }else{
-
+                console.log(contributedIdList);
                 if(contributedIdList.indexOf(userId) > -1){
                     $ionicPopup.show({
                         template: 'You’ve supported '+userName+' already, would you like to support him more funds?',

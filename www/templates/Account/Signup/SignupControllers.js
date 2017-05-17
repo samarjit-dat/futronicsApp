@@ -38,8 +38,9 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
     });
 
     $scope.rollerChange = function() {
-        if(!$scope.roller.checked){$rootScope.slider = {
-               
+       
+        if(!$scope.roller.checked){ $rootScope.slider = {
+              
             value: $rootScope.slidingAmount,
             options:{
                 floor: 0,ceil: 1000,step: 5,
@@ -48,7 +49,7 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
             }
         };
         $rootScope.latestValue=1000;
-        if($rootScope.slider.value>1000)$rootScope.slider.value=1000;}
+        if($rootScope.slider.value>1000)$rootScope.slider.value=1000;$scope.showRoller=0;}
         else{$rootScope.slider = {
             value: $rootScope.slidingAmount,
             options:{
@@ -57,7 +58,7 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
                 id: 'slideEnded',onEnd: $scope.myEndListener
             }
         };
-        $rootScope.latestValue=50000;}
+        $rootScope.latestValue=50000;$scope.showRoller=1;}
     };
     
     $scope.signup = function(data) {

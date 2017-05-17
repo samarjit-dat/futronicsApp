@@ -136,10 +136,11 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
 
                                 var _data = JSON.parse(data.response).result;
                                 console.log(_data)
-
+                                alert(_data.data.message);
+                                alert(_data.message);
                                 if(_data.length == 0){
                                     $ionicPopup.show({
-                                        title: _data.message,
+                                        title: _data.data.message,
                                         scope: $scope,
                                         buttons: [{   text: 'Ok' ,
                                                 type: 'button-calm',
@@ -153,8 +154,8 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                                 //console.log("mainyain",_data.maintence_campaign_all_video);
                                 if(_data.length == 0){
                                     $ionicPopup.show({
-                                        title: 'Thank you for video upload',
-                                        template: _data.message,
+                                        title: _data.data.message,
+                                       
                                         scope: $scope,
                                         buttons: [ {   text: 'Ok' ,
                                                 type: 'button-calm',

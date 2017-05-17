@@ -1,4 +1,4 @@
-futronics.service("UserListService", function($http,$q, $localstorage,URL) {
+futronics.service("UserListService", function($http,$q, $localstorage,URL,$rootScope) {
   this.userListOnLoad = function(data){
       var defered=$q.defer();
     return $http({
@@ -9,7 +9,10 @@ futronics.service("UserListService", function($http,$q, $localstorage,URL) {
         }).then(function(response){ 
             if(response.data.status == 2){
                 var loadMoreId = document.getElementById('loadMore');
-                loadMoreId.style.display = 'none';
+                if($rootScope.currentState == "globalChat"){
+                     loadMoreId.style.display = 'none';
+                }
+               
                
             }
             defered.resolve(response);
