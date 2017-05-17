@@ -134,12 +134,7 @@ futronics.directive('openChatPopup', function($timeout) {
 
     var contentDOM = $elm.children().children();
 
-
-
-    $elm.bind('touchmove', function(evt) {
-        evt.preventDefault();
-    });
-    
+ 
     $elm.bind('touchstart', function(evt) {
         $scope.longPress = true;
         $timeout(function() {

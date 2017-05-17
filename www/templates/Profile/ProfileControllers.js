@@ -7,7 +7,7 @@ futronics.controller('ProfileCtrl',
     
   
     var privateMsgSetupFlag = 0;
-
+   
     /**
     * Firebase setup
     */
@@ -57,7 +57,9 @@ futronics.controller('ProfileCtrl',
 
     if( localStorage.getItem("refrstate")) { 
         $scope.referStae =  localStorage.getItem("refrstate");
+      
     }
+    
     if($rootScope.user_id =='' || $rootScope.user_id == undefined){
         $scope.show_gear = 0;
     } else{
@@ -328,7 +330,7 @@ futronics.controller('ProfileCtrl',
             }
                 $state.go('campaignBrowse');
         };
-    $scope.referStae = 1;
+  
     /************************** video open on modal **************************************/
     $scope.openMainImageVideoModal = function(){
 
@@ -349,7 +351,7 @@ futronics.controller('ProfileCtrl',
              $scope.modal_video.hide();
         }
     };
-
+ 
     $scope.reportGoodVideo = function(video_id){
      $scope.video_id = video_id;
     };
@@ -363,6 +365,7 @@ futronics.controller('ProfileCtrl',
     $scope.fakeResponseList = function(listid) {
         $scope.fakeTypeId = listid;
     };
+   
     var fakeVideo = [];
     $scope.fakeVideo = function() {
         
@@ -457,6 +460,7 @@ futronics.controller('ProfileCtrl',
             }
 
         };
+        
 
         $scope.fakeReport = function() {
 
@@ -608,6 +612,7 @@ futronics.controller('ProfileCtrl',
             });
        }
     };
+   
     var goodVideo = [];
     $scope.goodVideo = function() {
        if(localStorage.getItem('fakeVideo')){
@@ -850,7 +855,7 @@ futronics.controller('ProfileCtrl',
             });
          }
     };
-
+ 
     $scope.completeCampaign = function(){
        if(localStorage.getItem('actualState')){
             var current_state=localStorage.getItem('actualState');
@@ -898,7 +903,7 @@ futronics.controller('ProfileCtrl',
             ]
         });
     }
-
+     
     $scope.openVideoModal = function(video_url){
        $scope.modal_video.videoUrl = $sce.trustAsResourceUrl(video_url);
        $scope.modal_video.show();
@@ -916,7 +921,7 @@ futronics.controller('ProfileCtrl',
 
 
 
-     
+    
 
        var _videoId = $scope.videoId || $scope.video_id;
        console.log(goodVideo,_videoId);
@@ -951,7 +956,7 @@ futronics.controller('ProfileCtrl',
             }
        }
     };
-
+    
     $scope.closeModal = function(){
       $scope.modal_video.hide();
 //      var video = angular.element(document.querySelector('video'));

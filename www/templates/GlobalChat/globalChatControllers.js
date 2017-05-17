@@ -444,8 +444,17 @@ $rootScope.slider = {
                         }
                     };
 
+                    if(response.data.result.campaign_success_or_fail == 'Fail'){
+                        localStorage.setItem("isMaintainPhaseButton",'false');
+                        localStorage.setItem("isMaintainPhase",'false');
+                    }else{
+                        localStorage.setItem("isMaintainPhaseButton",'true');
+                        localStorage.setItem("isMaintainPhase",'true');
+                    }
+
                     if(response.data.result.campaign_full_setup_or_not == 'false' && response.data.result.campaign_success_or_fail == 'Fail'){
                         $rootScope.endCampaignStatus = response.data.result.campaign_full_setup_or_not;
+                        
                     }else{
                         $rootScope.endCampaignStatus = response.data.result.campaign_full_setup_or_not;
                     }

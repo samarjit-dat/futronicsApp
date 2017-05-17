@@ -147,6 +147,12 @@ function($scope,StorageService,$state,$rootScope,$window,$localstorage,$ionicPop
      /* *** username and details end *** */
     
     /*** Thanks contribution start*** */
+
+  
+    if( $rootScope.isMaintain == null || $rootScope.isMaintain == '' || $rootScope.isMaintain == undefined) {
+         $rootScope.isMaintain = 'false';
+    }
+   
     $scope.goToThanksContribution=function(){
         //alert($rootScope.slidingAmount);
         if($rootScope.slidingAmount==0){
