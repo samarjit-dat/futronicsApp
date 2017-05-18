@@ -14,6 +14,8 @@ futronics.controller('campaignBrowseControllers',
     ContributionServices.whomeIContributed($rootScope.formatInputString({user_id : $rootScope.userId}))
         .then(function(res){
             contributedIdList = res.data.result.all_contributors;
+            console.clear();
+            console.log(res);
             console.log(contributedIdList);
         })
         .catch(function(err){
@@ -79,7 +81,7 @@ futronics.controller('campaignBrowseControllers',
     $rootScope.allUser=[];
     var allCorrectDetails = [];
     var countNosOfStatusOne = 0;
-    if($rootScope.previousState==='signup' || $rootScope.previousState===''){
+    //if($rootScope.previousState==='signup' || $rootScope.previousState===''){
         $scope.pageValue=1;
         $scope.userListShowbeforeLogin=[];
         var data={
@@ -174,68 +176,69 @@ futronics.controller('campaignBrowseControllers',
         }
                Loader.hideLoading();
         });
-    }else{
-      if(localStorage.getItem('allUserDetails')){
-           AllUser_MyContribution.storage();
+//     }else{
+//       if(localStorage.getItem('allUserDetails')){
+//            AllUser_MyContribution.storage();
 
-      $scope.userListShowbeforeLogin=[];
+//       $scope.userListShowbeforeLogin=[];
 
-      var initialPageNo=Math.ceil($rootScope.all_user_details.length/20);
-      $scope.pageValue=initialPageNo;
-       $scope.loadMoreX = function() {
-        if($scope.pageValue==0){
-         $scope.pageValue++;
-        }else{
-         $scope.pageValue++;
-        }
-        var data={
-                 page:$scope.pageValue
-        };
-        var data=$rootScope.formatInputString(data);
-        UserListService.userListOnLoad(data).then(function(res){
+//       var initialPageNo=Math.ceil($rootScope.all_user_details.length/20);
+//       $scope.pageValue=initialPageNo;
+//        $scope.loadMoreX = function() {
+//         if($scope.pageValue==0){
+//          $scope.pageValue++;
+//         }else{
+//          $scope.pageValue++;
+//         }
+//         var data={
+//                  page:$scope.pageValue
+//         };
+//         var data=$rootScope.formatInputString(data);
+//         UserListService.userListOnLoad(data).then(function(res){
 
-            if(res.data.message==="No result found"){
-//                $scope.noData=true;
-                //Loader.hideLoading();
-                $timeout(function(){
-                     $scope.noData=false;
-                }, 2500);
-                $scope.noMoreItemsAvailable=true;
-                $scope.pageValue =0;
+//             if(res.data.message==="No result found"){
+// //                $scope.noData=true;
+//                 //Loader.hideLoading();
+//                 $timeout(function(){
+//                      $scope.noData=false;
+//                 }, 2500);
+//                 $scope.noMoreItemsAvailable=true;
+//                 $scope.pageValue =0;
 
-            }else{
-                for(var i=0;i<res.data.result.length;i++){
-                  //$rootScope.allUser.push(res.data.result[i]);
+//             }else{
+//                 for(var i=0;i<res.data.result.length;i++){
+//                   //$rootScope.allUser.push(res.data.result[i]);
                   
-                        //console.log(res.data.result[i]);
-                        if(res.data.result[i].campaign.length>0){
-                            if(res.data.result[i].campaign[0].campaign_status==1){
-                                // $rootScope.allUser.push(res.data.result[i]);
-                                if($rootScope.user_id != res.data.result[i].user_details.user_id) {
-                                    for(var j=0;j<$rootScope.allUser.length;j++){
-                                        allCorrectDetails.push($rootScope.allUser[j].user_details.user_id)
-                                    }
+//                         //console.log(res.data.result[i]);
+//                         if(res.data.result[i].campaign.length>0){
+//                             if(res.data.result[i].campaign[0].campaign_status==1){
+//                                 // $rootScope.allUser.push(res.data.result[i]);
+//                                 if($rootScope.user_id != res.data.result[i].user_details.user_id) {
+//                                     for(var j=0;j<$rootScope.allUser.length;j++){
+//                                         allCorrectDetails.push($rootScope.allUser[j].user_details.user_id)
+//                                     }
 
-                                    if(allCorrectDetails.indexOf(res.data.result[i].user_details.user_id) == -1)
-                                        $rootScope.allUser.push(res.data.result[i]);
-                                }
-                            }
-                        }
+//                                     if(allCorrectDetails.indexOf(res.data.result[i].user_details.user_id) == -1)
+//                                         $rootScope.allUser.push(res.data.result[i]);
+//                                 }
+//                             }
+//                         }
                     
-                }
-                $localstorage.set('allUserDetails',JSON.stringify($rootScope.allUser));
-               // Loader.hideLoading();
-               console.log($rootScope.allUser)
-        };
-         $scope.$broadcast('scroll.infiniteScrollComplete');
-        });
+//                 }
+//                 $localstorage.set('allUserDetails',JSON.stringify($rootScope.allUser));
+//                // Loader.hideLoading();
+//                console.log($rootScope.allUser)
+//         };
+//          $scope.$broadcast('scroll.infiniteScrollComplete');
+//         });
 
-        };
-        }
-    }
+//         };
+//         }
+//     }
 
       $scope.goToContribution=function(single_user){
-
+          if(contributedIdList != undefined) {
+        console.log()
           if(localStorage.getItem('endcampaign')){
                 localStorage.setItem('campaignCompleteOrNot',$rootScope.userId);
                 localStorage.removeItem('showGlobalChat_afterEndCampaign');
@@ -283,7 +286,7 @@ futronics.controller('campaignBrowseControllers',
                     }]
                 });
             }else{
-
+                console.log(contributedIdList);
                 if(contributedIdList.indexOf(userId) > -1){
                     $ionicPopup.show({
                         template: 'You’ve supported '+userName+' already, would you like to support him more funds?',
@@ -310,6 +313,10 @@ futronics.controller('campaignBrowseControllers',
             }
             // $state.go('contribution',{id:single_user.user_details.user_id});
           }
+        } else {
+              localStorage.setItem('single_user',JSON.stringify(single_user));
+             $state.go('contribution',{id:single_user.user_details.user_id});
+        }
       }
 
       function repeateContribuationPopup(userName,userId){

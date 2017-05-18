@@ -1,8 +1,11 @@
 futronics.controller('VideoUploadCtrl', 
 function($scope,$rootScope,StorageService,$cordovaFileTransfer, 
     $cordovaFile,$ionicPopup,$cordovaDevice,$cordovaCapture,$cordovaCamera, 
-    $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage,
-    $timeout)  {
+$ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage,$timeout)  {
+
+  
+
+
     
     stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
     
@@ -45,7 +48,7 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                 $scope.btnDisabled = false;
                 navigator.createThumbnail($scope.path, function(err, imageData) {
                     if (err) throw err;
-                   $timeout(function(){ $scope.data = imageData;},1000);
+                   $timeout(function(){ $scope.videoSnapshot = imageData;},1000);
                    
                 });
             }
@@ -121,10 +124,11 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                
                 var _data = JSON.parse(data.response).result;
                 console.log(_data)
-
+                alert(_data.data.message)
                 if(_data.length == 0){
+
                     $ionicPopup.show({
-                        title: _data.message,
+                        title: _data.data.message,
                         scope: $scope,
                         buttons: [{   text: 'Ok' ,
                                 type: 'button-calm',
@@ -148,9 +152,7 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
                             type: 'button-calm',
                             onTap: function(e) {
 
-                                var _data = JSON.parse(data.response).result;
-
-                                //console.log("mainyain",_data.maintence_campaign_all_video);
+                               
                                 var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
                                 userInfo.userInfo.result.campaign = _data.campaign;
                                 if(_data.maintence_campaign_all_video) {

@@ -72,9 +72,10 @@ $ionicPopup,AccountService,$firebaseArray,$stateParams,CaloryHaveOrGiven){
           $state.go('profile');
      }
      var user=JSON.parse(localStorage.getItem('userInfo'));
-     
+   
       if(user.userInfo.result.campaign.length!=0){
           $scope.campaign_status=user.userInfo.result.campaign[0].campaign_status;
+        
       }
      
    $scope.$on('$ionicView.enter', function(){

@@ -1,4 +1,4 @@
-futronics.service("UserListService", function($http,$q, $localstorage,URL) {
+futronics.service("UserListService", function($http,$q, $localstorage,URL,$rootScope) {
   this.userListOnLoad = function(data){
       var defered=$q.defer();
     return $http({
@@ -8,8 +8,13 @@ futronics.service("UserListService", function($http,$q, $localstorage,URL) {
             data:data
         }).then(function(response){ 
             if(response.data.status == 2){
-                var loadMoreId = document.getElementById('loadMore');
-                loadMoreId.style.display = 'none';
+               
+                if($rootScope.currentState == "globalChat"){
+                     var loadMoreId = document.getElementById('loadMore');
+                     loadMoreId.style.display = 'none';
+                }
+               
+               
             }
             defered.resolve(response);
             return defered.promise; 
@@ -61,20 +66,22 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                        
                         if(localStorage.getItem('actualState')){
                         var _state=localStorage.getItem('actualState');
-                          
+                         
                          
                             if( (_state=='upload-video') ){
                                
                                // $rootScope.referState=1;
                                 localStorage.setItem("refrstate",1);
                                // alert($rootScope.referState+"actual")
-                            }else if((_state=='question1') || (_state=='question2') || (_state=='question3') ||
-                                    (_state=='question4') || (_state=='question5') || (_state=='question6') || 
-                                    (_state=='question7') ||  (_state=='question8') ) {
+                            }else if((_state=='questions')) {
                                // $rootScope.referState=2;
                              
                                  localStorage.setItem("refrstate",2);
                                 
+                            }else if((_state=='campaignBrowse') || (_state=='contribution') 
+                            ||  (_state=='thanksAfterContribution') ){
+                                   
+                                 localStorage.setItem("refrstate",3);
                             }else{
                                 
                                 if($rootScope.user.userInfo.result.campaign.length!=0){
@@ -89,7 +96,7 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                     }else{
                                        // $rootScope.referState=2;
                                          localStorage.setItem("refrstate",2);
-                                       // alert($rootScope.referState+"actual")
+                                      
                                     }
                                 }
                             }
@@ -99,24 +106,30 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                             var _state=localStorage.getItem('currentSate');
                            
                             if( _state=='upload-video' ){
+                               
                                // $rootScope.referState=1;
                                  localStorage.setItem("refrstate",1);
-                            }else if((_state=='question1') || (_state=='question2') || (_state=='question3') ||
-                                    (_state=='question4') || (_state=='question5') || (_state=='question6') || 
-                                    (_state=='question7') ||  (_state=='question8')) {
+                            }else if((_state=='questions') ) {
                                 //$rootScope.referState=2;
-                               
+                              
                                  localStorage.setItem("refrstate",2);
                             }else if((_state=='campaignBrowse') || (_state=='contribution') 
-                            ||  (_state=='thanksAfterContribution') ||  (_state=='profileViewStats') ||  (_state=='withdrawCaloryAndCash')
-                            ||  (_state=='globalChat')  ||  (_state=='chat') ||  (_state=='account_settings') 
-                            ||  (_state=='endCampaignProfile')  ||  (_state=='contactAdmin') ||  (_state=='myContribution') 
-                            ||  (_state=='myContributionUserProfile')  ||  (_state=='addFund') 
-                            ||  (_state=='sponsorsAcquired')  ||  (_state=='mySponsorsUserProfile')){
-                                 localStorage.setItem("refrstate",3);
+                            ||  (_state=='thanksAfterContribution') ){
+                                 if(localStorage.getItem('actualState')){
+                                    var _stateSub = localStorage.getItem('actualState');
+                                    if(_stateSub == 2){
+                                        localStorage.setItem("refrstate",2);
+                                    }
+                                    if(_stateSub == 1) {
+                                         localStorage.setItem("refrstate",1);
+                                    }
+                                 }else{
+                                    localStorage.setItem("refrstate",3);
+                                 }
                             }else{
                                 
                                 if(localStorage.getItem('actualState')){
+                                   
                                     var current_state=localStorage.getItem('actualState');
                                     
                                  }

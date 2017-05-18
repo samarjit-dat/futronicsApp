@@ -38,8 +38,9 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
     });
 
     $scope.rollerChange = function() {
-        if(!$scope.roller.checked){$rootScope.slider = {
-               
+       
+        if(!$scope.roller.checked){ $rootScope.slider = {
+              
             value: $rootScope.slidingAmount,
             options:{
                 floor: 0,ceil: 1000,step: 5,
@@ -48,7 +49,7 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
             }
         };
         $rootScope.latestValue=1000;
-        if($rootScope.slider.value>1000)$rootScope.slider.value=1000;}
+        if($rootScope.slider.value>1000)$rootScope.slider.value=1000;$scope.showRoller=0;}
         else{$rootScope.slider = {
             value: $rootScope.slidingAmount,
             options:{
@@ -57,17 +58,18 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
                 id: 'slideEnded',onEnd: $scope.myEndListener
             }
         };
-        $rootScope.latestValue=50000;}
+        $rootScope.latestValue=50000;$scope.showRoller=1;}
     };
     
     $scope.signup = function(data) {
+       
         
         if($stateParams.fromEndCampaign){
             var userData = JSON.parse(localStorage.getItem('userInfo'));
-            userData = userData.userInfo.result[0];
+            userDataa = userData.userInfo.result[0];
 
             var _data={
-                user_id: userData.user_id,
+                user_id: userDataa.user_id,
                 card_no : data.cardNumber,
                 cvv_code : data.cvv,
                 city_zip : data.location,
@@ -83,6 +85,8 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
                 if(res.data.status === 1){
                     userData.wallet = res.data.result.current_updated_amount_in_wallet;
                     localStorage.setItem("userInfo",JSON.stringify(userData));
+                    localStorage.setItem("disableStartnewcampaign",userDataa.user_id+"disabled");
+                    $state.go('campaignBrowse');
                 }
             })
         }else{
@@ -99,7 +103,7 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
                 });
                 }else{
                 Loader.showLoading();
-
+               
                 $scope.data={
                     username:data.username,
                     user_password:data.password,

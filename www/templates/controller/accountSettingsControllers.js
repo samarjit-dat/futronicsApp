@@ -7,7 +7,9 @@ futronics.controller('accountSettingsCtrl',
     
       $scope.isMaintainPhase = localStorage.isMaintainPhase;
       $scope.isMaintainPhaseButton = localStorage.isMaintainPhaseButton;
-    
+     if(localStorage.getItem("disableStartnewcampaign")) {
+         $scope.startnewcampaign_disable = localStorage.getItem("disableStartnewcampaign");
+     }
     StorageService.storage();
     $scope.endCampaignStats = 1;
     $scope.endCampaign = 0;
@@ -82,6 +84,7 @@ futronics.controller('accountSettingsCtrl',
     $scope.end_campaign=function(){
         console.clear()
         console.log($rootScope.campaign_status)
+        $scope.disable_btn = 1;
         if(!$rootScope.userId || $rootScope.userId==undefined){
         
             $ionicPopup.show({
@@ -122,7 +125,10 @@ futronics.controller('accountSettingsCtrl',
             scope: $scope,
             buttons: [
               { text: 'No' ,
-                type: 'button-dark'},  
+                type: 'button-dark',
+                onTap: function(e) {
+                 $scope.disable_btn = 0;
+              }},  
               { text: 'Yes' ,
               type: 'button-calm',
              
@@ -172,7 +178,7 @@ futronics.controller('accountSettingsCtrl',
                     }
                     var data=$rootScope.formatInputString(data);
                      Loader.hideLoading();
-                    
+                     $scope.disable_btn = 0;
                     endcampaign.userEndCampaign(data).then(function(response){
                         
                 if(response.data.status==0){
@@ -347,7 +353,7 @@ futronics.controller('accountSettingsCtrl',
    
    /* ************************ HIDE CAMPAIGN START************************************ */
     $scope.hideCampaign=function(v){
-       
+        $scope.disable_btn = 1;
         $scope.user1=JSON.parse(localStorage.getItem('userInfo'));
             if(!$rootScope.userId || $rootScope.userId==undefined){
                 $ionicPopup.show({
@@ -417,7 +423,8 @@ futronics.controller('accountSettingsCtrl',
                     ShowCampaign.userShowCampaign(data).then(function(response){
                         console.log('show');
                         console.log(response);
-                         Loader.hideLoading();
+                        Loader.hideLoading();
+                        $scope.disable_btn = 0;
                        if(response.data.campaign_status=="1"){
                                     $ionicPopup.show({
                                     template: 'Your campaign is shown now',
@@ -467,8 +474,11 @@ futronics.controller('accountSettingsCtrl',
            // subTitle: 'Please enter your weight using a point to indicate decimals',
             scope: $scope,
             buttons: [
-              { text: 'No' ,
-                type: 'button-dark'},  
+                { text: 'No' ,
+                type: 'button-dark',
+                onTap: function(e) {
+                 $scope.disable_btn = 0;
+              }},   
               { text: 'Yes' ,
               type: 'button-calm',
 
@@ -523,7 +533,8 @@ futronics.controller('accountSettingsCtrl',
                     HideCampaign.userHideCampaign(data).then(function(response){
                         console.log('hide');
                         console.log(response);
-                          Loader.hideLoading();
+                        Loader.hideLoading();
+                        $scope.disable_btn = 0;
                        if(response.data.message=="Your campaign hide successfully."){
                                     $ionicPopup.show({
                                     template: 'Your campaign is hidden',
@@ -606,7 +617,7 @@ futronics.controller('accountSettingsCtrl',
                       onTap: function(e) {
                         localStorage.setItem('startnew','active');
                         console.log($scope.slider.value)
-                            $state.go("signup",{motivationAmount : $scope.slider.value});
+                            $state.go("signup",{motivationAmount : $scope.slider.value,fromEndCampaign : 1});
                             return;
                             }
                      }

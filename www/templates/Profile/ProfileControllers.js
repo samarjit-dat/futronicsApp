@@ -7,7 +7,7 @@ futronics.controller('ProfileCtrl',
     
   
     var privateMsgSetupFlag = 0;
-
+   
     /**
     * Firebase setup
     */
@@ -57,7 +57,9 @@ futronics.controller('ProfileCtrl',
 
     if( localStorage.getItem("refrstate")) { 
         $scope.referStae =  localStorage.getItem("refrstate");
+      
     }
+    
     if($rootScope.user_id =='' || $rootScope.user_id == undefined){
         $scope.show_gear = 0;
     } else{
@@ -148,6 +150,7 @@ futronics.controller('ProfileCtrl',
     $scope.mainImage =  IMAGE.BASE_IMAGE;
 
      if(localStorage.getItem('viewIndividualProfile_globalChat')!=null){
+         
          privateMsgSetupFlag = 1;
          $scope.otherProfile=1;
          $scope.myProfile=0;
@@ -163,6 +166,9 @@ futronics.controller('ProfileCtrl',
         //     imgObj.push(requiredParams);
         //   });
             console.log($scope.individual_user_details)
+          if($scope.individual_user_details.campaign.length!==0){
+             $scope.status=$scope.individual_user_details.campaign[0].campaign_status;
+          }
           if($scope.individual_user_details.profile_videos.length > 0){
               $scope.individual_user_details.profile_videos.forEach(function(ele){
 
@@ -209,6 +215,7 @@ futronics.controller('ProfileCtrl',
      /* *****  user own profle start **** */
 
      if(localStorage.getItem('myProfile')!=null){
+        
          privateMsgSetupFlag = 2;
          $scope.totalCampaign='';
          $scope.myProfile=0;
@@ -323,7 +330,7 @@ futronics.controller('ProfileCtrl',
             }
                 $state.go('campaignBrowse');
         };
-    $scope.referStae = 1;
+  
     /************************** video open on modal **************************************/
     $scope.openMainImageVideoModal = function(){
 
@@ -344,7 +351,7 @@ futronics.controller('ProfileCtrl',
              $scope.modal_video.hide();
         }
     };
-
+ 
     $scope.reportGoodVideo = function(video_id){
      $scope.video_id = video_id;
     };
@@ -358,6 +365,7 @@ futronics.controller('ProfileCtrl',
     $scope.fakeResponseList = function(listid) {
         $scope.fakeTypeId = listid;
     };
+   
     var fakeVideo = [];
     $scope.fakeVideo = function() {
         
@@ -452,6 +460,7 @@ futronics.controller('ProfileCtrl',
             }
 
         };
+        
 
         $scope.fakeReport = function() {
 
@@ -603,6 +612,7 @@ futronics.controller('ProfileCtrl',
             });
        }
     };
+   
     var goodVideo = [];
     $scope.goodVideo = function() {
        if(localStorage.getItem('fakeVideo')){
@@ -845,7 +855,7 @@ futronics.controller('ProfileCtrl',
             });
          }
     };
-
+ 
     $scope.completeCampaign = function(){
        if(localStorage.getItem('actualState')){
             var current_state=localStorage.getItem('actualState');
@@ -893,7 +903,7 @@ futronics.controller('ProfileCtrl',
             ]
         });
     }
-
+     
     $scope.openVideoModal = function(video_url){
        $scope.modal_video.videoUrl = $sce.trustAsResourceUrl(video_url);
        $scope.modal_video.show();
@@ -909,12 +919,15 @@ futronics.controller('ProfileCtrl',
     //    var goodVideo = JSON.parse(localStorage.getItem('goodVideo'));
     //    var fakeVideo = JSON.parse(localStorage.getItem('fakeVideo'));
 
+
+
+    
+
        var _videoId = $scope.videoId || $scope.video_id;
-       
        console.log(goodVideo,_videoId);
        console.log(fakeVideo,_videoId);
+         if(goodVideo || fakeVideo ){
 
-       if(goodVideo || fakeVideo ){
             if(videoPlayerContainer.classList.contains('videoBorderGood')){
                 videoPlayerContainer.classList.remove('videoBorderGood');
             }else if(videoPlayerContainer.classList.contains('videoBorderFake')){
@@ -938,11 +951,12 @@ futronics.controller('ProfileCtrl',
                 }
                 videoDataId.parentElement.className += ' bad';
                 // console.log("2",videoDataId);
+
                 videoPlayerContainer.className += ' videoBorderFake'; 
             }
        }
     };
-
+    
     $scope.closeModal = function(){
       $scope.modal_video.hide();
 //      var video = angular.element(document.querySelector('video'));

@@ -317,6 +317,14 @@ $rootScope.slider = {
             var data=$rootScope.formatInputString(data);
 
             UserListService.userListOnLoad(data).then(function(res){
+                console.log(res);
+                if(res.data.result.length == 0 || res.data.message == "No result found" && res.data.status == 2){
+                     
+                      if($rootScope.previousState !='login' && $rootScope.previousState !=''){
+                        toastr.error('No more data available');
+                      }
+                    
+                }
                var all_details =  $localstorage.getObject('allUserDetails');
                
 
@@ -436,8 +444,17 @@ $rootScope.slider = {
                         }
                     };
 
+                    if(response.data.result.campaign_success_or_fail == 'Fail'){
+                        localStorage.setItem("isMaintainPhaseButton",'false');
+                        localStorage.setItem("isMaintainPhase",'false');
+                    }else{
+                        localStorage.setItem("isMaintainPhaseButton",'true');
+                        localStorage.setItem("isMaintainPhase",'true');
+                    }
+
                     if(response.data.result.campaign_full_setup_or_not == 'false' && response.data.result.campaign_success_or_fail == 'Fail'){
                         $rootScope.endCampaignStatus = response.data.result.campaign_full_setup_or_not;
+                        
                     }else{
                         $rootScope.endCampaignStatus = response.data.result.campaign_full_setup_or_not;
                     }
