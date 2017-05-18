@@ -13,10 +13,9 @@ futronics.controller('campaignBrowseControllers',
 
     ContributionServices.whomeIContributed($rootScope.formatInputString({user_id : $rootScope.userId}))
         .then(function(res){
-            contributedIdList = res.data.result.all_contributors;
-            console.clear();
-            console.log(res);
-            console.log(contributedIdList);
+            angular.forEach(res.data.result.all_contributors, function(value, key){
+                contributedIdList.push(value);
+            });
         })
         .catch(function(err){
             console.log(err);
@@ -238,58 +237,35 @@ futronics.controller('campaignBrowseControllers',
 
       $scope.goToContribution=function(single_user){
           if(contributedIdList != undefined) {
-        console.log()
-          if(localStorage.getItem('endcampaign')){
-                localStorage.setItem('campaignCompleteOrNot',$rootScope.userId);
-                localStorage.removeItem('showGlobalChat_afterEndCampaign');
-          }
-          var userName = single_user.user_details.full_name;
-          var userId = single_user.user_details.user_id;
+            if(localStorage.getItem('endcampaign')){
+                    localStorage.setItem('campaignCompleteOrNot',$rootScope.userId);
+                    localStorage.removeItem('showGlobalChat_afterEndCampaign');
+            }
+            var userName = single_user.user_details.full_name;
+            var userId = single_user.user_details.user_id;
 
-          localStorage.setItem('single_user',JSON.stringify(single_user));
-            if(!$rootScope.userId){
+            localStorage.setItem('single_user',JSON.stringify(single_user));
+                if(!$rootScope.userId){
 
-              $ionicPopup.show({
-                    template: 'Please Login to participate in campaign',
-                    title: '<p style="color:black"><b>Attention!!!</b></p>',
-                    scope: $scope,
-                    buttons: [
-                    { text: 'Ok' ,
-                    type: 'button-calm',
-                        onTap: function(e) {
-                          $state.go("login");
-                              return;
-
-                      }
-                    }
-                ]
-            });
-          }else{
-            if(contributedIdList.length === 0){
                 $ionicPopup.show({
-                    template: 'You’re about to contribute to ' + userName,
-                    title: '<p style="color:black"><b>Attention!!!</b></p>',
-                    scope: $scope,
-                    buttons: [{ 
-                        text: 'Back' ,
-                        type: 'button-dark',
-                        onTap: function(e) {
-                            return;
-                        }
-                    },{ 
-                        text: 'Yes' ,
+                        template: 'Please Login to participate in campaign',
+                        title: '<p style="color:black"><b>Attention!!!</b></p>',
+                        scope: $scope,
+                        buttons: [
+                        { text: 'Ok' ,
                         type: 'button-calm',
-                        onTap: function(e) {
-                            $state.go('contribution',{id:single_user.user_details.user_id});
-                            return;
+                            onTap: function(e) {
+                            $state.go("login");
+                                return;
+
                         }
-                    }]
+                        }
+                    ]
                 });
             }else{
-                console.log(contributedIdList);
-                if(contributedIdList.indexOf(userId) > -1){
+                if(contributedIdList.length === 0){
                     $ionicPopup.show({
-                        template: 'You’ve supported '+userName+' already, would you like to support him more funds?',
+                        template: 'You’re about to contribute to ' + userName,
                         title: '<p style="color:black"><b>Attention!!!</b></p>',
                         scope: $scope,
                         buttons: [{ 
@@ -302,21 +278,43 @@ futronics.controller('campaignBrowseControllers',
                             text: 'Yes' ,
                             type: 'button-calm',
                             onTap: function(e) {
-                                repeateContribuationPopup(userName);
+                                $state.go('contribution',{id:single_user.user_details.user_id});
                                 return;
                             }
                         }]
-                    }); 
+                    });
                 }else{
-                    repeateContribuationPopup(userName);
+                    if(contributedIdList.indexOf(userId) > -1){
+                        $ionicPopup.show({
+                            template: 'You’ve supported '+userName+' already, would you like to support him more funds?',
+                            title: '<p style="color:black"><b>Attention!!!</b></p>',
+                            scope: $scope,
+                            buttons: [{ 
+                                text: 'Back' ,
+                                type: 'button-dark',
+                                onTap: function(e) {
+                                    return;
+                                }
+                            },{ 
+                                text: 'Yes' ,
+                                type: 'button-calm',
+                                onTap: function(e) {
+                                    $state.go('contribution',{id:single_user.user_details.user_id});
+                                    // repeateContribuationPopup(userName);
+                                    return;
+                                }
+                            }]
+                        }); 
+                    }else{
+                        repeateContribuationPopup(userName);
+                    }
                 }
+                // $state.go('contribution',{id:single_user.user_details.user_id});
             }
-            // $state.go('contribution',{id:single_user.user_details.user_id});
-          }
-        } else {
-              localStorage.setItem('single_user',JSON.stringify(single_user));
-             $state.go('contribution',{id:single_user.user_details.user_id});
-        }
+            } else {
+                localStorage.setItem('single_user',JSON.stringify(single_user));
+                $state.go('contribution',{id:single_user.user_details.user_id});
+            }
       }
 
       function repeateContribuationPopup(userName,userId){

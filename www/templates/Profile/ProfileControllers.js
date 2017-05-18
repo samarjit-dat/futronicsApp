@@ -896,7 +896,7 @@ futronics.controller('ProfileCtrl',
                     onTap: function(e) {
                         localStorage.setItem('startnew','active');
                         $stateParams.fromEndCampaign = true;
-                        $state.go("signup",{motivationAmount : $scope.slider.value});
+                        $state.go("signup",{motivationAmount : $scope.slider.value,fromEndCampaign : 1});
                         return;
                     }
                 }

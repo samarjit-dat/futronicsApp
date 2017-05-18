@@ -732,3 +732,25 @@ futronics.service('AfterEndCampaign',function($rootScope,$q, $localstorage,URL,L
         });
     };
 });
+
+
+futronics.service('MarketMyCampaign',function($rootScope,$q, $localstorage,URL,Loader,$http){
+    // http://111.93.227.162/crowdfunding/fundingformaintencephase/funding/41
+    this.shareMessageLink=function(id){
+      var defered=$q.defer();
+      return $http({
+            method: "POST",
+            url: URL.BASE+'/fundingformaintencephase/funding/'+id,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function(response){
+            console.log(response+"end_storagevalue");
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        },function(error){
+            Loader.hideLoading();
+            console.log(error+"error");
+            defered.reject(error);
+        });
+    };
+});

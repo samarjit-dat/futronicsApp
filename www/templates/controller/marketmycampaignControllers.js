@@ -1,4 +1,4 @@
-futronics.controller('marketmycampaignControllers', function($scope,$cordovaContacts,$cordovaSocialSharing) {
+futronics.controller('marketmycampaignControllers', function($scope,$rootScope,$cordovaContacts,$cordovaSocialSharing,MarketMyCampaign,URL) {
     $scope.socialLists = [
         {text: 'Facebook'},
         {text: 'Twitter'},
@@ -10,6 +10,12 @@ futronics.controller('marketmycampaignControllers', function($scope,$cordovaCont
 
     var message = 'This is a dummy message';
     var subject = 'This is a dummy subject';
+    
+    var user_id = $rootScope.userId || $rootScope.user_id;
+
+    if(user_id > 0){
+        message = URL.BASE+'fundingformaintencephase/funding/'+user_id
+    }
 
     function getChecked(){
         for(var i in $scope.checkItems) {
@@ -31,7 +37,7 @@ futronics.controller('marketmycampaignControllers', function($scope,$cordovaCont
                             // Success!
                             console.log("Success");
                             console.log(result);
-                        }, function(err) {
+                       }, function(err) {
                             // An error occured. Show a message to the user
                             console.log("Error");
                             console.log(err);
@@ -54,42 +60,42 @@ futronics.controller('marketmycampaignControllers', function($scope,$cordovaCont
                 case 'Text Message':
                     console.log("share in text message");
                     /**** txt msg */
-                    $scope.addContact = function() {
-                        $cordovaContacts.save($scope.contactForm).then(function(result) {
-                        // Contact saved
-                        }, function(err) {
-                        // Contact error
-                        });
-                    };
+                    // $scope.addContact = function() {
+                    //     $cordovaContacts.save($scope.contactForm).then(function(result) {
+                    //     // Contact saved
+                    //     }, function(err) {
+                    //     // Contact error
+                    //     });
+                    // };
 
-                    $scope.getAllContacts = function() {
-                        $cordovaContacts.find().then(function(allContacts) { //omitting parameter to .find() causes all contacts to be returned
-                        $scope.contacts = allContacts;
-                        });
-                    };
+                    // $scope.getAllContacts = function() {
+                    //     $cordovaContacts.find().then(function(allContacts) { //omitting parameter to .find() causes all contacts to be returned
+                    //         $scope.contacts = allContacts;
+                    //     });
+                    // };
 
-                    $scope.findContactsBySearchTerm = function (searchTerm) {
-                        var opts = {                                           //search options
-                        filter : searchTerm,                                 // 'Bob'
-                        multiple: true,                                      // Yes, return any contact that matches criteria
-                        fields:  [ 'displayName', 'name' ],                   // These are the fields to search for 'bob'.
-                        desiredFields: [id]    //return fields.
-                        };
+                    // $scope.findContactsBySearchTerm = function (searchTerm) {
+                    //     var opts = {                                           //search options
+                    //         filter : searchTerm,                                 // 'Bob'
+                    //         multiple: true,                                      // Yes, return any contact that matches criteria
+                    //         fields:  [ 'displayName', 'name' ],                   // These are the fields to search for 'bob'.
+                    //         desiredFields: [id]    //return fields.
+                    //     };
 
-                        if ($ionicPlatform.isAndroid()) {
-                        opts.hasPhoneNumber = true;         //hasPhoneNumber only works for android.
-                        };
+                    //     if ($ionicPlatform.isAndroid()) {
+                    //         opts.hasPhoneNumber = true;         //hasPhoneNumber only works for android.
+                    //     };
 
-                        $cordovaContacts.find(opts).then(function (contactsFound) {
-                        $scope.contacts = contactsFound;
-                        });
-                    }
+                    //         $cordovaContacts.find(opts).then(function (contactsFound) {
+                    //         $scope.contacts = contactsFound;
+                    //     });
+                    // }
 
-                    $scope.pickContactUsingNativeUI = function () {
-                        $cordovaContacts.pickContact().then(function (contactPicked) {
-                        $scope.contact = contactPicked;
-                        });
-                    };
+                    // $scope.pickContactUsingNativeUI = function () {
+                    //     $cordovaContacts.pickContact().then(function (contactPicked) {
+                    //         $scope.contact = contactPicked;
+                    //     });
+                    // };
                     /*** txt msg */
                     $cordovaSocialSharing
                         .shareViaSMS(message, '0612345678')
@@ -130,6 +136,13 @@ futronics.controller('marketmycampaignControllers', function($scope,$cordovaCont
     };
 
     $scope.shareApp = function (){
-        console.log("Share this app");    
+        console.log("Share this app");
+        $cordovaSocialSharing
+        .share(message, subject, file, link) // Share via native share sheet
+        .then(function(result) {
+        // Success!
+        }, function(err) {
+        // An error occured. Show a message to the user
+        });
     };
 });

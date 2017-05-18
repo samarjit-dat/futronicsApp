@@ -235,8 +235,8 @@
 
                 <p class="inCompleteCampaignMessage" ng-if="referStae==3">Your campaign is not fully set up yet, please complete your campaign setup to unlock all Diet Monet features</p>
                 <div style="width: 300px; margin: 0 auto;">
-                    <a ng-if="referStae==1"  style="color:yellow" class="completeCampaignBtn" ng-click="completeCampaign()">Upload video to complete profile</a>
-                    <a ng-if="referStae==2" style="color:yellow" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
+                    <a ng-if="referStae==1" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="completeCampaignBtn" ng-click="completeCampaign()">Upload video to complete profile</a>
+                    <a ng-if="referStae==2" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
                     <a ng-if="referStae==3" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the campaign here</a>
                 </div>
          </div>

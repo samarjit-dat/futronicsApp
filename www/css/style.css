@@ -978,8 +978,8 @@ h5.camp-btn {
 .height100 { height: 100% !important; }
 #global_chat .view_all { text-align: center; }
 #global_chat .load_more { text-align: center; }
-#global_chat .view_all span { background: #000; display: inline-block; color:#fff; padding: 6px 15px; font-size: 14px; border-radius: 4px; text-align: center; margin-bottom: 35px;}
-#global_chat .load_more span { background: #000; display: inline-block; color:#fff; padding: 6px 15px; font-size: 14px; border-radius: 4px; text-align: center; margin: 15px;}
+#global_chat .view_all span { background: #000; color:#fff; padding: 6px 15px; font-size: 14px; border-radius: 4px; text-align: center; margin-bottom: 35px;}
+#global_chat .load_more span { background: #000; display: inline-block; color:#fff; padding: 6px 15px; font-size: 14px; border-radius: 4px; text-align: center; margin: 5px;}
 .profile-scroll { min-height: 165px;height : 165px; overflow-y: scroll;padding-bottom: 80px;}
 .account-block h3 { color: #33e4c9}
 .no-sponsore-btn { margin-top: 40px; width: 90%;left: 5%; }
@@ -1026,7 +1026,7 @@ h5.camp-btn {
 #profileViewMyStats .user-chat-table .row { display: inline-block; }
 #profileViewMyStats .user-chat-table .row button { float: right; }
 .contribuationBtn { padding-bottom: 40px !important; display: inline-block;background: none !important;}
-.profile-chat .list{ margin: 0 ;}
+.profile-chat .list{ margin: -7px 0 ;}
 .profile-addmore ul li {display: inline-block;padding: 0 1px;margin-top: 2px;}
 .profile-endcampaign p { padding: 0 0 0 5px; font-size: 13px; }
 .profile-endcampaign {height: 290px;}
