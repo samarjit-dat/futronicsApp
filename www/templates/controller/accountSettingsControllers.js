@@ -319,8 +319,10 @@ futronics.controller('accountSettingsCtrl',
     check_hideOrShow.hideShowLocalStorageValue(data).then(function(response){
         console.log('hschk');
         console.log(response);
+        if(response.data.result.campaign_status == 0) {
+            $scope.endCampaign == 1;
+        }
         if(response.data.status == 1){
-            alert($localstorage.get('hideShowCampaign'))
             if($localstorage.get('hideShowCampaign')){
                     if($localstorage.get('hideShowCampaign')==0){
                         $scope.C_hide = 0;

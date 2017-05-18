@@ -57,9 +57,11 @@ futronics.controller('ProfileCtrl',
         $scope.unCompleteCampaign =0;
     }
 
-    if( localStorage.getItem("refrstate")) { 
+    if(localStorage.getItem("refrstate")) { 
         $scope.referStae =  localStorage.getItem("refrstate");
-      
+        if($scope.referStae == 1 || $scope.referStae == 2) {
+             $scope.unCompleteCampaign =1;
+        }
     }
     
     if($rootScope.user_id =='' || $rootScope.user_id == undefined){

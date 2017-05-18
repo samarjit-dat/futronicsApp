@@ -62,12 +62,97 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                     if($rootScope.user.userInfo.result.profile_videos.length>0){
                         
                         $rootScope.profile_complete_show_progress='1';
+                        if(localStorage.getItem('actualState')){
+                        var _state=localStorage.getItem('actualState');
+                         
+                        
+                            if( (_state=='upload-video') ){
+                               
+                               // $rootScope.referState=1;
+                                localStorage.setItem("refrstate",1);
+                               // alert($rootScope.referState+"actual")
+                            }else if((_state=='questions')) {
+                               // $rootScope.referState=2;
+                             
+                                 localStorage.setItem("refrstate",2);
+                                
+                            }else if((_state=='campaignBrowse') || (_state=='contribution') 
+                            ||  (_state=='thanksAfterContribution') ){
+                                   
+                                 localStorage.setItem("refrstate",3);
+                            }else{
+                                
+                                if($rootScope.user.userInfo.result.campaign.length!=0){
+                                    if($rootScope.campaign_status==0){
+                                      //  $rootScope.referState=3; 
+                                         localStorage.setItem("refrstate",3);
+                                       // alert($rootScope.referState+"actual")
+                                    }else if((_state=='upload-video') && ($rootScope.campaign_status==1)){
+                                        //$rootScope.referState=1;
+                                         localStorage.setItem("refrstate",1);
+                                      
+                                    }else{
+                                       // $rootScope.referState=2;
+                                         localStorage.setItem("refrstate",2);
+                                      
+                                    }
+                                }
+                            }
+                        }
+                        if(localStorage.getItem('currentSate')){
+                           
+                            var _state=localStorage.getItem('currentSate');
+                           
+                            if( _state=='upload-video' ){
+                               
+                               // $rootScope.referState=1;
+                                 localStorage.setItem("refrstate",1);
+                            }else if((_state=='questions') ) {
+                                //$rootScope.referState=2;
+                              
+                                 localStorage.setItem("refrstate",2);
+                            }else if((_state=='campaignBrowse') || (_state=='contribution') 
+                            ||  (_state=='thanksAfterContribution') ){
+                                 if(localStorage.getItem('actualState')){
+                                    var _stateSub = localStorage.getItem('actualState');
+                                    if(_stateSub == 2){
+                                        localStorage.setItem("refrstate",2);
+                                    }
+                                    if(_stateSub == 1) {
+                                         localStorage.setItem("refrstate",1);
+                                    }
+                                 }else{
+                                    localStorage.setItem("refrstate",3);
+                                 }
+                            }else{
+                                
+                                if(localStorage.getItem('actualState')){
+                                   
+                                    var current_state=localStorage.getItem('actualState');
+                                    
+                                 }
+                                 if($rootScope.user.userInfo.result.campaign.length!=0){
+                                    if($rootScope.campaign_status==0){
+                                       // $rootScope.referState=3; 
+                                         localStorage.setItem("refrstate",3);
+                                    }else if((current_state=='upload-video') && ($rootScope.campaign_status==1)){
+                                       // $rootScope.referState=1;
+                                         localStorage.setItem("refrstate",1);
+                                    }else{
+                                       // $rootScope.referState=2;
+                                         localStorage.setItem("refrstate",2);
+                                    }
+                                }else{
+                                     localStorage.setItem("refrstate",3);
+                                }
+                            }
+                         }
                     }else{
                        
                         if(localStorage.getItem('actualState')){
                         var _state=localStorage.getItem('actualState');
                          
-                         
+                        
                             if( (_state=='upload-video') ){
                                
                                // $rootScope.referState=1;
