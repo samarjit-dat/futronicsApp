@@ -12,7 +12,7 @@ futronics.controller('marketmycampaignControllers', function($scope,$cordovaCont
     var subject = 'This is a dummy subject';
 
     function getChecked(){
-        for(i in $scope.checkItems) {
+        for(var i in $scope.checkItems) {
             if($scope.checkItems[i] == true) {
                 $scope.checkItemsCollection.push(i);
             }

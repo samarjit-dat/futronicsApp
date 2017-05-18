@@ -96,7 +96,8 @@ futronics.controller('campaignBrowseControllers',
                            //console.log('res');
                            //console.log(res.data.count);
                            console.log(res);
-        $localstorage.set('allUserDetails',JSON.stringify(res.data.result));
+        if(res.data.status !== 2){
+           $localstorage.set('allUserDetails',JSON.stringify(res.data.result));
             if(res.data.result.length!==0){
                 for(var i=0;i<res.data.result.length;i++){
                  //console.log(res.data.result[i]);
@@ -112,7 +113,67 @@ futronics.controller('campaignBrowseControllers',
                         }
                     }
                 }
-            }
+            } 
+        }else{
+            
+      if(localStorage.getItem('allUserDetails')){
+           AllUser_MyContribution.storage();
+
+      $scope.userListShowbeforeLogin=[];
+
+      var initialPageNo=Math.ceil($rootScope.all_user_details.length/20);
+      $scope.pageValue=initialPageNo;
+       $scope.loadMoreX = function() {
+        if($scope.pageValue==0){
+         $scope.pageValue++;
+        }else{
+         $scope.pageValue++;
+        }
+        var data={
+                 page:$scope.pageValue
+        };
+        var data=$rootScope.formatInputString(data);
+        UserListService.userListOnLoad(data).then(function(res){
+
+            if(res.data.message==="No result found"){
+//                $scope.noData=true;
+                //Loader.hideLoading();
+                $timeout(function(){
+                     $scope.noData=false;
+                }, 2500);
+                $scope.noMoreItemsAvailable=true;
+                $scope.pageValue =0;
+
+            }else{
+                for(var i=0;i<res.data.result.length;i++){
+                  //$rootScope.allUser.push(res.data.result[i]);
+                  
+                        //console.log(res.data.result[i]);
+                        if(res.data.result[i].campaign.length>0){
+                            if(res.data.result[i].campaign[0].campaign_status==1){
+                                // $rootScope.allUser.push(res.data.result[i]);
+                                if($rootScope.user_id != res.data.result[i].user_details.user_id) {
+                                    for(var j=0;j<$rootScope.allUser.length;j++){
+                                        allCorrectDetails.push($rootScope.allUser[j].user_details.user_id)
+                                    }
+
+                                    if(allCorrectDetails.indexOf(res.data.result[i].user_details.user_id) == -1)
+                                        $rootScope.allUser.push(res.data.result[i]);
+                                }
+                            }
+                        }
+                    
+                }
+                $localstorage.set('allUserDetails',JSON.stringify($rootScope.allUser));
+               // Loader.hideLoading();
+               console.log($rootScope.allUser)
+        };
+         $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
+
+        };
+        }
+        }
                Loader.hideLoading();
         });
 //     }else{
