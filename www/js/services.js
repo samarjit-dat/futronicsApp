@@ -298,14 +298,14 @@ futronics.service('FakeVideoService',function($http,$q,URL,Loader,$localstorage,
         return defered.promise;
      };
 
-     this.getMutedTime = function(_data){
+     this.getMutedTime = function(){
         Loader.showLoading();
         var defered=$q.defer();
         $http({
             method: "GET",
             url: URL.BASE+"/userMuteApi",
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            data: _data
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+           
         }).then(function(response){
             Loader.hideLoading();
             defered.resolve(response);

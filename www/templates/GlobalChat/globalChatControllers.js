@@ -254,6 +254,8 @@ $rootScope.slider = {
     var countNosOfStatusOne = 0;
     UserListService.userListOnLoad(data)
                        .then(function(res){
+                           console.clear();
+                           console.log(res);
 
         $localstorage.set('allUserDetails',JSON.stringify(res.data.result));      
             if(res.data.result.length!==0){
