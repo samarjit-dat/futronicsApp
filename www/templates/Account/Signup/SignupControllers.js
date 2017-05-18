@@ -61,8 +61,9 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
         $rootScope.latestValue=50000;$scope.showRoller=1;}
     };
     
+    console.log("from end ? ",$stateParams.fromEndCampaign);
+    
     $scope.signup = function(data) {
-       
         
         if($stateParams.fromEndCampaign){
             var userData = JSON.parse(localStorage.getItem('userInfo'));

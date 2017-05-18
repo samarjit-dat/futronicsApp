@@ -5,9 +5,8 @@ futronics.controller('ProfileCtrl',
     FakeVideoService,GoodVideoService,FakevideoReportList,$firebaseArray,$stateParams,
     CaloryHaveOrGiven,FakeOrGood) {
     
-  
     var privateMsgSetupFlag = 0;
-   
+
     /**
     * Firebase setup
     */
@@ -18,14 +17,17 @@ futronics.controller('ProfileCtrl',
     var myTitleJSon=JSON.parse(localStorage.getItem('userInfo'));
     $scope.video_countdown = '';
     
-    if(localStorage.getItem('video_countdown')){
-        $scope.video_countdown = localStorage.getItem('video_countdown');
-        console.log($scope.video_countdown);
-    }
+    $scope.$on('$ionicView.enter', function(){
+        if(localStorage.getItem('video_countdown')){
+            $scope.video_countdown = localStorage.getItem('video_countdown');
+        }
     
-    if(localStorage.getItem('endcampaign',"success") === 'success'){
-        $scope.endCampaignStatus = 0;
-    }
+        if(localStorage.getItem('endcampaign',"success") === 'success'){
+            $scope.endCampaignStatus = 1;
+        }else{
+            $scope.endCampaignStatus = 0;
+        }
+    });
     
     if(myTitleJSon === null){
         $scope.myTitle = '';

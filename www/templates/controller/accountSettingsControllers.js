@@ -14,8 +14,7 @@ futronics.controller('accountSettingsCtrl',
     $scope.endCampaignStats = 1;
     $scope.endCampaign = 0;
     $scope.campaign_id=localStorage.getItem('campaign_id');
-    console.log($scope.campaign_id+"campaignid");
-    
+    //console.log($scope.campaign_id+"campaignid");
     if($rootScope.isMaintain == 'false'){
         var data={
            user_id:$rootScope.userId,
@@ -621,9 +620,9 @@ futronics.controller('accountSettingsCtrl',
                         console.log($scope.slider.value)
                             $state.go("signup",{motivationAmount : $scope.slider.value,fromEndCampaign : 1});
                             return;
-                            }
-                     }
-                  ]
+                    }
+                }
+            ]
 
         });
         

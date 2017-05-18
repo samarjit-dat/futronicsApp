@@ -119,13 +119,17 @@
         "is_top_level": true,
         "variables": {}
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/joydip
     "cordova-plugin-contacts": {
         "source": {
             "type": "registry",
             "id": "cordova-plugin-contacts"
         },
         "is_top_level": true,
+<<<<<<< HEAD
         "variables": {},
 
     "cordova-plugin-x-socialsharing": {
@@ -143,6 +147,8 @@
             "id": "es6-promise-plugin"
         },
         "is_top_level": false,
+=======
+>>>>>>> origin/joydip
         "variables": {}
 
     }

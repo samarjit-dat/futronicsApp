@@ -4,7 +4,8 @@ function($scope,StorageService,$state,$rootScope,$window,$localstorage,$ionicPop
     ContributionServices,IMAGE,$stateParams,CaloryHaveOrGiven) {
  
     stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
-    
+     
+    $scope.showRoller = false;
     
     if($rootScope.isMaintain === undefined){
         $rootScope.isMaintain = null;
@@ -93,6 +94,7 @@ function($scope,StorageService,$state,$rootScope,$window,$localstorage,$ionicPop
             id: 'slideEnded',onEnd: $scope.myEndListener
         }
     };$rootScope.latestValue=50000;}
+        $scope.showRoller = $scope.roller.checked;
     };
     
     

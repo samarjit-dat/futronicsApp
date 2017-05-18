@@ -155,10 +155,11 @@
 </ion-range>
 </div>
 
-    <div class="right">
-     <ion-toggle ng-model="roller.checked" ng-change="rollerChange()">
-     </ion-toggle>
+<div class="right">
+    <ion-toggle ng-model="roller.checked" ng-change="rollerChange()"></ion-toggle>
 </div>
+<div ng-if="showRoller" class="high-roller"> High roller</div>
+
 <!--<div class="contribute-btn">
     <button class="button button-stable" ui-sref="campaignBrowse">Exit</button>
     <button class="button button-calm" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"
