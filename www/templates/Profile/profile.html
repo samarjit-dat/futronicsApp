@@ -129,7 +129,7 @@
                <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ui-sref="globalChat">+ Global Chat</button></li>
               
                <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ng-click="myContribution()"  >+ Contributed Campaigns</button></li>
-               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="!endCampaignStatus" ng-click="startNewCampaign()"  >+ Start new campaign</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="endCampaignStatus" ng-click="startNewCampaign()"  >+ Start new campaign</button></li>
             </ul>
 
          </div>

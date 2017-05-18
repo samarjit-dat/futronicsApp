@@ -20,7 +20,10 @@
                       
                     <rzslider  rz-slider-model="slider.value"   rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>
                 </ion-range> 
-                <div class=""> <ion-toggle ng-model="roller.checked" ng-change="rollerChange()"></ion-toggle></div>
+                    <div class=""> 
+                        <ion-toggle ng-model="roller.checked" ng-change="rollerChange()"></ion-toggle>
+                        <div ng-if="showRoller" class="high-roller"> High roller</div>
+                    </div>
                 </div>
                 
               </div>

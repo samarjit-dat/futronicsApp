@@ -3,9 +3,10 @@ futronics.controller('addFundCtrl',
         $state,$localstorage,$ionicPopup,stateFactory,LogoutService,AddFundServices) {
             
         stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
-       // alert($rootScope.previousState);
+       
         $scope.previoustate=$rootScope.previousState;  
-	
+        $scope.showRoller = false;
+
         $rootScope.slidingAmount=0;
         $scope.roller = { checked: false };
         $rootScope.slider = {
@@ -24,24 +25,31 @@ futronics.controller('addFundCtrl',
         
     }); 
     $scope.rollerChange = function() {
-       
-        if(!$scope.roller.checked){$rootScope.slider = {
-               
-        value: $rootScope.slidingAmount,
-        options:{
-            floor: 0,ceil: 1000,step: 5,
-            translate: function(value) {return '&dollar;' + value;},
-            id: 'slideEnded',onEnd: $scope.myEndListener
+        if(!$scope.roller.checked){
+            $rootScope.slider = {
+                    
+                value: $rootScope.slidingAmount,
+                options:{
+                    floor: 0,ceil: 1000,step: 5,
+                    translate: function(value) {return '&dollar;' + value;},
+                    id: 'slideEnded',onEnd: $scope.myEndListener
+                }
+            }
+            $rootScope.latestValue=1000;
+            if($rootScope.slider.value>1000) $rootScope.slider.value=1000;
         }
-    };$rootScope.latestValue=1000;if($rootScope.slider.value>1000)$rootScope.slider.value=1000;}else{$rootScope.slider = {
-        
-        value: $rootScope.slidingAmount,
-        options:{
-            floor: 0,ceil: 50000,step: 5,
-            translate: function(value) {return '&dollar;' + value;},
-            id: 'slideEnded',onEnd: $scope.myEndListener
+        else{
+            $rootScope.slider = {
+                value: $rootScope.slidingAmount,
+                options:{
+                    floor: 0,ceil: 50000,step: 5,
+                    translate: function(value) {return '&dollar;' + value;},
+                    id: 'slideEnded',onEnd: $scope.myEndListener
+                }
+            }
+            $rootScope.latestValue=50000;
         }
-    };$rootScope.latestValue=50000;}
+        $scope.showRoller = $scope.roller.checked;
     };
     /* ******************** UserId from LocalStorage start***********************  */
 

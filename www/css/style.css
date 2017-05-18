@@ -1052,3 +1052,5 @@ h5.camp-btn {
 
 /*=====================17-05-17====================*/
 .high-roller {position: relative; padding: 30px 0px 0px 0px;width: 85px;color: #ffff00;}
+.question-feedback-blocks .high-roller {padding: 20px 0px 0px 0px;color: #ffff00; float: right;}
+.contribution .high-roller { float: right; right: 0px; padding: 0; position: absolute;color: #ffff00;}
