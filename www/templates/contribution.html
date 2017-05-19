@@ -20,7 +20,7 @@
 
         <div class="profile-content">
             <h4 ng-bind="single_user.user_details.username"></h4>
-
+            <span class="progress">Progress <strong>{{motivation_percentage}}%</strong></span>
             <div class="rating">
             <span class="rating-full">calorie <strong><i class="ion-android-star"></i> {{total_calorie_have || 0}}</strong></span> 
             <span class="rating-give">give n <strong><i class="ion-android-star"></i>{{total_calorie_given || 0}}</strong></span> 
@@ -40,7 +40,7 @@
 
         <div class="profile-content">
             <h4 ng-bind="single_user.user_details.username"></h4>
-
+            <span class="progress">Progress <strong>50%</strong></span>
             <div class="rating">
             <span class="rating-full">calorie <strong><i class="ion-android-star"></i> 100</strong></span>
             <span class="rating-give">give n <strong><i class="ion-android-star"></i> 5</strong></span>
@@ -58,7 +58,7 @@
 
         <div class="profile-content">
             <h4 ng-bind="single_user.user_details.username"></h4>
-
+            <span class="progress">Progress <strong>50%</strong></span>
             <div class="rating">
             <span class="rating-full">calorie <strong><i class="ion-android-star"></i> 100</strong></span>
             <span class="rating-give">give n <strong><i class="ion-android-star"></i> 5</strong></span>
