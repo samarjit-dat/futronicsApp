@@ -2,15 +2,23 @@ futronics.controller('accountSettingsCtrl',
     function($scope,StorageService,$ionicPopup,$rootScope,
     AccountService,Loader,$state,$localstorage,endcampaign,
     TimeAndDateFactory,HideCampaign,MaintainService,ShowCampaign,check_hideOrShow,
-    AfterEndCampaign){
+    AfterEndCampaign,stateFactory){
      /* ******************** UserId from LocalStorage start***********************  */
-    
+      stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
       $scope.isMaintainPhase = localStorage.isMaintainPhase;
       $scope.isMaintainPhaseButton = localStorage.isMaintainPhaseButton;
      if(localStorage.getItem("disableStartnewcampaign")) {
          $scope.startnewcampaign_disable = localStorage.getItem("disableStartnewcampaign");
      }
     StorageService.storage();
+    $scope.backToPrev = function() {
+         if($rootScope.previousState == 'profile') {
+            $state.go('profile');
+          }else {
+            $state.go('globalChat');
+          }
+    };
+   
     $scope.endCampaignStats = 1;
     $scope.endCampaign = 0;
     $scope.campaign_id=localStorage.getItem('campaign_id');

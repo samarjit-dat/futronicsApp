@@ -32,7 +32,8 @@
        <button style="margin-top: 1px;"  ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="re-take button button-calm" ng-click="chooseVideo()">Re-Take</button>
 
      </div>
-        <input type="text" style="margin-top: 25px;overflow: hidden;" ng-if="currentWeightDisabled==false" value="" ng-model="data.current_weight" placeholder="Enter your weight"/>
+        <input type="number" style="margin-top: 25px;overflow: hidden;" ng-if="currentWeightDisabled==false" value="" ng-model="data.current_weight" placeholder="Enter your weight"/>
+
     </div>
     <!--<div class="video-submit">
         <button class="validate button button-stable" ui-sref='profile'>Validate Later</button>
