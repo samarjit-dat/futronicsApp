@@ -1,6 +1,6 @@
 futronics.controller('myContributionUserProfileCtrl',function($scope,$state,
 $rootScope,$localstorage,check_GlobalCommunity,
-$firebaseArray,AccountService, $stateParams,CaloryHaveOrGiven){
+$firebaseArray,AccountService, $stateParams,CaloryHaveOrGiven,MotivationPercent){
 
     $scope.mycontributionUserDetails=JSON.parse($localstorage.get('myContribution_userProfile'));
     $scope.messages = [];
@@ -13,6 +13,12 @@ $firebaseArray,AccountService, $stateParams,CaloryHaveOrGiven){
      $scope.checkMember=function(){
         check_GlobalCommunity.check_memberOrNot();
     };
+
+    console.log($scope.mycontributionUserDetails)
+    MotivationPercent.getPercent($rootScope.formatInputString({user_id: $scope.mycontributionUserDetails.user_id,campaign_id: $scope.mycontributionUserDetails.contribute_campaign[0].campaign_id}))
+    .then(function(res){
+        $scope.motivation_percentage = res.data.result.percentile_amount_collected;
+    });
 
     $scope.userdata=AccountService.getUserInfo();
     /**

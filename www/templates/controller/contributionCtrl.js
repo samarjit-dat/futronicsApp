@@ -1,7 +1,7 @@
 futronics.controller('contributionCtrl', 
 function($scope,StorageService,$state,$rootScope,$window,$localstorage,$ionicPopup, 
     $timeout,ionPullUpFooterState,stateFactory,LogoutService,
-    ContributionServices,IMAGE,$stateParams,CaloryHaveOrGiven) {
+    ContributionServices,IMAGE,$stateParams,CaloryHaveOrGiven,MotivationPercent) {
  
     stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
      
@@ -122,6 +122,13 @@ function($scope,StorageService,$state,$rootScope,$window,$localstorage,$ionicPop
     
     console.log('$scope.single_user');
     console.log($scope.single_user);
+
+    
+    
+    MotivationPercent.getPercent($rootScope.formatInputString({user_id: $scope.single_user.user_details.user_id,campaign_id:$scope.single_user.campaign[0].campaign_id }))
+    .then(function(res){
+        $scope.motivation_percentage = res.data.result.percentile_amount_collected;
+    });
     
     /* ************ Single_user$scope.single_user localStorage Get Data End************ */
     /* *** username and details start *** */

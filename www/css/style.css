@@ -997,7 +997,7 @@ h5.camp-btn {
 .videoBorderGood { border: 10px solid #4ddf51;}
 .videoCircleBorderFake { border: 2px solid #dc2f45;}
 .videoCircleBorderGood { border: 2px solid #4ddf51;}
-#profileViewMyStats .user-chat-table { height: 290px !important; }
+#profileViewMyStats .user-chat-table { height: 375px !important; }
 .inCompleteCampaignMessage { color: yellow; background: #3f424a;padding: 5px;font-size: 11px;border-radius: 5px;}
 .completeCampaignBtn { width: 100%;text-align: center;font-size: 13px;display: inline-block;color: #fff;background: #10888e; padding: 3px; border-radius: 5px;}
 
@@ -1054,3 +1054,14 @@ h5.camp-btn {
 .high-roller {position: relative; padding: 30px 0px 0px 0px;width: 85px;color: #ffff00;}
 .question-feedback-blocks .high-roller {padding: 20px 0px 0px 0px;color: #ffff00; float: right;}
 .contribution .high-roller { float: right; right: 0px; padding: 0; position: absolute;color: #ffff00;}
+
+/********  19-05-2017 *******/
+@media screen and (device-aspect-ratio: 40/71) { #profileViewMyStats .user-chat-table { height: 210px !important; } }
+@media screen and (device-aspect-ratio: 375/667) { #profileViewMyStats .user-chat-table { height: 305px !important; } }
+@media only screen and (min-device-width: 360px) and (max-device-width: 640px) { #profileViewMyStats .user-chat-table { height: 290px !important; } }
+@media only screen and (min-device-width: 412px) and (max-device-width: 732px) {
+    #profileViewMyStats .user-chat-table { height: 375px !important; }
+}
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) {
+    #profileViewMyStats .user-chat-table { height: 375px !important; }
+}

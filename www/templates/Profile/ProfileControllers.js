@@ -30,7 +30,7 @@ futronics.controller('ProfileCtrl',
 
         MotivationPercent.getPercent($rootScope.formatInputString({user_id: $rootScope.user_id || $rootScope.userId,campaign_id:$rootScope.user_details.userInfo.result['campaign'][0]['campaign_id']}))
         .then(function(res){
-            console.log(res);
+            $scope.motivation_percentage = res.data.result.percentile_amount_collected;
         })
     });
     
