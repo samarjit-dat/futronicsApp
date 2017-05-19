@@ -4,7 +4,7 @@ futronics.controller('globalChatControllers', function($scope,$ionicHistory,
     $window,AccountService, $localstorage,$rootScope,$ionicPopup,ionPullUpFooterState,
     Loader, $timeout,$state,LogoutService,newsFeedServices,$ionicSlideBoxDelegate,$firebaseArray,
     GlobalChatService,WeightLoseSuccessOrFail,MaintainService,$filter,$interval) {
-      
+   
 $scope.newshow=1;
 $scope.newsFeeds=[];
 ($rootScope.showDivider === undefined) ? $scope.showDivider = false : $scope.showDivider = !($rootScope.showDivider);
@@ -233,6 +233,14 @@ $rootScope.slider = {
         $scope.$broadcast('scroll');
         check_GlobalCommunity.check_memberOrNot();
     };
+    $scope.goToChatPage = function(){
+        if(localStorage.getItem('userInfo') == null) {
+             toastr.error('Sorry!!You are not currently logged in.');
+        } else {
+            $state.go('chat');
+        }
+        
+    }
 
        /* **************** Fetch USERINFO FROM LOCALSTORAGE************************************* */ 
 
@@ -412,10 +420,8 @@ $rootScope.slider = {
             }
         };
     }
-
-    $scope.goToChatPage = function(){
-        $state.go('chat');
-    }
+   
+    
 
     if($rootScope.user_id != null && $rootScope.user_id != '' && $rootScope.user_id != undefined){
        

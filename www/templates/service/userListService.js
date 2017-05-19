@@ -1,20 +1,20 @@
 futronics.service("UserListService", function($http,$q,Loader, $localstorage,URL,$rootScope) {
   this.userListOnLoad = function(data){
       var defered=$q.defer();
-      // Loader.showLoading();
+       Loader.showLoading();
     return $http({
             method: "POST",
             url: URL.BASE+"/userList",
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data:data
         }).then(function(response){ 
-            // Loader.hideLoading();
+             Loader.hideLoading();
             if(response.data.status == 2){
               
-                if($rootScope.currentState == "globalChat"){
+                if($rootScope.currentState == "globalChat"  && $rootScope.noMore++ < 2){
                      var loadMoreId = document.getElementById('loadMore');
                      loadMoreId.style.display = 'none';
-                   
+                     toastr.error('No more data available');
                 }
                
                
