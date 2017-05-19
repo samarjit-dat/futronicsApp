@@ -3,10 +3,6 @@ function($scope,$rootScope,StorageService,$cordovaFileTransfer,
     $cordovaFile,$ionicPopup,$cordovaDevice,$cordovaCapture,$cordovaCamera, 
 $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage,$timeout)  {
 
-  
-
-
-    
     stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
     
     StorageService.storage();
@@ -119,16 +115,14 @@ $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$loca
                }
                
                console.log("********");
-               console.log($rootScope.to_id);
                console.log(JSON.parse(data.response));
                
-                var _data = JSON.parse(data.response).result;
-                console.log(_data)
-                alert(_data.data.message)
-                if(_data.length == 0){
+                var _data = JSON.parse(data.response);
 
+                Loader.hideLoading();
+                if(_data.result.length == 0){
                     $ionicPopup.show({
-                        title: _data.data.message,
+                        title: _data.message,
                         scope: $scope,
                         buttons: [{   text: 'Ok' ,
                                 type: 'button-calm',
@@ -137,49 +131,49 @@ $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$loca
                                 }
                             }]
                     });
-                }
+                }else{
+                    
+                    $ionicPopup.show({
+                        title: 'Thank you for video upload',
+                        template: 'You receive a calorie for every 3 video uploads.Also, that Your video will be rated by the community and that if it\'s not satisfactory, You shall be prompted to upload a new one',
+                        scope: $scope,
+                        buttons: [
+                            {   text: 'Cancel' ,
+                                type: 'button-dark'
+                            },{ 
+                                text: 'Ok' ,
+                                type: 'button-calm',
+                                onTap: function(e) {
 
-                Loader.hideLoading();
-                $ionicPopup.show({
-                    title: 'Thank you for video upload',
-                    template: 'You receive a calorie for every 3 video uploads.Also, that Your video will be rated by the community and that if it\'s not satisfactory, You shall be prompted to upload a new one',
-                    scope: $scope,
-                    buttons: [
-                        {   text: 'Cancel' ,
-                            type: 'button-dark'
-                        },{ 
-                            text: 'Ok' ,
-                            type: 'button-calm',
-                            onTap: function(e) {
-
-                               
-                                var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
-                                userInfo.userInfo.result.campaign = _data.campaign;
-                                if(_data.maintence_campaign_all_video) {
-                                    if(_data.maintence_campaign_all_video[0]){
-                                        userInfo.userInfo.result.profile_videos.push(_data.maintence_campaign_all_video[0]);
-                                    }
-                                }
-
-                                if(_data.profile_videos.length > 0){
-                                    userInfo.userInfo.result.profile_videos.push(_data.profile_videos[0]);
-                                }
                                 
-                                _allUserDetails[0].campaign = _data.campaign;
-                                console.log("userInfo",userInfo.userInfo.result);
+                                    var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
+                                    userInfo.userInfo.result.campaign = _data.campaign;
+                                    if(_data.maintence_campaign_all_video) {
+                                        if(_data.maintence_campaign_all_video[0]){
+                                            userInfo.userInfo.result.profile_videos.push(_data.maintence_campaign_all_video[0]);
+                                        }
+                                    }
 
-                                localStorage.setItem('video_countdown', _data.maintenance_video_timer_end_time || _data.counter_end_time);
-                                localStorage.setItem('allUserDetails',JSON.stringify(_allUserDetails));
+                                    if(_data.profile_videos.length > 0){
+                                        userInfo.userInfo.result.profile_videos.push(_data.profile_videos[0]);
+                                    }
+                                    
+                                    _allUserDetails[0].campaign = _data.campaign;
+                                    console.log("userInfo",userInfo.userInfo.result);
 
-                                $localstorage.setObject("userInfo",userInfo);
-                                $state.go('congrats_videoupload');
-                                $scope.data.current_weight = '';
-                                return;
+                                    localStorage.setItem('video_countdown', _data.maintenance_video_timer_end_time || _data.counter_end_time);
+                                    localStorage.setItem('allUserDetails',JSON.stringify(_allUserDetails));
 
+                                    $localstorage.setObject("userInfo",userInfo);
+                                    $state.go('congrats_videoupload');
+                                    $scope.data.current_weight = '';
+                                    return;
+
+                                }
                             }
-                        }
-                    ]
-                });
+                        ]
+                    });
+                }
 
                
             }, function (err) {

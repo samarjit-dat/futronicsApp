@@ -17,6 +17,8 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     var userInfo = JSON.parse(localStorage.getItem('userInfo')).userInfo;
     var wallet = userInfo.wallet;
 
+    var user_id = $rootScope.userId || $rootScope.user_id;
+
     $scope.checkMember=function(){
         $scope.$broadcast('scroll');
         check_GlobalCommunity.check_memberOrNot();
@@ -28,6 +30,10 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     }).then(function(modal) {
         $scope.modal_report = modal;
     });
+
+    $scope.setChatUser = function (id) {
+        $scope.muteUserId = id;
+    };
 
     // create a synchronized array
     // ref.once('value', function(snapshot) {
@@ -67,164 +73,160 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         var loggedinUserId = userInfo.result[0].user_id;
 
         $scope.giveCalory = function(){
-
-            $scope.myVar = 'hideIt';
-            $ionicPopup.show({
-                template: '<div style="text-align: center">Give user calories ?</div>',
-                scope: $scope,
-                buttons: [
-                { 
-                    text: 'Cancle' ,
-                    type: 'button-dark',
-                    onTap: function(e) {
-                        return;
-                    }
-                },{ 
-                    text: 'Ok' ,
-                    type: 'button-calm',
-                    onTap: function(e) {
-    
+            if($scope.muteUserId == user_id){
+                toastr.error("You can not add calory yourself");
+            }else{
+                $scope.myVar = 'hideIt';
+                $ionicPopup.show({
+                    template: '<div style="text-align: center">Give user calories ?</div>',
+                    scope: $scope,
+                    buttons: [
+                    { 
+                        text: 'Cancle' ,
+                        type: 'button-dark',
+                        onTap: function(e) {
+                            return;
+                        }
+                    },{ 
+                        text: 'Ok' ,
+                        type: 'button-calm',
+                        onTap: function(e) {
+                            var caloryAmount = 1;
                             var dataJson = {
                                 user_who_provide_calories : loggedinUserId,
                                 user_who_receive_calories : $scope.muteUserId,
-                                calories_amount : 20
+                                calories_amount : caloryAmount
                             };
 
-                            GlobalChatService.giveCalory($rootScope.formatInputString(dataJson)).then(function(res){
-                                var user_info = JSON.parse(localStorage.getItem("userInfo"));
-                                user_info.userInfo.result.calories = res.data.result.provider_current_calorie_amount;
-                                var update_userInfo=JSON.stringify(user_info);
-                                localStorage.setItem("userInfo",update_userInfo);
-                                toastr.success('Callory added successfully');
-                            });
+                            GlobalChatService.giveCalory($rootScope.formatInputString(dataJson))
+                                .then(function(res){
+                                    var user_info = JSON.parse(localStorage.getItem("userInfo"));
+                                    user_info.userInfo.result.calories = res.data.result.provider_current_calorie_amount;
+                                    var update_userInfo=JSON.stringify(user_info);
+                                    localStorage.setItem("userInfo",update_userInfo);
+                                    toastr.success(caloryAmount+ ' calory add to ' +getUserName($scope.muteUserId));
+                                });
                             return;
-
+                        }
                     }
-                }
-            ]
-            });
-
+                ]
+                });
+            }
         }
 
 
         $scope.muteUser = function(){
-            $scope.myVar = 'hideIt';
-            $ionicPopup.show({
-                template: '<div style="text-align: center">Mute user?</div>',
-                scope: $scope,
-                buttons: [
-                { 
-                    text: 'Cancle' ,
-                    type: 'button-dark',
-                    onTap: function(e) {
-                        return;
-                    }
-                },{ 
-                    text: 'Ok' ,
-                    type: 'button-calm',
-                    onTap: function(e) {
-                        // var msg = parseInt($scope.muteUserId);
-                        // var mutedListArray = [];
-                        // if((mutedListArray.length === 0  || mutedListArray ) && (!$localstorage.getObject('muteChatUser'))){
-                        //         mutedListArray.push(msg);
-                        //         $localstorage.setObject('muteChatUser',mutedListArray);
-                        // }else{
-                        //     mutedListArray = $localstorage.getObject('muteChatUser');
-                        //     if(mutedListArray.indexOf(msg) === -1){
-                        //         mutedListArray.push(msg);
-                        //         $localstorage.setObject('muteChatUser',mutedListArray);
-                        //     }
-                        // }
+            if($scope.muteUserId == user_id){
+                toastr.error("You can not add calory yourself");
+            }else{
+                $scope.myVar = 'hideIt';
+                $ionicPopup.show({
+                    template: '<div style="text-align: center">Mute user?</div>',
+                    scope: $scope,
+                    buttons: [
+                    { 
+                        text: 'Cancle' ,
+                        type: 'button-dark',
+                        onTap: function(e) {
+                            return;
+                        }
+                    },{ 
+                        text: 'Ok' ,
+                        type: 'button-calm',
+                        onTap: function(e) {
+                            var msg = {
+                                id : parseInt($scope.muteUserId),
+                                time : Date.now()
+                            };
 
-                        var msg = {
-                            id : parseInt($scope.muteUserId),
-                            time : Date.now()
-                        };
-
-                        var mutedListArray = [];
-                        if((mutedListArray.length === 0  || mutedListArray ) && (!$localstorage.getObject('muteChatUser'))){
-                                mutedListArray.push(msg);
-                                $localstorage.setObject('muteChatUser',mutedListArray);
-                                toastr.success('User muted successfully');
-                        }else{
-                            mutedListArray = $localstorage.getObject('muteChatUser');
-                            if(mutedListArray.indexOf(msg) === -1){
-                                mutedListArray.push(msg);
-                                $localstorage.setObject('muteChatUser',mutedListArray);
-                                toastr.success('User muted successfully');
+                            var mutedListArray = [];
+                            if((mutedListArray.length === 0  || mutedListArray ) && (!$localstorage.getObject('muteChatUser'))){
+                                    mutedListArray.push(msg);
+                                    $localstorage.setObject('muteChatUser',mutedListArray);
+                                    toastr.success(getUserName($scope.muteUserId)+' muted successfully');
+                            }else{
+                                mutedListArray = $localstorage.getObject('muteChatUser');
+                                if(mutedListArray.indexOf(msg) === -1){
+                                    mutedListArray.push(msg);
+                                    $localstorage.setObject('muteChatUser',mutedListArray);
+                                    toastr.success(getUserName($scope.muteUserId)+' muted successfully');
+                                }
                             }
                         }
-                    }
-                }]
-            });
+                    }]
+                });
+            }
         }
 
         $scope.addFriend = function(){
-            $scope.myVar = 'hideIt';
-            $ionicPopup.show({
-                template: '<div style="text-align: center">Bookmark user?</div>',
-                scope: $scope,
-                buttons: [
-                { 
-                    text: 'Cancle' ,
-                    type: 'button-dark',
-                    onTap: function(e) {
-                        return;
-                    }
-                },{ 
-                    text: 'Ok' ,
-                    type: 'button-calm',
-                    onTap: function(e) {
-                        var dataJson = {
-                            user_who_added_friend : loggedinUserId,
-                            user_who_is_added : $scope.muteUserId
-                        };
-                        GlobalChatService.addFriend($rootScope.formatInputString(dataJson)).then(function(res){
-                            console.log("Add Friend");
-                            console.log(res);
-                            toastr.success('Friend added successfully');
-                        });
-                    }
-                }]
-            });
+            if($scope.muteUserId == user_id){
+                toastr.error("You can not add calory yourself");
+            }else{
+                $scope.myVar = 'hideIt';
+                $ionicPopup.show({
+                    template: '<div style="text-align: center">Bookmark user?</div>',
+                    scope: $scope,
+                    buttons: [
+                    { 
+                        text: 'Cancle' ,
+                        type: 'button-dark',
+                        onTap: function(e) {
+                            return;
+                        }
+                    },{ 
+                        text: 'Ok' ,
+                        type: 'button-calm',
+                        onTap: function(e) {
+                            var dataJson = {
+                                user_who_added_friend : loggedinUserId,
+                                user_who_is_added : $scope.muteUserId
+                            };
+                            GlobalChatService.addFriend($rootScope.formatInputString(dataJson)).then(function(res){
+                                console.log("Add Friend");
+                                console.log(res);
+                                toastr.success('Friend added successfully');
+                            });
+                        }
+                    }]
+                });
+            }
         }
 
         $scope.reportUser = function(){
-            $scope.myVar = 'hideIt';
-            $ionicPopup.show({
-                template: '<div style="text-align: center">Report user?</div>',
-                scope: $scope,
-                buttons: [{ 
-                    text: 'Cancle' ,
-                    type: 'button-dark',
-                    onTap: function(e) {
-                        return;
-                    }
-                },{ 
-                    text: 'Ok' ,
-                    type: 'button-calm',
-                    onTap: function(e) {
-                        $scope.modal_report.show();
-                        var reportUserId = document.getElementById('userReport');
-                        reportUserId.style.height = window.innerHeight+'px';
-                        console.log($rootScope.userId)
-                        GlobalChatService.getReportUsersList($rootScope.formatInputString({user_id : $rootScope.userId}))
-                            .then(function(res){
-                                $scope.reportUsers = res.data.result.all_user_reported;
-                            });
-                    }
-                }]
-            });
-
+            if($scope.muteUserId == user_id){
+                toastr.error("You can not add calory yourself");
+            }else{
+                $scope.myVar = 'hideIt';
+                $ionicPopup.show({
+                    template: '<div style="text-align: center">Report user?</div>',
+                    scope: $scope,
+                    buttons: [{ 
+                        text: 'Cancle' ,
+                        type: 'button-dark',
+                        onTap: function(e) {
+                            return;
+                        }
+                    },{ 
+                        text: 'Ok' ,
+                        type: 'button-calm',
+                        onTap: function(e) {
+                            $scope.modal_report.show();
+                            var reportUserId = document.getElementById('userReport');
+                            reportUserId.style.height = window.innerHeight+'px';
+                            console.log($rootScope.userId)
+                            GlobalChatService.getReportUsersList($rootScope.formatInputString({user_id : $rootScope.userId}))
+                                .then(function(res){
+                                    $scope.reportUsers = res.data.result.all_user_reported;
+                                });
+                        }
+                    }]
+                });
+            }
         }
 
         $scope.closeReportUserModal = function(){
             $scope.modal_report.hide();
         }
-
-        $scope.setChatUser = function (id) {
-            $scope.muteUserId = id;
-        };
 
         $scope.report = function(id){
 
@@ -247,28 +249,32 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     */
 
     $scope.addMessage = function() {
-        var myChatObj = {
+        if($scope.campaign_text){
+            var myChatObj = {
             id : userInfo.result[0].user_id,
-            user_image : (userInfo.result.profile_videos.length == 0 || userInfo.result[0].profile_videos === undefined || userInfo.result[0].profile_videos === '') ? '' : userInfo.result[0].profile_videos[0].thumb_url,
-            text: $scope.campaign_text,
-            createdAt: firebase.database.ServerValue.TIMESTAMP
-        };
+                user_image : (userInfo.result.profile_videos.length == 0 || userInfo.result[0].profile_videos === undefined || userInfo.result[0].profile_videos === '') ? '' : userInfo.result[0].profile_videos[0].thumb_url,
+                text: $scope.campaign_text,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            };
 
-        msgRef.$add(myChatObj);
-        $scope.campaign_text = '';
-        $scope.$broadcast('scroll');
+            msgRef.$add(myChatObj);
+            $scope.campaign_text = '';
+            $scope.$broadcast('scroll');
+        }
     };
     var mutedTime = $rootScope.getMutedTime;
     $interval(function(){
         var now = Date.now();
-        var cutoff = now - (mutedTime * 60 * 1000);
+        var cutoff = now - (1/2 * 60 * 1000);
         if($localstorage.getObject('muteChatUser')){
             $localstorage.getObject('muteChatUser').forEach(function(ele,index){
                 if(ele.time < cutoff) {
                     console.log("Delete mute user successfully");
-                    $localstorage.remove('muteChatUser')[index];
+                    toastr.success(getUserName(ele.id)+' unmuted successfully');
+                    (index === undefined) ? false : $localstorage.remove('muteChatUser',index);
+                    console.log(ele,index);
                 }
-                console.log(ele);
+                console.log(ele,index);
             });
         }
     },1*1000);
@@ -286,4 +292,15 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
     //         }
     //     });
     // },1000);
+
+    function getUserName(muteUserId){
+        var userName = null;
+        userName = $localstorage.getObject('allUserDetails').map(function(ele){
+            // console.log(ele);
+            if(ele.user_details.user_id == muteUserId){
+                return ele.user_details.full_name;
+            }
+        });
+        return userName.filter(function(e){return e});
+    }
 });

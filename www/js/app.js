@@ -15,6 +15,7 @@ futronics.run(function($ionicPlatform,$state,$timeout,$rootScope) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
     $rootScope.isMaintain = localStorage.isMaintainPhase;
    });
    $ionicPlatform.registerBackButtonAction(function (event) {
