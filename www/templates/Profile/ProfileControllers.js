@@ -3,7 +3,7 @@ futronics.controller('ProfileCtrl',
     $ionicHistory,StorageService,$ionicModal,$sce,$http,$state,
     $window,$localstorage,$ionicPopup,URL,$location,IMAGE,stateFactory,LogoutService,
     FakeVideoService,GoodVideoService,FakevideoReportList,$firebaseArray,$stateParams,
-    CaloryHaveOrGiven,FakeOrGood) {
+    CaloryHaveOrGiven,FakeOrGood,MotivationPercent) {
     
     var privateMsgSetupFlag = 0;
 
@@ -27,6 +27,11 @@ futronics.controller('ProfileCtrl',
         }else{
             $scope.endCampaignStatus = 0;
         }
+
+        MotivationPercent.getPercent($rootScope.formatInputString({user_id: $rootScope.user_id || $rootScope.userId,campaign_id:$rootScope.user_details.userInfo.result['campaign'][0]['campaign_id']}))
+        .then(function(res){
+            console.log(res);
+        })
     });
     
     if(myTitleJSon === null){
@@ -169,10 +174,13 @@ futronics.controller('ProfileCtrl',
         //     requiredParams['profile_image'] = imageStr;
         //     imgObj.push(requiredParams);
         //   });
-            console.log($scope.individual_user_details)
+
           if($scope.individual_user_details.campaign.length!==0){
              $scope.status=$scope.individual_user_details.campaign[0].campaign_status;
           }
+          var goodVideoList = localStorage.getItem('goodVideo');
+          var fakeVideoList = localStorage.getItem('fakeVideo');
+
           if($scope.individual_user_details.profile_videos.length > 0){
               $scope.individual_user_details.profile_videos.forEach(function(ele){
 
@@ -182,9 +190,10 @@ futronics.controller('ProfileCtrl',
                 requiredParams['video_url'] = ele.user_id;
                 requiredParams['user_videos_id'] = ele.user_id;
                 requiredParams['user_id'] = ele.user_id;
-                requiredParams['user_whose_video_fake'] = (ele.user_whose_video_fake === undefined) ? null : ele.user_whose_video_fake;
-                requiredParams['user_whose_video_good'] = (ele.user_whose_video_good === undefined) ? null : ele.user_whose_video_good;
+                requiredParams['user_whose_video_fake'] = (ele.user_id,fakeVideoList.indexOf(ele.user_id) > -1) ? ele.user_id : null;
+                requiredParams['user_whose_video_good'] = (ele.user_id,goodVideoList.indexOf(ele.user_id) > -1) ? ele.user_id : null;
 
+                console.log(ele.user_id,goodVideoList.indexOf(ele.user_id),fakeVideoList.indexOf(ele.user_id));
                 imgObj.push(requiredParams);
             });
 
@@ -289,6 +298,8 @@ futronics.controller('ProfileCtrl',
           $scope.myProfile=1;
      }
    
+     console.log("************");
+     console.log($scope.profileImages);
 
      if($scope.status==1){
         if(!localStorage.getItem('actualState')){
@@ -1022,7 +1033,7 @@ futronics.controller('ProfileCtrl',
             createdAt: firebase.database.ServerValue.TIMESTAMP
         };
         msgRef.$add(msgObj);
-        // $scope.messages.push(msgObj);
+        $scope.messages.push(msgObj);
         $scope.campaign_text = '';
     };
 
