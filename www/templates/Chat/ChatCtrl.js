@@ -263,18 +263,23 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
         }
     };
     var mutedTime = $rootScope.getMutedTime;
+    var removeIndex = null,removeElement=null;
+
     $interval(function(){
         var now = Date.now();
-        var cutoff = now - (1/2 * 60 * 1000);
-        if($localstorage.getObject('muteChatUser')){
+        var cutoff = now - (mutedTime * 60 * 1000);
+        if($localstorage.getObject('muteChatUser') && $localstorage.getObject('muteChatUser').length){
             $localstorage.getObject('muteChatUser').forEach(function(ele,index){
                 if(ele.time < cutoff) {
-                    console.log("Delete mute user successfully");
-                    toastr.success(getUserName(ele.id)+' unmuted successfully');
-                    (index === undefined) ? false : $localstorage.remove('muteChatUser',index);
-                    console.log(ele,index);
+                    removeIndex = index;
+                    removeElement = ele;
+                    console.log(index);
+                    var dataMuted = $localstorage.getObject('muteChatUser');
+                    toastr.success(getUserName(removeElement.id)+' unmuted successfully');
+                    dataMuted.splice(index,1);
+                    $localstorage.setObject('muteChatUser',dataMuted);
                 }
-                console.log(ele,index);
+                console.log(ele);
             });
         }
     },1*1000);
