@@ -285,7 +285,7 @@ $rootScope.slider = {
                     $scope.loadMore();
                 }
             }
-               Loader.hideLoading();
+              // Loader.hideLoading();
         });
     }else{
         var all_user_details=JSON.parse($localstorage.get('allUserDetails'));
@@ -308,7 +308,7 @@ $rootScope.slider = {
  
         var allCorrectDetails = [];
         $scope.loadMore = function() {
-            // Loader.showLoading();
+             //Loader.showLoading();
             $scope.pageValue+=1;
             var data={
                      page:$scope.pageValue
@@ -320,7 +320,7 @@ $rootScope.slider = {
                 console.log(res);
                 if(res.data.result.length == 0 || res.data.message == "No result found" && res.data.status == 2){
                      
-                      if($rootScope.previousState !='login' && $rootScope.previousState !=''){
+                      if($rootScope.previousState !='login' && $rootScope.previousState !='' && $rootScope.currentState =='globalChat'){
                         toastr.error('No more data available');
                       }
                     
@@ -356,7 +356,7 @@ $rootScope.slider = {
                 }
               
               $localstorage.set('allUserDetails',JSON.stringify($scope.userListShowbeforeLogin)); 
-              Loader.hideLoading();
+             // Loader.hideLoading();
             });
          };
        

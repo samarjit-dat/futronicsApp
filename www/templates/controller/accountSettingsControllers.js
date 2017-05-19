@@ -16,7 +16,9 @@ futronics.controller('accountSettingsCtrl',
             $state.go('profile');
           }else if($rootScope.previousState == 'globalChat') {
             $state.go('globalChat');
-          } else {
+          } else if($rootScope.previousState ==''){
+             $state.go('profile');
+          }else {
             $state.go('profileViewStats');
           }
     };
@@ -45,9 +47,9 @@ futronics.controller('accountSettingsCtrl',
         console.log(response);
         if($rootScope.campaign_status == 0) {
          $scope.endCampaignStats = response.data.result.endCampaignStats;
-          //$scope.endCampaignStats = 0;
+         // $scope.endCampaignStats = 0;
          $scope.endCampaign = response.data.result.endCampaign;
-        // $scope.endCampaign =1;
+         //$scope.endCampaign =1;
     }
     });
     
@@ -311,7 +313,9 @@ futronics.controller('accountSettingsCtrl',
     }else{
       $scope.newsOff='0'; 
     }
-    if($rootScope.isMaintain == 'false'){
+    if(localStorage.getItem('isMaintainPhaseButton'))
+        var maintain = localStorage.getItem('isMaintainPhaseButton');
+    if($rootScope.isMaintain == 'false' || maintain == 'false'){
         var data={
            user_id:$rootScope.userId,
            campaign_id:$scope.campaign_id
@@ -329,7 +333,7 @@ futronics.controller('accountSettingsCtrl',
     check_hideOrShow.hideShowLocalStorageValue(data).then(function(response){
         console.log('hschk');
         console.log(response);
-        if(response.data.result.campaign_status == 0) {
+        if(response.data.result.weight_loss_hide_show_status == 0) {
             $scope.endCampaign == 1;
         }
         if(response.data.status == 1){

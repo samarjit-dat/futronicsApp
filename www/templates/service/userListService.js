@@ -1,17 +1,20 @@
-futronics.service("UserListService", function($http,$q, $localstorage,URL,$rootScope) {
+futronics.service("UserListService", function($http,$q,Loader, $localstorage,URL,$rootScope) {
   this.userListOnLoad = function(data){
       var defered=$q.defer();
+      // Loader.showLoading();
     return $http({
             method: "POST",
             url: URL.BASE+"/userList",
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data:data
         }).then(function(response){ 
+            // Loader.hideLoading();
             if(response.data.status == 2){
-               
+              
                 if($rootScope.currentState == "globalChat"){
                      var loadMoreId = document.getElementById('loadMore');
                      loadMoreId.style.display = 'none';
+                   
                 }
                
                
