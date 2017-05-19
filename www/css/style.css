@@ -1057,8 +1057,14 @@ h5.camp-btn {
 
 /********  19-05-2017 *******/
 @media screen and (device-aspect-ratio: 40/71) { #profileViewMyStats .user-chat-table { height: 210px !important; } }
-@media screen and (device-aspect-ratio: 375/667) { #profileViewMyStats .user-chat-table { height: 305px !important; } }
-@media only screen and (min-device-width: 360px) and (max-device-width: 640px) { #profileViewMyStats .user-chat-table { height: 290px !important; } }
+@media screen and (device-aspect-ratio: 375/667) { 
+    #profileViewMyStats .user-chat-table { height: 305px !important; } 
+    .platform-android.platform-android5 .profile-chat { height: 165px;}
+}
+@media only screen and (min-device-width: 360px) and (max-device-width: 640px) { 
+    #profileViewMyStats .user-chat-table { height: 290px !important; } 
+    .platform-android.platform-android5 .profile-chat .list:last-child  { padding-bottom : 25px; }
+}
 @media only screen and (min-device-width: 412px) and (max-device-width: 732px) {
     #profileViewMyStats .user-chat-table { height: 375px !important; }
 }
