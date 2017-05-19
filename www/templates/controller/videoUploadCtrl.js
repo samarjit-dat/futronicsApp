@@ -148,14 +148,14 @@ $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$loca
                                 
                                     var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
                                     userInfo.userInfo.result.campaign = _data.campaign;
-                                    if(_data.maintence_campaign_all_video) {
-                                        if(_data.maintence_campaign_all_video[0]){
-                                            userInfo.userInfo.result.profile_videos.push(_data.maintence_campaign_all_video[0]);
+                                    if(_data.result.maintence_campaign_all_video || _data.maintence_campaign_all_video) {
+                                        if(_data.result.maintence_campaign_all_video[0]){
+                                            userInfo.userInfo.result.profile_videos.push(_data.result.maintence_campaign_all_video[0]);
                                         }
                                     }
 
-                                    if(_data.profile_videos.length > 0){
-                                        userInfo.userInfo.result.profile_videos.push(_data.profile_videos[0]);
+                                    if(_data.result.profile_videos.length > 0){
+                                        userInfo.userInfo.result.profile_videos.push(_data.result.profile_videos[0]);
                                     }
                                     
                                     _allUserDetails[0].campaign = _data.campaign;

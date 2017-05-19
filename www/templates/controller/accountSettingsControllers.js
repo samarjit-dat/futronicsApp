@@ -14,8 +14,10 @@ futronics.controller('accountSettingsCtrl',
     $scope.backToPrev = function() {
          if($rootScope.previousState == 'profile') {
             $state.go('profile');
-          }else {
+          }else if($rootScope.previousState == 'globalChat') {
             $state.go('globalChat');
+          } else {
+            $state.go('profileViewStats');
           }
     };
    
