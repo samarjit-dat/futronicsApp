@@ -32,7 +32,7 @@
                   <span ng-show="form.password.$error.minlength" class="input-validation-message">At least 6 characters</span>
            
             <div class="login-text">
-               <a href="#" class="sign">Sign in with fingerprint.</a>
+               <a href="#" ng-click="login_fingerprint()" class="sign">Sign in with fingerprint.</a>
                <p>Forgot username or password? <a href="#" class="click">Tab here.</a></p>
                <p ng-if="$root.isMaintain == 'false'">If not registered yet. <a ui-sref="signup" class="click">Register Now.</a></p>
                

@@ -103,63 +103,63 @@ futronics.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvide
     }
   
   })
-  .state('question1', {
-    url: '/question1',
-    templateUrl: 'templates/question.html',
-    controller: 'question1Ctrl'
+  // .state('question1', {
+  //   url: '/question1',
+  //   templateUrl: 'templates/question.html',
+  //   controller: 'question1Ctrl'
   
-  })
-  .state('question2', {
-    url: '/question2',
-    templateUrl: 'templates/question2.html',
-    controller: 'question2Ctrl',
-    params:{
-        obj:null
-    }
+  // })
+  // .state('question2', {
+  //   url: '/question2',
+  //   templateUrl: 'templates/question2.html',
+  //   controller: 'question2Ctrl',
+  //   params:{
+  //       obj:null
+  //   }
   
-  })
-  .state('question3', {
-    url: '/question3',
-    templateUrl: 'templates/question3.html',
-    controller: 'question3Ctrl',
-    params:{
-        obj:null
-    }
+  // })
+  // .state('question3', {
+  //   url: '/question3',
+  //   templateUrl: 'templates/question3.html',
+  //   controller: 'question3Ctrl',
+  //   params:{
+  //       obj:null
+  //   }
   
-  })
-  .state('question4', {
-    url: '/question4',
-    templateUrl: 'templates/question4.html',
-    controller: 'question4Ctrl',
-    params:{
-        obj:null
-    }
+  // })
+  // .state('question4', {
+  //   url: '/question4',
+  //   templateUrl: 'templates/question4.html',
+  //   controller: 'question4Ctrl',
+  //   params:{
+  //       obj:null
+  //   }
   
-  })
-  .state('question5', {
-    url: '/question5',
-    templateUrl: 'templates/question5.html',
-    controller: 'question5Ctrl',
-    params:{
-        obj:null
-    }
+  // })
+  // .state('question5', {
+  //   url: '/question5',
+  //   templateUrl: 'templates/question5.html',
+  //   controller: 'question5Ctrl',
+  //   params:{
+  //       obj:null
+  //   }
   
-  })
-  .state('question6', {
-    url: '/question6',
-    templateUrl: 'templates/question6.html',
-    controller: 'question6Ctrl',
-  })
-  .state('question7', {
-    url: '/question7',
-    templateUrl: 'templates/question7.html',
-    controller: 'question7Ctrl'
-  })
-  .state('question8', {
-    url: '/question8',
-    templateUrl: 'templates/question8.html',
-    controller: 'question8Ctrl'
-  })
+  // })
+  // .state('question6', {
+  //   url: '/question6',
+  //   templateUrl: 'templates/question6.html',
+  //   controller: 'question6Ctrl',
+  // })
+  // .state('question7', {
+  //   url: '/question7',
+  //   templateUrl: 'templates/question7.html',
+  //   controller: 'question7Ctrl'
+  // })
+  // .state('question8', {
+  //   url: '/question8',
+  //   templateUrl: 'templates/question8.html',
+  //   controller: 'question8Ctrl'
+  // })
   .state('updateCampaign_video', {
     url: '/updateCampaign',
     templateUrl: 'templates/updatecampaign.html',

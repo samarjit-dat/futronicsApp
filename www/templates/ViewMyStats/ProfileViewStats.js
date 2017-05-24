@@ -2,7 +2,7 @@ futronics.controller('ProfileViewStatsCtrl',
     function($scope,$rootScope,AccountService,UserListService,check_GlobalCommunity, 
     $ionicHistory,StorageService,$ionicModal,$sce,$http,$state,
     $window,$localstorage,$ionicPopup,URL,$location,IMAGE,
-    CaloryService,ViewMyStats,CaloryHaveOrGiven) {
+    CaloryService,ViewMyStats,CaloryHaveOrGiven,MotivationPercent) {
     
     StorageService.storage();
     $scope.ViewMyStatsData = {};
@@ -10,6 +10,12 @@ futronics.controller('ProfileViewStatsCtrl',
     var __data = {
       user_id: $rootScope.user_id
     };
+
+     
+    MotivationPercent.getPercent($rootScope.formatInputString({user_id: $rootScope.user_id || $rootScope.userId,campaign_id:$rootScope.user_details.userInfo.result['campaign'][0]['campaign_id']}))
+    .then(function(res){
+        $scope.motivation_percentage = res.data.result.percentile_amount_collected;
+    })
 
     ViewMyStats.getDetails($rootScope.formatInputString(__data))
     .then(function(res){

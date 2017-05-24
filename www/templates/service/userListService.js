@@ -11,7 +11,7 @@ futronics.service("UserListService", function($http,$q,Loader, $localstorage,URL
              Loader.hideLoading();
             if(response.data.status == 2){
               
-                if($rootScope.currentState == "globalChat"  && $rootScope.noMore++ < 2){
+                if($rootScope.currentState == "globalChat"  && $rootScope.noMore++ < 1){
                      var loadMoreId = document.getElementById('loadMore');
                      loadMoreId.style.display = 'none';
                      toastr.error('No more data available');
@@ -61,7 +61,7 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                         $rootScope.runningCampaign_id=$rootScope.user.userInfo.result.campaign[0].campaign_id;
                         
                     }
-                   
+                  
                     if($rootScope.user.userInfo.result.profile_videos.length>0){
                         
                         $rootScope.profile_complete_show_progress='1';
@@ -99,6 +99,8 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                          localStorage.setItem("refrstate",2);
                                       
                                     }
+                                }else{
+                                     localStorage.setItem("refrstate",3);
                                 }
                             }
                         }
@@ -186,6 +188,8 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                          localStorage.setItem("refrstate",2);
                                       
                                     }
+                                }else{
+                                     localStorage.setItem("refrstate",3);
                                 }
                             }
                         }

@@ -122,7 +122,7 @@
                <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()"  >+ Support Others</button></li>
              
                <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='1'" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ui-sref="upload-video">+ Post Update</button></li>
-               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' " ng-if="myProfile=='0'"  ui-sref="upload-video">+ Post Update</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign =='1' " ng-if="myProfile=='0'"  ui-sref="upload-video">+ Post Update</button></li>
                
                <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ui-sref="myCampaign">+ Market Campaign</button></li>
               

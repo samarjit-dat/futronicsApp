@@ -34,11 +34,11 @@ futronics.directive('pwCheck', [function () {
         
         if(id){
            //profileMainImage = angular.element(document.getElementById(id));
-           
+
             elem.bind('click', function() {
             profileMainImage['alt'] = attrs.videoUrl;  
             profileMainImage['src'] = innerHtml;
-            if(attrs.videoUrl !== undefined) scope.openVideoModal(attrs.videoUrl);
+            if(attrs.videoUrl !== undefined) scope.openVideoModal(attrs.videoUrl,attrs.id,elem.parent('div'));
             if(id !== undefined) scope.reportFakeVideo(attrs.id);
             if(id !== undefined) scope.reportGoodVideo(attrs.id);
 

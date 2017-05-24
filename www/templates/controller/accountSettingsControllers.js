@@ -2,7 +2,7 @@ futronics.controller('accountSettingsCtrl',
     function($scope,StorageService,$ionicPopup,$rootScope,
     AccountService,Loader,$state,$localstorage,endcampaign,
     TimeAndDateFactory,HideCampaign,MaintainService,ShowCampaign,check_hideOrShow,
-    AfterEndCampaign,stateFactory){
+    AfterEndCampaign,stateFactory,$cordovaTouchID){
      /* ******************** UserId from LocalStorage start***********************  */
       stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
       $scope.isMaintainPhase = localStorage.isMaintainPhase;
@@ -11,6 +11,7 @@ futronics.controller('accountSettingsCtrl',
          $scope.startnewcampaign_disable = localStorage.getItem("disableStartnewcampaign");
      }
     StorageService.storage();
+    
     $scope.backToPrev = function() {
          if($rootScope.previousState == 'profile') {
             $state.go('profile');
@@ -311,7 +312,19 @@ futronics.controller('accountSettingsCtrl',
             $scope.newsOn=1;
         }
     }else{
-      $scope.newsOff='0'; 
+      $scope.newsOff=0; 
+    }
+
+    if($localstorage.get('fingerprints')){
+       if($localstorage.get('fingerprints')==0){
+            $rootScope.showDivider = $scope.fingerprintOn=0;
+            $scope.fingerprintOff=0;
+        }else{
+            $scope.fingerprintOff=1;
+            $scope.fingerprintOn=1;
+        }
+    }else{
+      $scope.fingerprintOn=1;
     }
     if(localStorage.getItem('isMaintainPhaseButton'))
         var maintain = localStorage.getItem('isMaintainPhaseButton');
@@ -363,6 +376,57 @@ futronics.controller('accountSettingsCtrl',
             $localstorage.set('newsFeed',1);
             $scope.newsOn=1;
             $scope.newsOff=1;
+        }
+    }
+
+    $scope.fingerPrint=function(data){
+        $rootScope.showDivider = data;
+        if(data==1){
+           if (ionic.Platform.isAndroid()) {
+            FingerprintAuth.isAvailable(isAvailableSuccess, isAvailableError);
+            }
+            function isAvailableSuccess(result) {
+            console.log("FingerprintAuth available: " + JSON.stringify(result));
+            if (result.isAvailable) {
+                // var encryptConfig = {}; // See config object for required parameters
+                var encryptConfig = {
+                    clientId: "cordova-chatapp",
+                    username: "dakshesh",
+                    password: "daksh@123"
+                };
+                FingerprintAuth.encrypt(encryptConfig, encryptSuccessCallback, encryptErrorCallback);
+            }
+            }
+
+            function isAvailableError(message) {
+                console.log("isAvailableError(): " + message);
+            }
+
+            function encryptSuccessCallback(result) {
+                alert("sucess");
+                console.log("successCallback(): " + JSON.stringify(result));
+                if (result.withFingerprint) {
+                    console.log("Successfully encrypted credentials.");
+                    console.log("Encrypted credentials: " + result.token);
+                } else if (result.withBackup) {
+                    console.log("Authenticated with backup password");
+                }
+            }
+
+            function encryptErrorCallback(error) {
+                if (error === "Cancelled") {
+                    console.log("FingerprintAuth Dialog Cancelled!");
+                } else {
+                    console.log("FingerprintAuth Error: " + error);
+                }
+            }
+            $localstorage.set('fingerprints',0);
+            $scope.fingerprintOff=0;
+            $scope.fingerprintOn=0;
+        }else{
+            $localstorage.set('fingerprints',1);
+            $scope.fingerprintOn=1;
+            $scope.fingerprintOff=1;
         }
     }
    /* *********************** News Feed Toggle End******************************* */

@@ -1,4 +1,5 @@
-futronics.controller('marketmycampaignControllers', function($scope,$rootScope,$cordovaContacts,$cordovaSocialSharing,MarketMyCampaign,URL) {
+futronics.controller('marketmycampaignControllers', 
+function($scope,$rootScope,$cordovaContacts,$cordovaSocialSharing,URL) {
     $scope.socialLists = [
         {text: 'Facebook'},
         {text: 'Twitter'},
@@ -8,13 +9,13 @@ futronics.controller('marketmycampaignControllers', function($scope,$rootScope,$
     $scope.checkItems = {};
     $scope.checkItemsCollection = [];
 
-    var message = 'This is a dummy message';
+    $scope.message = 'This is a dummy message';
     var subject = 'This is a dummy subject';
     
     var user_id = $rootScope.userId || $rootScope.user_id;
 
     if(user_id > 0){
-        message = URL.BASE+'fundingformaintencephase/funding/'+user_id
+        $scope.message = URL.BASE+'fundingformaintencephase/funding/'+user_id
     }
 
     function getChecked(){
@@ -25,8 +26,8 @@ futronics.controller('marketmycampaignControllers', function($scope,$rootScope,$
         }
     }
 
-    function shareVia(){
-
+    function shareVia(_message){
+        var message = _message;
         $scope.checkItemsCollection.forEach(function(element) {
             switch(element){
                 case 'Facebook':
@@ -128,14 +129,14 @@ futronics.controller('marketmycampaignControllers', function($scope,$rootScope,$
 
     }
 
-    $scope.shareContent = function (){
+    $scope.shareContent = function (message){
         console.log("Share it");
         getChecked();
-        shareVia();
+        shareVia(message);
         $scope.checkItemsCollection = [];
     };
 
-    $scope.shareApp = function (){
+    $scope.shareApp = function (message){
         console.log("Share this app");
         $cordovaSocialSharing
         .share(message, subject, file, link) // Share via native share sheet

@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-android-fingerprint-auth": {
+            "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
+        },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
         },

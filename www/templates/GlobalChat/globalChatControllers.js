@@ -379,13 +379,16 @@ $rootScope.slider = {
             var id=userdata.user_details.user_id;
            
             localStorage.setItem('otherProfileDetails',id);
+            console.log($rootScope.user_id)
+            console.log(id)
             if($rootScope.user_id!=id){
                 localStorage.removeItem('myProfile');
             }else{
                  localStorage.setItem('myProfile','1');
             }
             localStorage.setItem('viewIndividualProfile_globalChat',JSON.stringify(userdata));
-            $state.go('profile',{id:otheruserId});
+            $state.go('profile');
+             // $state.go('profile',{id:otheruserId});
         };
       
       $scope.myOwnProfile=function(){

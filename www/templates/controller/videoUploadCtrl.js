@@ -1,6 +1,6 @@
 futronics.controller('VideoUploadCtrl', 
 function($scope,$rootScope,StorageService,$cordovaFileTransfer, 
-    $cordovaFile,$ionicPopup,$cordovaDevice,$cordovaCapture,$cordovaCamera, 
+    $cordovaFile,$ionicPopup,$cordovaDevice,$cordovaCapture,$cordovaCamera,
 $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$localstorage,$timeout)  {
 
     stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
@@ -66,7 +66,24 @@ $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$loca
     }   
 
     $scope.uploadVideo=function(current_weight){
+            if(current_weight == '' || current_weight.length >3 || current_weight.length < 2) {
+               $ionicPopup.show({
+                            template: 'Please enter 2 or 3 digit number only',
+                            title: '<p style="color:black"><b>Attention!!!</b></p>',
+                            buttons: [
+                                { 
+                                    text: 'Ok' ,
+                                    type: 'button-calm',
+                                    onTap: function(e) { 
 
+                                       
+                                        return; 
+                                    }
+                                }
+                            ]
+                        });
+               return false;
+            }
             Loader.showLoading();
             
             var path1 = $scope.path;
@@ -146,10 +163,36 @@ $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$loca
                                 onTap: function(e) {
 
                                 
+                                    // var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
+                                    // userInfo.userInfo.result.campaign = _data.campaign;
+                                    // if(_data.result.maintence_campaign_all_video || _data.maintence_campaign_all_video) {
+                                    //     if(_data.result.maintence_campaign_all_video[0]){
+                                    //         userInfo.userInfo.result.profile_videos.push(_data.result.maintence_campaign_all_video[0]);
+                                    //     }
+                                    // }
+
+                                    // if(_data.result.profile_videos.length > 0){
+                                    //     userInfo.userInfo.result.profile_videos.push(_data.result.profile_videos[0]);
+                                    // }
+                                    
+                                    // _allUserDetails[0].campaign = _data.campaign;
+                                    // console.log("userInfo",userInfo.userInfo.result);
+
+                                    // localStorage.setItem('video_countdown', _data.maintenance_video_timer_end_time || _data.counter_end_time);
+                                    // localStorage.setItem('allUserDetails',JSON.stringify(_allUserDetails));
+
+                                    // $localstorage.setObject("userInfo",userInfo);
+                                    // $state.go('congrats_videoupload');
+                                    // $scope.data.current_weight = '';
+                                    // return;
+
+                                    console.log(_data);
+                                    console.log(_data.result);
+                                    console.log(_data.result.campaign);
                                     var _allUserDetails = JSON.parse(localStorage.getItem('allUserDetails'));
-                                    userInfo.userInfo.result.campaign = _data.campaign;
-                                    if(_data.result.maintence_campaign_all_video || _data.maintence_campaign_all_video) {
-                                        if(_data.result.maintence_campaign_all_video[0]){
+                                    userInfo.userInfo.result.campaign = _data.result.campaign;
+                                    if(_data.result.maintence_campaign_all_video) {
+                                        if(_data.maintence_campaign_all_video[0]){
                                             userInfo.userInfo.result.profile_videos.push(_data.result.maintence_campaign_all_video[0]);
                                         }
                                     }
@@ -158,10 +201,10 @@ $ionicActionSheet, $state,$ionicLoading, Loader,stateFactory,LogoutService,$loca
                                         userInfo.userInfo.result.profile_videos.push(_data.result.profile_videos[0]);
                                     }
                                     
-                                    _allUserDetails[0].campaign = _data.campaign;
+                                    _allUserDetails[0].campaign = _data.result.campaign;
                                     console.log("userInfo",userInfo.userInfo.result);
 
-                                    localStorage.setItem('video_countdown', _data.maintenance_video_timer_end_time || _data.counter_end_time);
+                                    localStorage.setItem('video_countdown', _data.result.maintenance_video_timer_end_time || _data.result.counter_end_time);
                                     localStorage.setItem('allUserDetails',JSON.stringify(_allUserDetails));
 
                                     $localstorage.setObject("userInfo",userInfo);

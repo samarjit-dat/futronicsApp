@@ -70,6 +70,47 @@ AccountService,$rootScope, Loader,$state,$ionicModal, $localstorage) {
             Loader.hide(error.message);
         });
     }
+
+    $scope.login_fingerprint = function() {
+        if (ionic.Platform.isAndroid()) {
+        FingerprintAuth.isAvailable(isAvailableSuccess, isAvailableError);
+        }
+        function isAvailableSuccess(result) {
+        console.log("FingerprintAuth available: " + JSON.stringify(result));
+        if (result.isAvailable) {
+            // var encryptConfig = {}; // See config object for required parameters
+            var encryptConfig = {
+                clientId: "cordova-chatapp",
+                username: "dakshesh",
+                password: "daksh@123"
+            };
+            FingerprintAuth.encrypt(encryptConfig, encryptSuccessCallback, encryptErrorCallback);
+        }
+        }
+
+        function isAvailableError(message) {
+            console.log("isAvailableError(): " + message);
+        }
+
+        function encryptSuccessCallback(result) {
+            alert("sucess");
+            console.log("successCallback(): " + JSON.stringify(result));
+            if (result.withFingerprint) {
+                console.log("Successfully encrypted credentials.");
+                console.log("Encrypted credentials: " + result.token);
+            } else if (result.withBackup) {
+                console.log("Authenticated with backup password");
+            }
+        }
+
+        function encryptErrorCallback(error) {
+            if (error === "Cancelled") {
+                console.log("FingerprintAuth Dialog Cancelled!");
+            } else {
+                console.log("FingerprintAuth Error: " + error);
+            }
+        }
+    };
     
 });
 

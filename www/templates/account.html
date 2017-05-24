@@ -27,9 +27,6 @@
        <li ng-if="isMaintainPhaseButton =='true'">
         <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-disabled="disable_btn==1" ng-click="end_campaign()">End Maintenance Phase</button>
       </li>
-      
-       
-       
        <li>
       <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ui-sref="contactAdmin">Contact Admin</button>
       </li>
@@ -40,6 +37,10 @@
       </li>
       <li>
         <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-click="viewStats()">View My Stats</button>
+      </li>
+      <li>
+          <button ng-if="fingerprintOn==1" ng-click="fingerPrint(1)" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" class="button balanced"> FingerPrint enable</button>
+          <button ng-if="fingerprintOff==0" ng-click="fingerPrint(0)" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" class="button balanced"> FingerPrint disable</button>
       </li>
       
        <!--<li ng-if="isMaintainPhaseButton =='false'">
