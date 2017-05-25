@@ -11,6 +11,7 @@ futronics.service("LocalStorageRemoveService",
             $localstorage.remove('hideShowCampaign');
             $localstorage.remove('myProfile');
             $localstorage.remove('viewIndividualProfile_globalChat');
+             $localstorage.remove('startNew');
             
         };
    });

@@ -69,7 +69,7 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
             var userData = JSON.parse(localStorage.getItem('userInfo'));
             userDataa = userData.userInfo.result[0];
 
-            var _data={
+            var _data = {
                 user_id: userDataa.user_id,
                 card_no : data.cardNumber,
                 cvv_code : data.cvv,
@@ -91,6 +91,7 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
                 }
             })
         }else{
+            
             if($rootScope.slidingAmount === '0' || $rootScope.slidingAmount === 0){
                 $ionicPopup.show({
                     template: 'Please choose deposit amount',
@@ -104,7 +105,7 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
                 });
                 }else{
                 Loader.showLoading();
-               
+              
                 $scope.data={
                     username:data.username,
                     user_password:data.password,

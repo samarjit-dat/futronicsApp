@@ -7,6 +7,12 @@ futronics.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvide
     // Turn off back button text
     */
   $stateProvider
+  // .state('splash',{
+  //   url:'/splash',
+  //   templateUrl:'splash.html',
+  //   controller : 'splashCtrl'
+  // })
+   
    .state('globalChat', {
         url: "/globalChat",
         templateUrl: "templates/GlobalChat/globalChat.html",

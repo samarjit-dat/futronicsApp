@@ -93,7 +93,7 @@ AccountService,$rootScope, Loader,$state,$ionicModal, $localstorage) {
         }
 
         function encryptSuccessCallback(result) {
-            alert("sucess");
+           
             console.log("successCallback(): " + JSON.stringify(result));
             if (result.withFingerprint) {
                 console.log("Successfully encrypted credentials.");

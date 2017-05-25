@@ -65,7 +65,7 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                     if($rootScope.user.userInfo.result.profile_videos.length>0){
                         
                         $rootScope.profile_complete_show_progress='1';
-                        if(localStorage.getItem('actualState')){
+                       if(localStorage.getItem('actualState')){
                         var _state=localStorage.getItem('actualState');
                          
                         
@@ -95,8 +95,17 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                          localStorage.setItem("refrstate",1);
                                       
                                     }else{
-                                       // $rootScope.referState=2;
-                                         localStorage.setItem("refrstate",2);
+                                            if(localStorage.getItem('actualState')){
+                                            var _stateSub = localStorage.getItem('actualState');
+                                            if(_stateSub == 2){
+                                                localStorage.setItem("refrstate",2);
+                                            }
+                                            if(_stateSub == 1) {
+                                                localStorage.setItem("refrstate",1);
+                                            }
+                                            }else{
+                                                localStorage.setItem("refrstate",3);
+                                            }
                                       
                                     }
                                 }else{
@@ -145,7 +154,17 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                          localStorage.setItem("refrstate",1);
                                     }else{
                                        // $rootScope.referState=2;
-                                         localStorage.setItem("refrstate",2);
+                                            if(localStorage.getItem('actualState')){
+                                            var _stateSub = localStorage.getItem('actualState');
+                                            if(_stateSub == 2){
+                                                localStorage.setItem("refrstate",2);
+                                            }
+                                            if(_stateSub == 1) {
+                                                localStorage.setItem("refrstate",1);
+                                            }
+                                            }else{
+                                                localStorage.setItem("refrstate",3);
+                                            }
                                     }
                                 }else{
                                      localStorage.setItem("refrstate",3);
@@ -184,8 +203,17 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                          localStorage.setItem("refrstate",1);
                                       
                                     }else{
-                                       // $rootScope.referState=2;
-                                         localStorage.setItem("refrstate",2);
+                                            if(localStorage.getItem('actualState')){
+                                            var _stateSub = localStorage.getItem('actualState');
+                                            if(_stateSub == 2){
+                                                localStorage.setItem("refrstate",2);
+                                            }
+                                            if(_stateSub == 1) {
+                                                localStorage.setItem("refrstate",1);
+                                            }
+                                            }else{
+                                                localStorage.setItem("refrstate",3);
+                                            }
                                       
                                     }
                                 }else{
@@ -234,7 +262,17 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                          localStorage.setItem("refrstate",1);
                                     }else{
                                        // $rootScope.referState=2;
-                                         localStorage.setItem("refrstate",2);
+                                            if(localStorage.getItem('actualState')){
+                                            var _stateSub = localStorage.getItem('actualState');
+                                            if(_stateSub == 2){
+                                                localStorage.setItem("refrstate",2);
+                                            }
+                                            if(_stateSub == 1) {
+                                                localStorage.setItem("refrstate",1);
+                                            }
+                                            }else{
+                                                localStorage.setItem("refrstate",3);
+                                            }
                                     }
                                 }else{
                                      localStorage.setItem("refrstate",3);

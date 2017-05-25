@@ -48,8 +48,9 @@
    <!--                 <h5 >{{users.campaign[0].campaign_height || '0'}}% </h5>-->
                     <div class="p-sec">
 
-                       <div class="p-bar"><span class="skill" style="width:{{users.campaign[0].campaign_height*11.33 || '0'}}%"></span></div>
-                       </div>
+                       <div class="p-bar"><span class="skill" style="width:{{users.campaign[0].progress_percentage || '0'}}%"></span></div>
+                       <!--<div class="p-bar"><span class="skill" style="width:{{users.campaign[0].campaign_height*11.33 || '0'}}%"></span></div>-->
+                    </div>
                   </div>
                </div>
                 <div id="loadMore" class="load_more" ng-if="userListShowbeforeLogin.length > 0" ng-click="loadMore()">

@@ -26,6 +26,10 @@ futronics.controller('accountSettingsCtrl',
    
     $scope.endCampaignStats = 1;
     $scope.endCampaign = 0;
+     if(localStorage.getItem('startnew')){
+        $scope.endCampaignStats = 1;
+        $scope.endCampaign = 0;
+    }
     $scope.campaign_id=localStorage.getItem('campaign_id');
     //console.log($scope.campaign_id+"campaignid");
     if($rootScope.isMaintain == 'false'){
@@ -403,7 +407,7 @@ futronics.controller('accountSettingsCtrl',
             }
 
             function encryptSuccessCallback(result) {
-                alert("sucess");
+              
                 console.log("successCallback(): " + JSON.stringify(result));
                 if (result.withFingerprint) {
                     console.log("Successfully encrypted credentials.");
@@ -434,6 +438,7 @@ futronics.controller('accountSettingsCtrl',
    
    /* ************************ HIDE CAMPAIGN START************************************ */
     $scope.hideCampaign=function(v){
+       
         $scope.disable_btn = 1;
         $scope.user1=JSON.parse(localStorage.getItem('userInfo'));
             if(!$rootScope.userId || $rootScope.userId==undefined){
@@ -638,6 +643,7 @@ futronics.controller('accountSettingsCtrl',
                             $scope.C_hide=1;
                             $scope.C_show=1;
                         }
+                        
                     });
                    
                         }

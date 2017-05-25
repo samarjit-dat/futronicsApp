@@ -47,6 +47,15 @@ futronics.run(function($ionicPlatform,$state,$timeout,$rootScope) {
   }, 100);
 });
 
+// futronics.controller('splashCtrl',function($timeout,$scope,$state,$ionicHistory){
+	 
+// 	$timeout(function(){
+// 		//$(".pane").style.display=none;
+// 	 $state.go('globalChat');
+//   },15000);
+//   //$ionicHistory.clearHistory();
+// })
+
 /// For android device back button
 futronics.run(function ($ionicPlatform, $ionicPopup,$ionicHistory,$rootScope,$state,Loader) {
     $ionicPlatform.ready(function () {

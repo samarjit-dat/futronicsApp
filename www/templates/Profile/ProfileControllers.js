@@ -16,8 +16,12 @@ futronics.controller('ProfileCtrl',
 
     var myTitleJSon=JSON.parse(localStorage.getItem('userInfo'));
     $scope.video_countdown = '';
+  
     
     $scope.$on('$ionicView.enter', function(){
+        if(localStorage.getItem('startnew')){
+          $scope.unCompleteCampaign = 0;
+        }
         if(localStorage.getItem('video_countdown')){
             $scope.video_countdown = localStorage.getItem('video_countdown');
         }
@@ -68,10 +72,10 @@ futronics.controller('ProfileCtrl',
         $scope.hideOption = localStorage.getItem('hideuploadpage');
         $scope.unCompleteCampaign =0;
     }
-
+    //alert(localStorage.getItem('actualState'))
     if(localStorage.getItem("refrstate")) { 
         $scope.referStae =  localStorage.getItem("refrstate");
-       
+        //alert($scope.referStae);
         if($scope.referStae == 1 || $scope.referStae == 2) {
              $scope.unCompleteCampaign =1;
         }
@@ -324,15 +328,11 @@ futronics.controller('ProfileCtrl',
      console.log("************");
      console.log($scope.profileImages);
 
-     if($scope.status==1){
-        if(!localStorage.getItem('actualState')){
-            if(localStorage.getItem('currentSate')){
-                var lastState=localStorage.getItem('currentSate');
-                localStorage.setItem('actualState',lastState);
-            }
-        }
-        if(localStorage.getItem('actualState')){
-
+     if($scope.status==1 || $scope.status==2){
+         if(localStorage.getItem('actualState')){
+        console.log(localStorage.getItem('actualState'))
+         console.log('current')
+         console.log(localStorage.getItem('currentSate'))
             var a_state=localStorage.getItem('actualState');
             var c_state=localStorage.getItem('currentSate');
 
@@ -380,6 +380,13 @@ futronics.controller('ProfileCtrl',
            }
 
           }
+        if(!localStorage.getItem('actualState')){
+               if(localStorage.getItem('currentSate')){
+                var lastState=localStorage.getItem('currentSate');
+                localStorage.setItem('actualState',lastState);
+            }
+        }
+        
         }else{
          localStorage.removeItem('actualState');
 
@@ -948,6 +955,13 @@ futronics.controller('ProfileCtrl',
     $scope.videoLength = imgObj.length;
 
     $scope.startNewCampaign = function(){
+        if($scope.status == 1) {
+            toastr.error('Sorry!!You have already start a campaign');
+            return false;
+        }else if($scope.status == 2) {
+            toastr.error('you have a campaign in hidden stage,Please end the campaign before start another');
+            return false;
+        }else { 
         $scope.slider = {
             value: 0,
             options:{
@@ -976,6 +990,7 @@ futronics.controller('ProfileCtrl',
                 }
             ]
         });
+      }
     }
      
     $scope.openVideoModal = function(video_url,id,parentEle){
@@ -1149,6 +1164,7 @@ futronics.controller('ProfileCtrl',
              return false;
         }
     };
+   
 });
 
 

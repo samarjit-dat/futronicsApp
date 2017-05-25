@@ -125,7 +125,10 @@ $ionicPopup, $timeout,ionPullUpFooterState,$location,IMAGE,stateFactory) {
                       type: 'button-calm',
                       onTap: function(e) {
                             localStorage.setItem('startnew','active');
-                          
+                            if($scope.slider.value == 0) {
+                                 toastr.error('Motivation value should be greater than 0');
+                                  return false;
+                            }
                               $state.go("signup",{motivationAmount : $scope.slider.value,fromEndCampaign : 1});
                               
                                   return;

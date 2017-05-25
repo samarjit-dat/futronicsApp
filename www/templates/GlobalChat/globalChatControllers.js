@@ -175,6 +175,11 @@ $rootScope.slider = {
               text: '<b>Save</b>',
               type: 'button-calm',
               onTap: function(e) {
+                 
+                  if($rootScope.slideValue == undefined) {
+                       toastr.error('Motivation amount should be greater than 0');
+                       return false;
+                  }
                 $state.go("signup",{ motivationAmount : $rootScope.slideValue });
                 return;
               }

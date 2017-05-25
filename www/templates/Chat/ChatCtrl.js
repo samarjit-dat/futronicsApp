@@ -117,7 +117,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
 
         $scope.muteUser = function(){
             if($scope.muteUserId == user_id){
-                toastr.error("You can not add calory yourself");
+                toastr.error("You can not mute yourself");
             }else{
                 $scope.myVar = 'hideIt';
                 $ionicPopup.show({
@@ -160,7 +160,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
 
         $scope.addFriend = function(){
             if($scope.muteUserId == user_id){
-                toastr.error("You can not add calory yourself");
+                toastr.error("You can not add as friend yourself");
             }else{
                 $scope.myVar = 'hideIt';
                 $ionicPopup.show({
@@ -194,7 +194,7 @@ futronics.controller('ChatCtrl', function($scope,$state,$rootScope, AccountServi
 
         $scope.reportUser = function(){
             if($scope.muteUserId == user_id){
-                toastr.error("You can not add calory yourself");
+                toastr.error("You can not report yourself");
             }else{
                 $scope.myVar = 'hideIt';
                 $ionicPopup.show({
