@@ -1,4 +1,4 @@
-futronics.service("UserListService", function($http,$q, $localstorage,URL,$rootScope) {
+ futronics.service("UserListService", function($http,$q, $localstorage,URL,$rootScope) {
   this.userListOnLoad = function(data){
       var defered=$q.defer();
     return $http({
@@ -8,13 +8,12 @@ futronics.service("UserListService", function($http,$q, $localstorage,URL,$rootS
             data:data
         }).then(function(response){ 
             if(response.data.status == 2){
-               
-                if($rootScope.currentState == "globalChat"){
-                     var loadMoreId = document.getElementById('loadMore');
-                     loadMoreId.style.display = 'none';
+                if($rootScope.currentState == "globalChat" && $rootScope.noMore < 1){
+                    var loadMoreId = document.getElementById('loadMore');
+                    loadMoreId.style.display = 'none';
+                    toastr.error('No more data available');
+                    $rootScope.noMore++;
                 }
-               
-               
             }
             defered.resolve(response);
             return defered.promise; 
@@ -28,7 +27,7 @@ futronics.service("UserListService", function($http,$q, $localstorage,URL,$rootS
 futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
     this.storage=function(){
         
-            if(localStorage.getItem('userInfo')!==null){
+        if(localStorage.getItem('userInfo')!==null){
                 
                // alert('storage');
             $rootScope.user_id='';

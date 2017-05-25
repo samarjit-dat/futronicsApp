@@ -330,6 +330,7 @@ $rootScope.slider = {
                
 
                 for(var i=0;i<res.data.result.length;i++){
+                    
                     // if(res.data.result[i].campaign.length>0 && res.data.result[i].profile_videos.length>0){ 
                     //   if(res.data.result[i].campaign[0].campaign_status=='1'){
                     //      if($rootScope.user_id != res.data.result[i].user_details.user_id) {

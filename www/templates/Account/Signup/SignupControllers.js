@@ -65,6 +65,12 @@ futronics.controller('SignupControllers', function($scope,$rootScope, AccountSer
     
     $scope.signup = function(data) {
         
+        // braintree implementation
+        var submitBtn = document.getElementById('signup_submit');
+        var form = document.getElementById('signup_form');
+
+        ///////////
+
         if($stateParams.fromEndCampaign){
             var userData = JSON.parse(localStorage.getItem('userInfo'));
             userDataa = userData.userInfo.result[0];

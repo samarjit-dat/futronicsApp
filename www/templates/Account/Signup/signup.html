@@ -28,7 +28,7 @@
             </ul>
          </div>
          <div class="padding form-block">
-            <form method="post" name="form" class="form" ng-submit="signup(data)" role="form">
+            <form method="post" name="form" id="signup_form" class="form" ng-submit="signup(data)" role="form">
                 <div class="list" ng-if="isMaintainPhaseButton =='false' && start_new != 'active' || startnewEmpty == 'blank' ">
                   <input type="text" placeholder="User Name" name="username"  id="username"   class="form-control" ng-model="data.username" disallow-spaces  required>
                   <span ng-show="form.username.$dirty && form.username.$invalid && !form.username.$pristine" class="input-validation-message" >Username is required</span>
@@ -65,6 +65,10 @@
                    <span ng-show="form.address.$dirty && form.address.$error.required && !form.address.$pristine" class="input-validation-message">Address is required</span>
                </div>
                <div class="list">
+                  <input type="text" placeholder="Expiration Date" name="expiration-date"" ng-model="data.expirationDate" id="expiration-date"" class="form-control"  disallow-spaces required>
+                   <span ng-show="form.expiration-date.$dirty && form.expiration-date.$error.required && !form.expiration-date.$pristine" class="input-validation-message">Expiration date is required"</span>
+               </div>
+               <div class="list">
                   <input type="text" placeholder="City/State/Zip" name="location" ng-model="data.location"  id="location" class="form-control"  disallow-spaces required>
                   <span ng-show="form.location.$dirty && form.location.$error.required && !form.location.$pristine" class="input-validation-message">location is required</span>
                </div>
@@ -98,7 +102,7 @@
                     </div>
                </div>
                <div class="contribute-btn">
-                  <button ng-class="{ 'gold-bg': $root.isMaintain == 'true'}"  class="button button-block button-calm" type="submit" ng-disabled="form.$invalid">Start Your Campaign</button>
+                  <button ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" id="signup_submit" class="button button-block button-calm" type="submit" ng-disabled="form.$invalid">Start Your Campaign</button>
                </div>
             </form>
          </div>

@@ -185,11 +185,11 @@ futronics.controller('ProfileCtrl',
                 var requiredParams = [];
 
                 requiredParams['thumb_url'] = ele.thumb_url;
-                requiredParams['video_url'] = ele.user_id;
-                requiredParams['user_videos_id'] = ele.user_id;
+                requiredParams['video_url'] = ele.video_url;
+                requiredParams['user_videos_id'] = ele.user_videos_id;
                 requiredParams['user_id'] = ele.user_id;
-                requiredParams['user_whose_video_fake'] = (ele.user_id,fakeVideoList.indexOf(ele.user_id) > -1) ? ele.user_id : null;
-                requiredParams['user_whose_video_good'] = (ele.user_id,goodVideoList.indexOf(ele.user_id) > -1) ? ele.user_id : null;
+                requiredParams['user_whose_video_fake'] = (ele.user_id && fakeVideoList.indexOf(ele.user_id) > -1) ? ele.user_id : null;
+                requiredParams['user_whose_video_good'] = (ele.user_id && goodVideoList.indexOf(ele.user_id) > -1) ? ele.user_id : null;
 
                 console.log(ele.user_id,goodVideoList.indexOf(ele.user_id),fakeVideoList.indexOf(ele.user_id));
                 imgObj.push(requiredParams);
@@ -250,8 +250,8 @@ futronics.controller('ProfileCtrl',
                 var requiredParams = [];
 
                 requiredParams['thumb_url'] = ele.thumb_url;
-                requiredParams['video_url'] = ele.user_id;
-                requiredParams['user_videos_id'] = ele.user_id;
+                requiredParams['video_url'] = ele.video_url;
+                requiredParams['user_videos_id'] = ele.user_videos_id;
                 requiredParams['user_id'] = ele.user_id;
                 requiredParams['user_whose_video_fake'] = (ele.user_whose_video_fake === undefined) ? null : ele.user_whose_video_fake;
                 requiredParams['user_whose_video_good'] = (ele.user_whose_video_good === undefined) ? null : ele.user_whose_video_good;

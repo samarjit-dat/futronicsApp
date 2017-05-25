@@ -1071,3 +1071,5 @@ h5.camp-btn {
 @media only screen and (min-device-width: 414px) and (max-device-width: 736px) {
     #profileViewMyStats .user-chat-table { height: 375px !important; }
 }
+/***** 22-05-2017 ******/
+.braintree-upper-container { height : 220px; margin-top: 90px; }

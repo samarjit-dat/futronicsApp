@@ -87,57 +87,104 @@ futronics.controller('addFundCtrl',
                password : res
             };
             var data=$rootScope.formatInputString(data);
-                 
-                AddFundServices.addFund(data).then(function(response){
-                        console.log('add fund response*************');
-                        console.log(response);
-                    
-                    if(response==undefined){
-                        $ionicPopup.show({
-                                    template: 'Sorry!!!you entered password may not be matched',
-                                    title: '<p style="color:black"><b>Error!!!</b></p>',
-                                    scope: $scope,
-                                    buttons: [
-                                    { text: 'Ok' ,
-                                    type: 'button-calm'
-                                    
-                                    }
-                                ]
-                            });
-                    }else { 
 
-                        if(response.data.message==='Fund Added Successfully!'){
-                            $ionicPopup.show({
-                                    template: 'your fund added successfully',
-                                    title: '<p style="color:black"><b>cheers</b></p>',
-                                    scope: $scope,
-                                    buttons: [
-                                    { text: 'Ok' ,
-                                    type: 'button-calm',
-                                    onTap: function(e) {
-                                        $state.go($scope.previoustate);
-                                            return;
-                                        }
-                                    
-                                    }
-                                ]
-                            });
-                        }else{
-                            $ionicPopup.show({
-                                    template: 'Sorry!!!Something went wrong,Try again',
-                                    title: '<p style="color:black"><b>Error!!!</b></p>',
-                                    scope: $scope,
-                                    buttons: [
-                                    { text: 'Ok' ,
-                                    type: 'button-calm'
-                                    
-                                    }
-                                ]
-                            });
-                        }
-                        }
-                    
-                    });
+            BraintreePlugin.initialize('sandbox_bch7rb5q_7bqh48s42gznjn2k',
+                function () { console.log("init OK!"); },
+                function (error) { console.error(error); }
+            );
+
+            var options = {
+                cancelText: "Cancel",
+                title: "Purchase",
+                ctaText: "Select Payment Method",
+                amount: "$49.99",
+                primaryDescription: "Your Item",
+                secondaryDescription :"Free shipping!"
+            };
+
+            BraintreePlugin.presentDropInPaymentUI(options, function (result) {
+                if (result.userCancelled) {
+                    console.debug("User cancelled payment dialog.");
+                }else {
+                    console.info("User completed payment dialog.");
+                    console.info("Payment Nonce: " + result.nonce);
+                    console.debug("Payment Result.", result);
+                }
+            });
+
+            // var button = document.querySelector('#addFundBtn');
+            // var clientToken = 'sandbox_bch7rb5q_7bqh48s42gznjn2k';
+
+            // braintree.dropin.create({
+            //     authorization: 'sandbox_jfx7gj3q_4ftfwnyzvrg5h6zq',
+            //     selector: '#dropin-container',
+            //     paypal: {
+            //         flow: 'checkout',
+            //         amount: '10.00',
+            //         currency: 'USD',
+            //         locale : 'en_US'
+            //     }
+            // }, function (createErr, instance) {
+            //     button.style.display = 'block';
+            //     button.addEventListener('click', function () {
+            //         instance.requestPaymentMethod(function (requestPaymentMethodErr, payload) {
+            //             // Submit payload.nonce to your server
+            //             console.log("payload",requestPaymentMethodErr);
+            //             console.log("payload",payload);
+            //         });
+            //     });
+            // });
+
+            // AddFundServices.addFund(data).then(function(response){
+            //         console.log('add fund response*************');
+            //         console.log(response);
+                
+            //     if(response==undefined){
+            //         $ionicPopup.show({
+            //                     template: 'Sorry!!!you entered password may not be matched',
+            //                     title: '<p style="color:black"><b>Error!!!</b></p>',
+            //                     scope: $scope,
+            //                     buttons: [
+            //                     { text: 'Ok' ,
+            //                     type: 'button-calm'
+                                
+            //                     }
+            //                 ]
+            //             });
+            //     }else { 
+
+            //         if(response.data.message==='Fund Added Successfully!'){
+            //             $ionicPopup.show({
+            //                     template: 'your fund added successfully',
+            //                     title: '<p style="color:black"><b>cheers</b></p>',
+            //                     scope: $scope,
+            //                     buttons: [
+            //                     { text: 'Ok' ,
+            //                     type: 'button-calm',
+            //                     onTap: function(e) {
+            //                         $state.go($scope.previoustate);
+            //                             return;
+            //                         }
+                                
+            //                     }
+            //                 ]
+            //             });
+            //         }else{
+            //             $ionicPopup.show({
+            //                     template: 'Sorry!!!Something went wrong,Try again',
+            //                     title: '<p style="color:black"><b>Error!!!</b></p>',
+            //                     scope: $scope,
+            //                     buttons: [
+            //                     { text: 'Ok' ,
+            //                     type: 'button-calm'
+                                
+            //                     }
+            //                 ]
+            //             });
+            //         }
+            //         }
+                
+            //     });
             });
         }
     };

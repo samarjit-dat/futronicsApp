@@ -1,6 +1,6 @@
 futronics.controller('contactAdminCtrl',function($scope,ContactAdminSend,ContactAdminCatagory,$ionicPopup,$rootScope,AccountService,Loader,$state){
     $scope.categories =[];
-    $scope.adminText='';
+    
     ContactAdminCatagory.catagory().then(function(response){
         $scope.categories=response.data.result.category;
     });
@@ -17,6 +17,7 @@ futronics.controller('contactAdminCtrl',function($scope,ContactAdminSend,Contact
         var data=$rootScope.formatInputString(data);
         ContactAdminSend.sendmail(data).then(function(response){
             console.log(response);
+            $scope.adminText='';
             if(response.data.message=="Email Send Successfully To Admin. Thank you!"){
                 $ionicPopup.show({
                 template: 'Your request has been sent successfully',
@@ -43,7 +44,10 @@ futronics.controller('contactAdminCtrl',function($scope,ContactAdminSend,Contact
                    
                     {
                       text: '<b>Ok</b>',
-                      type: 'button-calm'
+                      type: 'button-calm',
+                      onTap : function(){
+                        $scope.adminText='';
+                      }
                       
                      }
                   ]
