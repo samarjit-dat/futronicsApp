@@ -2,7 +2,7 @@ futronics.controller('accountSettingsCtrl',
     function($scope,StorageService,$ionicPopup,$rootScope,
     AccountService,Loader,$state,$localstorage,endcampaign,
     TimeAndDateFactory,HideCampaign,MaintainService,ShowCampaign,check_hideOrShow,
-    AfterEndCampaign,stateFactory,$cordovaTouchID){
+    AfterEndCampaign,stateFactory,$cordovaTouchID,NotificationSettings){
      /* ******************** UserId from LocalStorage start***********************  */
       stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
       $scope.isMaintainPhase = localStorage.isMaintainPhase;
@@ -22,6 +22,42 @@ futronics.controller('accountSettingsCtrl',
           }else {
             $state.go('profileViewStats');
           }
+    };
+
+       NotificationSettings.get($rootScope.formatInputString({user_id : $rootScope.userId || $rootScope.user_id})).then(function(res){
+        console.log(res);
+    });
+    
+    $ionicModal.fromTemplateUrl('notification.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.notification_modal = modal;
+        $scope.notification_modal.checked_data = [
+            {
+                name : 'Email Notification',
+                checked : false
+            },{
+                name : 'Text Message Notification',
+                checked : true
+            }
+        ];
+    });
+        
+    $scope.saveNotiSettings = function() {
+        $scope.notification_modal.checked_data.map(function(ele){
+            console.log(ele);
+        });
+        $scope.notification_modal.hide();
+    };
+
+    $scope.updateStatus = function(index,status){
+        $scope.notification_modal.checked_data[index].checked = status;
+        console.log($scope.notification_modal.checked_data);
+    };
+
+    $scope.openNotificationModal = function(){
+        $scope.notification_modal.show();
     };
    
     $scope.endCampaignStats = 1;

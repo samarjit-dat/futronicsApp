@@ -39,9 +39,13 @@
         <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-click="viewStats()">View My Stats</button>
       </li>
       <li>
+        <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-click="openNotificationModal()">Notification</button>
+      </li>
+      <li>
           <button ng-if="fingerprintOn==1" ng-click="fingerPrint(1)" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" class="button balanced"> FingerPrint enable</button>
           <button ng-if="fingerprintOff==0" ng-click="fingerPrint(0)" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" class="button balanced"> FingerPrint disable</button>
       </li>
+
       
        <!--<li ng-if="isMaintainPhaseButton =='false'">
         <button class="button balanced" ng-class="{ 'gold-btn-border': $root.isMaintain == 'true'}" ng-click="maintainPhase()">Go To Maintenance Phase</button>
@@ -50,7 +54,26 @@
      </div>
     </div>
     </div>
-     
+     <script type="text/ng-template" id="notification.html">
+      <ion-modal-view>
+        <ion-header-bar style="border-color: #101010; background-color: #141415;">
+          <h1 class="title">Notification</h1>
+          <!-- ion-ios-close-outline -->
+          <button class="button button-large" ng-click="closeModal()">Close</button>
+        </ion-header-bar>
+        <ion-content style="background:#333">
+            <ul class="list">
+              <li ng-repeat="cd in notification_modal.checked_data track by $index">
+                <ion-checkbox ng-model="cd.checked" ng-change="updateStatus($index,cd.checked)"><span class="colorAqua">{{cd.name}}</span></ion-checkbox>
+              </li>
+            </ul>
+
+            <div class="text-center">
+              <button class="button balanced" ng-click="saveNotiSettings()">Save</button>
+            </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
   </ion-content>
 </ion-view>
  

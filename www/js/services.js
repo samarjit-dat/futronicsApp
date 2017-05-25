@@ -881,4 +881,25 @@ futronics.factory('PaypalService', ['$q', '$ionicPlatform', 'shopSettings', '$fi
     }
 
     return service;
-}])
+}]);
+
+futronics.service('NotificationSettings',function($rootScope,$q, $localstorage,URL,Loader,$http){
+    this.get=function(data){
+      var defered=$q.defer();
+      return $http({
+            method: "GET",
+            url: URL.BASE+'/get_notification_data',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data:data
+        }).then(function(response){
+            console.log(response+"end_storagevalue");
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        },function(error){
+            Loader.hideLoading();
+            console.log(error+"error");
+            defered.reject(error);
+        });
+    };
+});
