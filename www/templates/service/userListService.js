@@ -1,18 +1,32 @@
+<<<<<<< HEAD
  futronics.service("UserListService", function($http,$q, $localstorage,URL,$rootScope) {
+=======
+futronics.service("UserListService", function($http,$q,Loader, $localstorage,URL,$rootScope) {
+>>>>>>> origin/master
   this.userListOnLoad = function(data){
       var defered=$q.defer();
+       Loader.showLoading();
     return $http({
             method: "POST",
             url: URL.BASE+"/userList",
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             data:data
         }).then(function(response){ 
+             Loader.hideLoading();
             if(response.data.status == 2){
+<<<<<<< HEAD
                 if($rootScope.currentState == "globalChat" && $rootScope.noMore < 1){
                     var loadMoreId = document.getElementById('loadMore');
                     loadMoreId.style.display = 'none';
                     toastr.error('No more data available');
                     $rootScope.noMore++;
+=======
+              
+                if($rootScope.currentState == "globalChat"  && $rootScope.noMore++ < 1){
+                     var loadMoreId = document.getElementById('loadMore');
+                     loadMoreId.style.display = 'none';
+                     toastr.error('No more data available');
+>>>>>>> origin/master
                 }
             }
             defered.resolve(response);
@@ -57,16 +71,14 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                         $rootScope.runningCampaign_id=$rootScope.user.userInfo.result.campaign[0].campaign_id;
                         
                     }
-                   
+                  
                     if($rootScope.user.userInfo.result.profile_videos.length>0){
                         
                         $rootScope.profile_complete_show_progress='1';
-                    }else{
-                       
-                        if(localStorage.getItem('actualState')){
+                       if(localStorage.getItem('actualState')){
                         var _state=localStorage.getItem('actualState');
                          
-                         
+                        
                             if( (_state=='upload-video') ){
                                
                                // $rootScope.referState=1;
@@ -93,10 +105,21 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                          localStorage.setItem("refrstate",1);
                                       
                                     }else{
-                                       // $rootScope.referState=2;
-                                         localStorage.setItem("refrstate",2);
+                                            if(localStorage.getItem('actualState')){
+                                            var _stateSub = localStorage.getItem('actualState');
+                                            if(_stateSub == 2){
+                                                localStorage.setItem("refrstate",2);
+                                            }
+                                            if(_stateSub == 1) {
+                                                localStorage.setItem("refrstate",1);
+                                            }
+                                            }else{
+                                                localStorage.setItem("refrstate",3);
+                                            }
                                       
                                     }
+                                }else{
+                                     localStorage.setItem("refrstate",3);
                                 }
                             }
                         }
@@ -141,7 +164,125 @@ futronics.service("StorageService", function($rootScope, $localstorage,IMAGE) {
                                          localStorage.setItem("refrstate",1);
                                     }else{
                                        // $rootScope.referState=2;
-                                         localStorage.setItem("refrstate",2);
+                                            if(localStorage.getItem('actualState')){
+                                            var _stateSub = localStorage.getItem('actualState');
+                                            if(_stateSub == 2){
+                                                localStorage.setItem("refrstate",2);
+                                            }
+                                            if(_stateSub == 1) {
+                                                localStorage.setItem("refrstate",1);
+                                            }
+                                            }else{
+                                                localStorage.setItem("refrstate",3);
+                                            }
+                                    }
+                                }else{
+                                     localStorage.setItem("refrstate",3);
+                                }
+                            }
+                         }
+                    }else{
+                       
+                        if(localStorage.getItem('actualState')){
+                        var _state=localStorage.getItem('actualState');
+                         
+                        
+                            if( (_state=='upload-video') ){
+                               
+                               // $rootScope.referState=1;
+                                localStorage.setItem("refrstate",1);
+                               // alert($rootScope.referState+"actual")
+                            }else if((_state=='questions')) {
+                               // $rootScope.referState=2;
+                             
+                                 localStorage.setItem("refrstate",2);
+                                
+                            }else if((_state=='campaignBrowse') || (_state=='contribution') 
+                            ||  (_state=='thanksAfterContribution') ){
+                                   
+                                 localStorage.setItem("refrstate",3);
+                            }else{
+                                
+                                if($rootScope.user.userInfo.result.campaign.length!=0){
+                                    if($rootScope.campaign_status==0){
+                                      //  $rootScope.referState=3; 
+                                         localStorage.setItem("refrstate",3);
+                                       // alert($rootScope.referState+"actual")
+                                    }else if((_state=='upload-video') && ($rootScope.campaign_status==1)){
+                                        //$rootScope.referState=1;
+                                         localStorage.setItem("refrstate",1);
+                                      
+                                    }else{
+                                            if(localStorage.getItem('actualState')){
+                                            var _stateSub = localStorage.getItem('actualState');
+                                            if(_stateSub == 2){
+                                                localStorage.setItem("refrstate",2);
+                                            }
+                                            if(_stateSub == 1) {
+                                                localStorage.setItem("refrstate",1);
+                                            }
+                                            }else{
+                                                localStorage.setItem("refrstate",3);
+                                            }
+                                      
+                                    }
+                                }else{
+                                     localStorage.setItem("refrstate",3);
+                                }
+                            }
+                        }
+                        if(localStorage.getItem('currentSate')){
+                           
+                            var _state=localStorage.getItem('currentSate');
+                           
+                            if( _state=='upload-video' ){
+                               
+                               // $rootScope.referState=1;
+                                 localStorage.setItem("refrstate",1);
+                            }else if((_state=='questions') ) {
+                                //$rootScope.referState=2;
+                              
+                                 localStorage.setItem("refrstate",2);
+                            }else if((_state=='campaignBrowse') || (_state=='contribution') 
+                            ||  (_state=='thanksAfterContribution') ){
+                                 if(localStorage.getItem('actualState')){
+                                    var _stateSub = localStorage.getItem('actualState');
+                                    if(_stateSub == 2){
+                                        localStorage.setItem("refrstate",2);
+                                    }
+                                    if(_stateSub == 1) {
+                                         localStorage.setItem("refrstate",1);
+                                    }
+                                 }else{
+                                    localStorage.setItem("refrstate",3);
+                                 }
+                            }else{
+                                
+                                if(localStorage.getItem('actualState')){
+                                   
+                                    var current_state=localStorage.getItem('actualState');
+                                    
+                                 }
+                                 if($rootScope.user.userInfo.result.campaign.length!=0){
+                                    if($rootScope.campaign_status==0){
+                                       // $rootScope.referState=3; 
+                                         localStorage.setItem("refrstate",3);
+                                    }else if((current_state=='upload-video') && ($rootScope.campaign_status==1)){
+                                       // $rootScope.referState=1;
+                                         localStorage.setItem("refrstate",1);
+                                    }else{
+                                       // $rootScope.referState=2;
+                                            if(localStorage.getItem('actualState')){
+                                            var _stateSub = localStorage.getItem('actualState');
+                                            if(_stateSub == 2){
+                                                localStorage.setItem("refrstate",2);
+                                            }
+                                            if(_stateSub == 1) {
+                                                localStorage.setItem("refrstate",1);
+                                            }
+                                            }else{
+                                                localStorage.setItem("refrstate",3);
+                                            }
                                     }
                                 }else{
                                      localStorage.setItem("refrstate",3);

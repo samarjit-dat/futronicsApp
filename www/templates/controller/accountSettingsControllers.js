@@ -2,19 +2,72 @@ futronics.controller('accountSettingsCtrl',
     function($scope,StorageService,$ionicPopup,$rootScope,
     AccountService,Loader,$state,$localstorage,endcampaign,
     TimeAndDateFactory,HideCampaign,MaintainService,ShowCampaign,check_hideOrShow,
-    AfterEndCampaign){
+    AfterEndCampaign,stateFactory,$cordovaTouchID,NotificationSettings){
      /* ******************** UserId from LocalStorage start***********************  */
-    
+      stateFactory.setCurrentState($state.current.name); // For getting value stateFactory.getCurrentState()
       $scope.isMaintainPhase = localStorage.isMaintainPhase;
       $scope.isMaintainPhaseButton = localStorage.isMaintainPhaseButton;
      if(localStorage.getItem("disableStartnewcampaign")) {
          $scope.startnewcampaign_disable = localStorage.getItem("disableStartnewcampaign");
      }
     StorageService.storage();
+    
+    $scope.backToPrev = function() {
+         if($rootScope.previousState == 'profile') {
+            $state.go('profile');
+          }else if($rootScope.previousState == 'globalChat') {
+            $state.go('globalChat');
+          } else if($rootScope.previousState ==''){
+             $state.go('profile');
+          }else {
+            $state.go('profileViewStats');
+          }
+    };
+
+       NotificationSettings.get($rootScope.formatInputString({user_id : $rootScope.userId || $rootScope.user_id})).then(function(res){
+        console.log(res);
+    });
+    
+    $ionicModal.fromTemplateUrl('notification.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.notification_modal = modal;
+        $scope.notification_modal.checked_data = [
+            {
+                name : 'Email Notification',
+                checked : false
+            },{
+                name : 'Text Message Notification',
+                checked : true
+            }
+        ];
+    });
+        
+    $scope.saveNotiSettings = function() {
+        $scope.notification_modal.checked_data.map(function(ele){
+            console.log(ele);
+        });
+        $scope.notification_modal.hide();
+    };
+
+    $scope.updateStatus = function(index,status){
+        $scope.notification_modal.checked_data[index].checked = status;
+        console.log($scope.notification_modal.checked_data);
+    };
+
+    $scope.openNotificationModal = function(){
+        $scope.notification_modal.show();
+    };
+   
     $scope.endCampaignStats = 1;
     $scope.endCampaign = 0;
+     if(localStorage.getItem('startnew')){
+        $scope.endCampaignStats = 1;
+        $scope.endCampaign = 0;
+    }
     $scope.campaign_id=localStorage.getItem('campaign_id');
-
+    //console.log($scope.campaign_id+"campaignid");
     if($rootScope.isMaintain == 'false'){
         var data={
            user_id:$rootScope.userId,
@@ -35,9 +88,9 @@ futronics.controller('accountSettingsCtrl',
         console.log(response);
         if($rootScope.campaign_status == 0) {
          $scope.endCampaignStats = response.data.result.endCampaignStats;
-          //$scope.endCampaignStats = 0;
+         // $scope.endCampaignStats = 0;
          $scope.endCampaign = response.data.result.endCampaign;
-        // $scope.endCampaign =1;
+         //$scope.endCampaign =1;
     }
     });
     
@@ -299,9 +352,23 @@ futronics.controller('accountSettingsCtrl',
             $scope.newsOn=1;
         }
     }else{
-      $scope.newsOff='0'; 
+      $scope.newsOff=0; 
     }
-    if($rootScope.isMaintain == 'false'){
+
+    if($localstorage.get('fingerprints')){
+       if($localstorage.get('fingerprints')==0){
+            $rootScope.showDivider = $scope.fingerprintOn=0;
+            $scope.fingerprintOff=0;
+        }else{
+            $scope.fingerprintOff=1;
+            $scope.fingerprintOn=1;
+        }
+    }else{
+      $scope.fingerprintOn=1;
+    }
+    if(localStorage.getItem('isMaintainPhaseButton'))
+        var maintain = localStorage.getItem('isMaintainPhaseButton');
+    if($rootScope.isMaintain == 'false' || maintain == 'false'){
         var data={
            user_id:$rootScope.userId,
            campaign_id:$scope.campaign_id
@@ -319,6 +386,9 @@ futronics.controller('accountSettingsCtrl',
     check_hideOrShow.hideShowLocalStorageValue(data).then(function(response){
         console.log('hschk');
         console.log(response);
+        if(response.data.result.weight_loss_hide_show_status == 0) {
+            $scope.endCampaign == 1;
+        }
         if(response.data.status == 1){
             if($localstorage.get('hideShowCampaign')){
                     if($localstorage.get('hideShowCampaign')==0){
@@ -348,11 +418,63 @@ futronics.controller('accountSettingsCtrl',
             $scope.newsOff=1;
         }
     }
+
+    $scope.fingerPrint=function(data){
+        $rootScope.showDivider = data;
+        if(data==1){
+           if (ionic.Platform.isAndroid()) {
+            FingerprintAuth.isAvailable(isAvailableSuccess, isAvailableError);
+            }
+            function isAvailableSuccess(result) {
+            console.log("FingerprintAuth available: " + JSON.stringify(result));
+            if (result.isAvailable) {
+                // var encryptConfig = {}; // See config object for required parameters
+                var encryptConfig = {
+                    clientId: "cordova-chatapp",
+                    username: "dakshesh",
+                    password: "daksh@123"
+                };
+                FingerprintAuth.encrypt(encryptConfig, encryptSuccessCallback, encryptErrorCallback);
+            }
+            }
+
+            function isAvailableError(message) {
+                console.log("isAvailableError(): " + message);
+            }
+
+            function encryptSuccessCallback(result) {
+              
+                console.log("successCallback(): " + JSON.stringify(result));
+                if (result.withFingerprint) {
+                    console.log("Successfully encrypted credentials.");
+                    console.log("Encrypted credentials: " + result.token);
+                } else if (result.withBackup) {
+                    console.log("Authenticated with backup password");
+                }
+            }
+
+            function encryptErrorCallback(error) {
+                if (error === "Cancelled") {
+                    console.log("FingerprintAuth Dialog Cancelled!");
+                } else {
+                    console.log("FingerprintAuth Error: " + error);
+                }
+            }
+            $localstorage.set('fingerprints',0);
+            $scope.fingerprintOff=0;
+            $scope.fingerprintOn=0;
+        }else{
+            $localstorage.set('fingerprints',1);
+            $scope.fingerprintOn=1;
+            $scope.fingerprintOff=1;
+        }
+    }
    /* *********************** News Feed Toggle End******************************* */
    
    
    /* ************************ HIDE CAMPAIGN START************************************ */
     $scope.hideCampaign=function(v){
+       
         $scope.disable_btn = 1;
         $scope.user1=JSON.parse(localStorage.getItem('userInfo'));
             if(!$rootScope.userId || $rootScope.userId==undefined){
@@ -557,6 +679,7 @@ futronics.controller('accountSettingsCtrl',
                             $scope.C_hide=1;
                             $scope.C_show=1;
                         }
+                        
                     });
                    
                         }

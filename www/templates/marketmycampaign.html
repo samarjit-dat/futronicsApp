@@ -9,7 +9,7 @@
     <div class="padding black-bg-color">
         <h4>Market Your Campaign</h4>
         <div class="text-block">
-          <textarea name="" placeholder="Hello, help me achieve  my weight loss goal by  sponsoring my campaign!"></textarea>
+          <textarea name="" ng-model="message" placeholder="Hello, help me achieve  my weight loss goal by  sponsoring my campaign!"></textarea>
           <ion-list>
             <ul class="checkbox-block">
                 <li ng-repeat="socialList in socialLists"><ion-checkbox ng-model="checkItems[socialList.text]"><span ng-class="{ 'gold-text': $root.isMaintain == 'true'}">{{socialList.text}}</span></ion-checkbox></li>
@@ -19,7 +19,7 @@
             </ul>           
           </ion-list>
           <div class="account-fund-form">
-              <input value="Market Campaign" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" ng-click="shareContent()" type="submit">
+              <input value="Market Campaign" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" ng-click="shareContent(message)" type="submit">
           </div>
         </div>
         <div class="text-block">

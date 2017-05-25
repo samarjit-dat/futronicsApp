@@ -16,6 +16,12 @@ futronics.controller('ProfileViewStatsCtrl',
         $scope.motivation_percentage = res.data.result.percentile_amount_collected;
     })
 
+     
+    MotivationPercent.getPercent($rootScope.formatInputString({user_id: $rootScope.user_id || $rootScope.userId,campaign_id:$rootScope.user_details.userInfo.result['campaign'][0]['campaign_id']}))
+    .then(function(res){
+        $scope.motivation_percentage = res.data.result.percentile_amount_collected;
+    })
+
     ViewMyStats.getDetails($rootScope.formatInputString(__data))
     .then(function(res){
       var _data = res.data.result;

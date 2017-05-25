@@ -17,7 +17,7 @@ futronics.controller('addFundCtrl',
             id: 'slideEnded',onEnd: $scope.myEndListener
         }
     };
-    
+
     $scope.$on("slideEnded", function() {
        
         $rootScope.slidingAmount= $scope.slider.value;
@@ -80,7 +80,12 @@ futronics.controller('addFundCtrl',
               inputType: 'password',
               inputPlaceholder: 'Your password'
             }).then(function(res) {
+                console.log(res)
+                if(res == undefined){
+                    return;
+                }else {
           
+<<<<<<< HEAD
            var data={
                amount:$rootScope.slidingAmount,
                user_id:$rootScope.userId,
@@ -185,6 +190,77 @@ futronics.controller('addFundCtrl',
             //         }
                 
             //     });
+=======
+                    var data={
+                        amount:$rootScope.slidingAmount,
+                        user_id:$rootScope.userId,
+                        password : res
+                    };
+                    var data=$rootScope.formatInputString(data);
+                        
+                    PaypalService.initPaymentUI().then(function () {
+                        PaypalService.makePayment($rootScope.slidingAmount, "Total Amount").then(function (response) {
+                            // alert("success"+JSON.stringify(response));
+
+
+                            AddFundServices.addFund(data).then(function(response){
+                            console.log('add fund response*************');
+                            console.log(response);
+                        
+                                if(response==undefined){
+                                    $ionicPopup.show({
+                                                template: 'Sorry!!!you entered password may not be matched',
+                                                title: '<p style="color:black"><b>Error!!!</b></p>',
+                                                scope: $scope,
+                                                buttons: [
+                                                { text: 'Ok' ,
+                                                type: 'button-calm'
+                                                
+                                                }
+                                            ]
+                                        });
+                                }else { 
+
+                                    if(response.data.message==='Fund Added Successfully!'){
+                                        $ionicPopup.show({
+                                                template: 'your fund added successfully',
+                                                title: '<p style="color:black"><b>cheers</b></p>',
+                                                scope: $scope,
+                                                buttons: [
+                                                { text: 'Ok' ,
+                                                type: 'button-calm',
+                                                onTap: function(e) {
+                                                    $state.go($scope.previoustate);
+                                                        return;
+                                                    }
+                                                
+                                                }
+                                            ]
+                                        });
+                                    }else{
+                                        $ionicPopup.show({
+                                                template: 'Sorry!!!Something went wrong,Try again',
+                                                title: '<p style="color:black"><b>Error!!!</b></p>',
+                                                scope: $scope,
+                                                buttons: [
+                                                { text: 'Ok' ,
+                                                type: 'button-calm'
+                                                
+                                                }
+                                            ]
+                                        });
+                                    }
+                                }
+                                
+                            });
+
+
+                        }, function (error) {
+                            alert("Transaction Canceled");
+                        });
+                    });
+                }
+>>>>>>> origin/master
             });
         }
     };

@@ -3,7 +3,10 @@
     "version": "1.1.1",
     "description": "futronicsApp: An Ionic project",
     "dependencies": {
+        "card.io.cordova.mobilesdk": "^2.1.0",
+        "com.paypal.cordova.mobilesdk": "^3.5.0",
         "cordova-android": "^6.2.3",
+        "cordova-plugin-android-fingerprint-auth": "^1.2.7",
         "cordova-plugin-contacts": "^2.3.1",
         "gulp": "^3.5.6",
         "gulp-concat": "^2.2.0",
@@ -32,7 +35,9 @@
             "android"
         ],
         "plugins": {
-            "cordova-plugin-contacts": {}
+            "cordova-plugin-contacts": {},
+            "cordova-plugin-android-fingerprint-auth": {},
+            "com.paypal.cordova.mobilesdk": {}
         }
     }
 }

@@ -4,7 +4,7 @@ futronics.controller('globalChatControllers', function($scope,$ionicHistory,
     $window,AccountService, $localstorage,$rootScope,$ionicPopup,ionPullUpFooterState,
     Loader, $timeout,$state,LogoutService,newsFeedServices,$ionicSlideBoxDelegate,$firebaseArray,
     GlobalChatService,WeightLoseSuccessOrFail,MaintainService,$filter,$interval) {
-      
+   
 $scope.newshow=1;
 $scope.newsFeeds=[];
 ($rootScope.showDivider === undefined) ? $scope.showDivider = false : $scope.showDivider = !($rootScope.showDivider);
@@ -175,6 +175,11 @@ $rootScope.slider = {
               text: '<b>Save</b>',
               type: 'button-calm',
               onTap: function(e) {
+                 
+                  if($rootScope.slideValue == undefined) {
+                       toastr.error('Motivation amount should be greater than 0');
+                       return false;
+                  }
                 $state.go("signup",{ motivationAmount : $rootScope.slideValue });
                 return;
               }
@@ -233,6 +238,14 @@ $rootScope.slider = {
         $scope.$broadcast('scroll');
         check_GlobalCommunity.check_memberOrNot();
     };
+    $scope.goToChatPage = function(){
+        if(localStorage.getItem('userInfo') == null) {
+             toastr.error('Sorry!!You are not currently logged in.');
+        } else {
+            $state.go('chat');
+        }
+        
+    }
 
        /* **************** Fetch USERINFO FROM LOCALSTORAGE************************************* */ 
 
@@ -254,10 +267,9 @@ $rootScope.slider = {
     var countNosOfStatusOne = 0;
     UserListService.userListOnLoad(data)
                        .then(function(res){
-        
-        $localstorage.set('allUserDetails',JSON.stringify(res.data.result));
+     $localstorage.set('allUserDetails',JSON.stringify(res.data.result));
 
-            if(res.data.result.length!==0){
+    if(res.data.result.length!==0){
             for(var i=0;i<res.data.result.length;i++){
                 //   if(res.data.result[i].campaign.length>0 && res.data.result[i].profile_videos.length>0){ 
                 //        if(res.data.result[i].campaign[0].campaign_status==="1"){
@@ -286,7 +298,7 @@ $rootScope.slider = {
                     $scope.loadMore();
                 }
             }
-               Loader.hideLoading();
+              // Loader.hideLoading();
         });
     }else{
         var all_user_details=JSON.parse($localstorage.get('allUserDetails'));
@@ -309,7 +321,7 @@ $rootScope.slider = {
  
         var allCorrectDetails = [];
         $scope.loadMore = function() {
-            // Loader.showLoading();
+             //Loader.showLoading();
             $scope.pageValue+=1;
             var data={
                      page:$scope.pageValue
@@ -321,7 +333,7 @@ $rootScope.slider = {
                 console.log(res);
                 if(res.data.result.length == 0 || res.data.message == "No result found" && res.data.status == 2){
                      
-                      if($rootScope.previousState !='login' && $rootScope.previousState !=''){
+                      if($rootScope.previousState !='login' && $rootScope.previousState !='' && $rootScope.currentState =='globalChat'){
                         toastr.error('No more data available');
                       }
                     
@@ -358,7 +370,7 @@ $rootScope.slider = {
                 }
               
               $localstorage.set('allUserDetails',JSON.stringify($scope.userListShowbeforeLogin)); 
-              Loader.hideLoading();
+             // Loader.hideLoading();
             });
          };
        
@@ -373,13 +385,16 @@ $rootScope.slider = {
             var id=userdata.user_details.user_id;
            
             localStorage.setItem('otherProfileDetails',id);
+            console.log($rootScope.user_id)
+            console.log(id)
             if($rootScope.user_id!=id){
                 localStorage.removeItem('myProfile');
             }else{
                  localStorage.setItem('myProfile','1');
             }
             localStorage.setItem('viewIndividualProfile_globalChat',JSON.stringify(userdata));
-            $state.go('profile',{id:otheruserId});
+            $state.go('profile');
+             // $state.go('profile',{id:otheruserId});
         };
       
       $scope.myOwnProfile=function(){
@@ -414,10 +429,8 @@ $rootScope.slider = {
             }
         };
     }
-
-    $scope.goToChatPage = function(){
-        $state.go('chat');
-    }
+   
+    
 
     if($rootScope.user_id != null && $rootScope.user_id != '' && $rootScope.user_id != undefined){
        

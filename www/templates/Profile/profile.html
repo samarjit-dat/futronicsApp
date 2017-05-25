@@ -46,7 +46,7 @@
                     </ion-slide-box>
 
                     <h4 >{{individual_user_details.user_details.username || 'My' }} campaign</h4>
-                    <span class="progress">Progress <strong>{{motivation_percentage}}%</strong></span>
+                    <span class="progress">Progress <strong>{{motivation_percentage || 0}}%</strong></span>
                     <!--<span ng-if="profile_complete_show_progress==='1' || referState==='1' " class="progress">Progress <strong>50%</strong></span>-->
 
                     <div ng-if="$root.isMaintain == 'true'">
@@ -122,7 +122,7 @@
                <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()"  >+ Support Others</button></li>
              
                <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='1'" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ui-sref="upload-video">+ Post Update</button></li>
-               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign==='1' " ng-if="myProfile=='0'"  ui-sref="upload-video">+ Post Update</button></li>
+               <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign =='1' " ng-if="myProfile=='0'"  ui-sref="upload-video">+ Post Update</button></li>
                
                <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}"  ui-sref="myCampaign">+ Market Campaign</button></li>
               
@@ -226,15 +226,15 @@
                </div>
             </div>
          </div>-->
-
-         <div class="profile-endcampaign" ng-show="unCompleteCampaign==='1' && completeOrNot==='{{uid}}'" ng-if="myProfile=='0' || myProfile == undefined" id="">
+            {{unCompleteCampaign}} {{completeOrNot}} {{uid}} {{myProfile}}
+         <div class="profile-endcampaign" ng-show="unCompleteCampaign =='1' && completeOrNot =='{{uid}}'" ng-if="myProfile=='0' || myProfile == undefined" id="">
                 
-                <div ng-if="referStae == 1 || referStae == 2" >
-                    <p style="color:yellow;font-size: 14px;">Your campaign is not fully set up yet</p>
+                <div class="profiletext" ng-if="referStae == 1 || referStae == 2" >
+                    <p style="color:yellow;">Your campaign is not fully set up yet</p>
                     <p class="inCompleteCampaignMessage">Please Complete Your Campaign Setup to unlock all of our key features,tools and community</p>
                 </div>
 
-                <p class="inCompleteCampaignMessage" ng-if="referStae==3">Your campaign is not fully set up yet, please complete your campaign setup to unlock all Diet Monet features</p>
+                <p class="inCompleteCampaignMessage profiletext" ng-if="referStae==3">Your campaign is not fully set up yet, please complete your campaign setup to unlock all Diet Monet features</p>
                 <div style="width: 300px; margin: 0 auto;">
                     <a ng-if="referStae==1" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="completeCampaignBtn" ng-click="completeCampaign()">Upload video to complete profile</a>
                     <a ng-if="referStae==2" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
