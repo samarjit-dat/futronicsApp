@@ -13,7 +13,7 @@ futronics.service("UserListService", function($http,$q,Loader, $localstorage,URL
               
                 if($rootScope.currentState == "globalChat"  && $rootScope.noMore++ < 1){
                      var loadMoreId = document.getElementById('loadMore');
-                     loadMoreId.style.display = 'none';
+                     //loadMoreId.style.display = 'none';
                      toastr.error('No more data available');
                 }
                

@@ -226,8 +226,8 @@
                </div>
             </div>
          </div>-->
-            {{unCompleteCampaign}} {{completeOrNot}} {{uid}} {{myProfile}}
-         <div class="profile-endcampaign" ng-show="unCompleteCampaign =='1' && completeOrNot =='{{uid}}'" ng-if="myProfile=='0' || myProfile == undefined" id="">
+            <!--{{unCompleteCampaign}} {{completeOrNot}} {{uid}} {{myProfile}}-->
+         <div class="profile-endcampaign" ng-show="unCompleteCampaign =='1' && completeOrNot =='{{uid}}'"  ng-hide="showOrhidenav==1" ng-if="myProfile=='0' || myProfile == undefined" id="">
                 
                 <div class="profiletext" ng-if="referStae == 1 || referStae == 2" >
                     <p style="color:yellow;">Your campaign is not fully set up yet</p>

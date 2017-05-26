@@ -6,7 +6,7 @@ futronics.controller('ProfileCtrl',
     CaloryHaveOrGiven,FakeOrGood,MotivationPercent) {
     
     var privateMsgSetupFlag = 0;
-
+    $scope.showOrhidenav = 0;
     /**
     * Firebase setup
     */
@@ -78,6 +78,7 @@ futronics.controller('ProfileCtrl',
         //alert($scope.referStae);
         if($scope.referStae == 1 || $scope.referStae == 2) {
              $scope.unCompleteCampaign =1;
+           
         }
     }
     
@@ -86,6 +87,18 @@ futronics.controller('ProfileCtrl',
     } else{
         $scope.show_gear = 1;
     }
+    /** To hide complete your campaign link if campaign status 1 **** */
+    var user= JSON.parse(localStorage.getItem('userInfo'));
+    console.log(user);
+    if(user.userInfo.result.campaign.length){
+         $scope.c_status = user.userInfo.result.campaign[0].campaign_status;
+    }
+    $scope.p_video = user.userInfo.result.profile_videos.length;
+    if($scope.c_status == 1 && $scope.p_video > 0) {
+        $scope.showOrhidenav = 1;
+    }
+
+     /** To hide complete your campaign link if campaign status 1 **** */
 
 //    if( $scope.checkload==undefined){
 //    var count=1;
