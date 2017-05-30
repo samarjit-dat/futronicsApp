@@ -46,6 +46,9 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
         },
+        "cordova-plugin-touch-id": {
+            "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
+        },
         "cordova-plugin-video-thumbnail": {
             "PACKAGE_NAME": "com.ionicframework.futronicsapp196801"
         },

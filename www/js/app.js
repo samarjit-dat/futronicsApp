@@ -3,7 +3,9 @@ var futronics = angular.module('futronics', ['ionic', 'ngAnimate','ngCordova','n
 futronics.run(function($ionicPlatform,$state,$timeout,$rootScope) {
     
   $ionicPlatform.ready(function() {
+   
       $rootScope.animate = false;
+     
       
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -26,7 +28,7 @@ futronics.run(function($ionicPlatform,$state,$timeout,$rootScope) {
         //$ionicHistory.clearCache();
         //$ionicHistory.clearHistory();
           count +=1;
-        if(count===1){
+        if(count == 1){
             window.plugins.toast.showWithOptions(
             {
               message: "Tap back button to exit",
@@ -52,7 +54,7 @@ futronics.controller('splashCtrl',function($timeout,$scope,$state,$ionicHistory)
 	$timeout(function(){
 		//$(".pane").style.display=none;
 	 $state.go('globalChat');
-  },15000);
+  },10000);
   //$ionicHistory.clearHistory();
 })
 

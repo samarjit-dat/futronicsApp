@@ -8,6 +8,7 @@
         "cordova-android": "^6.2.3",
         "cordova-plugin-android-fingerprint-auth": "^1.2.7",
         "cordova-plugin-contacts": "^2.3.1",
+        "cordova-plugin-touch-id": "^3.2.0",
         "gulp": "^3.5.6",
         "gulp-concat": "^2.2.0",
         "gulp-minify-css": "^0.3.0",
@@ -37,7 +38,8 @@
         "plugins": {
             "cordova-plugin-contacts": {},
             "cordova-plugin-android-fingerprint-auth": {},
-            "com.paypal.cordova.mobilesdk": {}
+            "com.paypal.cordova.mobilesdk": {},
+            "cordova-plugin-touch-id": {}
         }
     }
 }

@@ -221,7 +221,8 @@ futronics.controller('ProfileViewStatsCtrl',
                         
                         var dataJson = {
                             money_paid : CaloryData.cost,
-                            user_who_purchase : $scope.my_details.userInfo.result[0].user_id
+                            user_who_purchase : $scope.my_details.userInfo.result[0].user_id, 
+                            cal : CaloryData.calories
                          };
                          CaloryService.purchaseCalory($rootScope.formatInputString(dataJson)).then(function(res){
                             
