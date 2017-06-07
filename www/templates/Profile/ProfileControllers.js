@@ -3,11 +3,12 @@ futronics.controller('ProfileCtrl',
         $ionicHistory, StorageService, $ionicModal, $sce, $http, $state,
         $window, $localstorage, $ionicPopup, URL, $location, IMAGE, stateFactory, LogoutService,
         FakeVideoService, GoodVideoService, FakevideoReportList, $firebaseArray, $stateParams,
-        CaloryHaveOrGiven, FakeOrGood, $timeout, StartNewCampaign,
+        CaloryHaveOrGiven, FakeOrGood, $timeout, StartNewCampaign, RefState,
         MotivationPercent, NotificationSettings, checkingActualState) {
-        // stateFactory.getCurrentState();
-        var privateMsgSetupFlag = 0;
-        //$scope.showOrhidenav = 0;
+
+        $scope.privateMsgSetupFlag = 0;
+        $rootScope.disabledAddbutton = 0;
+
         /**
          * Firebase setup
          */
@@ -21,14 +22,15 @@ futronics.controller('ProfileCtrl',
 
         $scope.$on('$ionicView.enter', function() {
             if (localStorage.getItem('startnew')) {
-                $scope.unCompleteCampaign = 0;
+                $rootScope.unCompleteCampaign = 0;
             }
             if (localStorage.getItem('video_countdown')) {
                 $scope.video_countdown = localStorage.getItem('video_countdown');
             }
-
             if (localStorage.getItem('endcampaign', "success") === 'success') {
                 $scope.endCampaignStatus = 1;
+				if (localStorage.getItem('actualState'))
+                    localStorage.removeItem('actualState');
             } else {
                 $scope.endCampaignStatus = 0;
             }
@@ -36,17 +38,17 @@ futronics.controller('ProfileCtrl',
                 if ($rootScope.user_details.userInfo.result.campaign.length) {
                     MotivationPercent.getPercent($rootScope.formatInputString({ user_id: $rootScope.user_id || $rootScope.userId, campaign_id: $rootScope.user_details.userInfo.result['campaign'][0]['campaign_id'] }))
                         .then(function(res) {
-                            $scope.motivation_percentage = res.data.result.percentile_amount_collected;
+                            $scope.motivation_percentage = Math.round(res.data.result.percentile_amount_collected).toFixed();
                         })
                 }
+
+            } else {
+                $rootScope.disabledAddbutton = 1;
             }
 
             if (localStorage.getItem('userInfo')) {
                 FakeOrGood.getArrayList($rootScope.formatInputString({ user_id: $rootScope.user_id || $rootScope.userId }))
                     .then(function(res) {
-                        // console.log('good')
-                        // console.log(res.data.result.all_users_marked_good);
-                        // console.log(res.data.result.all_users_marked_fake);
                         (res.data.result.all_users_marked_good.length > 0) ? localStorage.setItem('goodVideo', res.data.result.all_users_marked_good): localStorage.setItem('goodVideo', '');
                         (res.data.result.all_users_marked_fake.length > 0) ? localStorage.setItem('fakeVideo', res.data.result.all_users_marked_fake): localStorage.setItem('fakeVideo', '');
                     });
@@ -73,16 +75,37 @@ futronics.controller('ProfileCtrl',
         StorageService.storage();
         if (localStorage.getItem('hideuploadpage')) {
             $scope.hideOption = localStorage.getItem('hideuploadpage');
-            $scope.unCompleteCampaign = 0;
+            $rootScope.unCompleteCampaign = 0;
         }
-        //alert(localStorage.getItem('actualState'))
-        if (localStorage.getItem("refrstate")) {
-            $scope.referStae = localStorage.getItem("refrstate");
-            //alert($scope.referStae);
-            if ($scope.referStae == 1 || $scope.referStae == 2) {
-                $scope.unCompleteCampaign = 1;
 
-            }
+        if (localStorage.getItem('userInfo')) {
+            var param = { user_id: $rootScope.user_id };
+            var data = $rootScope.formatInputString(param);
+            RefState.get(data).then(function(response) {
+
+                if (response.data.status == 2) {
+                    var status = response.data.result.ref_status;
+                    localStorage.setItem("refrstate", status);
+                    if (localStorage.getItem("refrstate")) {
+                        $scope.referStae = localStorage.getItem("refrstate");
+
+                        if ($scope.referStae == 1 || $scope.referStae == 2) {
+                            $rootScope.unCompleteCampaign = 1;
+
+                            if ($scope.referStae == 1) {
+                                (localStorage.setItem('actualState', 'upload-video'));
+                            } else if ($scope.referStae == 2) {
+                                (localStorage.setItem('actualState', 'questions'));
+                            } else {
+                                $scope.showOrhidenav = 1;
+                            }
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            })
+
         }
 
         if ($rootScope.user_id == '' || $rootScope.user_id == undefined) {
@@ -93,34 +116,45 @@ futronics.controller('ProfileCtrl',
 
 
         if (localStorage.getItem('userInfo')) {
-            console.log('111')
             var user = JSON.parse(localStorage.getItem('userInfo'));
 
             if (user.userInfo.result.campaign.length) {
                 $scope.c_status = user.userInfo.result.campaign[0].campaign_status;
                 $scope.contributor = user.userInfo.result.contributor.length;
-
-
-
             }
             $scope.p_video = user.userInfo.result.profile_videos.length;
 
             if ($scope.c_status == 1 && $scope.p_video == 0) {
 
-                var c_state = (localStorage.getItem('currentSate'));
-                var a_state = (localStorage.getItem('actualState'));
-                var refState = localStorage.getItem("refrstate");
-                alert(refState)
-                if (refState == 3) {
-                    localStorage.setItem('currentSate', "campaignBrowse");
-                    localStorage.setItem('actualState', 'campaignBrowse');
-                } else if (refState == 2) {
-                    localStorage.setItem('currentSate', "questions");
-                    localStorage.setItem('actualState', 'questions');
-                } else {
-                    localStorage.setItem('currentSate', "upload-video");
-                    localStorage.setItem('actualState', 'upload-video');
-                }
+
+                var param = { user_id: $rootScope.user_id };
+                var data = $rootScope.formatInputString(param);
+                RefState.get(data).then(function(response) {
+                    if (response.data.status == 2) {
+                        var status = response.data.result.ref_status;
+                        localStorage.setItem("refrstate", status);
+
+                        var c_state = (localStorage.getItem('currentSate'));
+                        var a_state = (localStorage.getItem('actualState'));
+                        var refState = localStorage.getItem("refrstate");
+
+                        if (refState == 3) {
+                            localStorage.setItem('currentSate', "campaignBrowse");
+                            localStorage.setItem('actualState', 'campaignBrowse');
+                        } else if (refState == 2) {
+                            localStorage.setItem('currentSate', "questions");
+                            localStorage.setItem('actualState', 'questions');
+                        } else {
+                            localStorage.setItem('currentSate', "upload-video");
+                            localStorage.setItem('actualState', 'upload-video');
+                        }
+
+
+                    } else {
+                        //toastr.error('Sorry,Something went wrong.Try again...');
+                        return false;
+                    }
+                })
 
 
             }
@@ -128,14 +162,14 @@ futronics.controller('ProfileCtrl',
             if (($scope.c_status == 1 && $scope.p_video > 0) || ($scope.c_status == 2) || ($scope.c_status == 0 && $rootScope.previousState == "endCampaignProfile")) {
                 $scope.showOrhidenav = 1;
             } else {
-                if ($scope.contributor > 0 && $scope.c_status == 0) {
-                    $scope.showOrhidenav = 1;
-                } else {
-                    $scope.showOrhidenav = 0;
-                }
+                $scope.showOrhidenav = 0;
+                // if ($scope.contributor > 0 && $scope.c_status == 0) {
+                //     $scope.showOrhidenav = 1;
+                // } else {
+                //     $scope.showOrhidenav = 0;
+                // }
 
             }
-
         }
         /** To hide complete your campaign link if campaign status 1 **** */
 
@@ -195,14 +229,14 @@ futronics.controller('ProfileCtrl',
         $scope.userdata = '';
 
         $scope.userdata = AccountService.getUserInfo();
-        //console.log($scope.userdata);
+
         if ($scope.userdata == undefined) {
             $scope.check = 0;
         } else {
             $scope.check = $scope.userdata.userInfo.status;
         }
         /*** checking for Login or Logout state end****/
-        //$scope.items=friends;
+
         $scope.user_id = '';
         $scope.logout = function() {
             LogoutService.logout();
@@ -227,29 +261,18 @@ futronics.controller('ProfileCtrl',
 
         if (localStorage.getItem('viewIndividualProfile_globalChat') != null) {
 
-            privateMsgSetupFlag = 1;
+            $scope.privateMsgSetupFlag = 1;
             $scope.otherProfile = 1;
             $scope.myProfile = 0;
             $scope.individual_user_details = JSON.parse(localStorage.getItem('viewIndividualProfile_globalChat'));
 
             /*******************************Image push start************************************/
 
-            //   $scope.individual_user_details.profile_images.forEach(function(ele){
-            //     var requiredParams = [];
-
-            //     var imageStr = ele.profile_image;
-            //     requiredParams['profile_image'] = imageStr;
-            //     imgObj.push(requiredParams);
-            //   });
-
             if ($scope.individual_user_details.campaign.length !== 0) {
                 $scope.status = $scope.individual_user_details.campaign[0].campaign_status;
             }
             var goodVideoList = localStorage.getItem('goodVideo');
             var fakeVideoList = localStorage.getItem('fakeVideo');
-            // console.log('fakevideo goodvideo list');
-            // console.log(fakeVideoList);
-            // console.log(goodVideoList);
 
             if (localStorage.getItem('userInfo')) {
                 if ($scope.individual_user_details.profile_videos.length > 0) {
@@ -262,21 +285,15 @@ futronics.controller('ProfileCtrl',
                         requiredParams['user_videos_id'] = ele.user_videos_id;
                         requiredParams['user_id'] = ele.user_id;
 
-                        // console.log(ele);
-
                         if (fakeVideoList != null) {
-                            requiredParams['user_whose_video_fake'] = (ele.user_id, fakeVideoList.indexOf(ele.user_id) > -1) ? ele.user_id : null;
+                            requiredParams['user_whose_video_fake'] = (ele.user_videos_id, fakeVideoList.indexOf(ele.user_videos_id) > -1) ? ele.user_videos_id : null;
                         }
                         if (goodVideoList != null) {
-                            requiredParams['user_whose_video_good'] = (ele.user_id, goodVideoList.indexOf(ele.user_id) > -1) ? ele.user_id : null;
+                            requiredParams['user_whose_video_good'] = (ele.user_videos_id, goodVideoList.indexOf(ele.user_videos_id) > -1) ? ele.user_videos_id : null;
                         }
-                        //console.log(ele.user_id,goodVideoList.indexOf(ele.user_id),fakeVideoList.indexOf(ele.user_id));
                         imgObj.push(requiredParams);
 
                     });
-
-                    // console.log("abcd 1234");
-                    // console.log(imgObj);
 
                     if (imgObj.length > 0) {
                         $scope.profileImages = array_chunk(imgObj, 3);
@@ -310,8 +327,8 @@ futronics.controller('ProfileCtrl',
         /* *****  user own profle start **** */
 
         if (localStorage.getItem('myProfile') != null) {
-            alert(localStorage.getItem('refrstate') + "myprofile")
-            privateMsgSetupFlag = 2;
+            //alert(localStorage.getItem('refrstate') + "myprofile")
+            $scope.privateMsgSetupFlag = 2;
             $scope.totalCampaign = '';
             $scope.myProfile = 0;
             $scope.my_details = '';
@@ -319,6 +336,7 @@ futronics.controller('ProfileCtrl',
 
             if ($scope.my_details.userInfo.result.campaign.length !== 0) {
                 $scope.status = $rootScope.campaign_status;
+                $scope.loggedInUser = 1;
             }
 
             //   $scope.my_details.userInfo.result.profile_images.forEach(function(ele){
@@ -377,26 +395,23 @@ futronics.controller('ProfileCtrl',
             $scope.myProfile = 1;
         }
 
-        // console.log("************");
-        // console.log($scope.profileImages);
-        console.log(JSON.parse(localStorage.getItem('userInfo')));
-        alert($scope.status)
-        if ($scope.status == 1 || $scope.status == 2) {
+        if (($scope.status == 1 || $scope.status == 2) && ($scope.loggedInUser == 1)) {
+
+            var user, user_id;
             if (localStorage.getItem('userInfo')) {
-                var user = JSON.parse(localStorage.getItem('userInfo'));
+                user = JSON.parse(localStorage.getItem('userInfo'));
+                if (user.userInfo.result[0].user_id != null || user.userInfo.result[0].user_id != '')
+                    user_id = user.userInfo.result[0].user_id;
+
             }
-            if (user.userInfo.result[0].user_id != null || user.userInfo.result[0].user_id != '') {
-                var user_id = user.userInfo.result[0].user_id;
-            }
+
             var param = { user_id: user_id };
             var data = $rootScope.formatInputString(param);
             checkingActualState.get(data).then(function(response) {
-                console.log('get actual')
-                console.log(response)
+
                 if (response.data.status == 1) {
                     var actualstate = response.data.result[0].actual_stat;
-                    alert('actual')
-                    alert(actualstate)
+
                     if (actualstate == "") {
 
                         if (localStorage.getItem('currentSate')) {
@@ -405,89 +420,73 @@ futronics.controller('ProfileCtrl',
                             var param = { user_id: user_id, actual_stat: lastState };
                             var data = $rootScope.formatInputString(param);
                             checkingActualState.post(data).then(function(response) {
-                                console.log('post actual')
-                                console.log(response)
+
                                 if (response.data.status == 1) {
                                     localStorage.setItem('actualState', lastState);
                                 } else if (response.data.status == 2) {
                                     localStorage.setItem('actualState', lastState);
                                 } else {
-                                    toastr.error('Sorry,Something went wrong.Try again...');
+                                    toastr.error('If you are  in logout state.Please login');
                                     return false;
                                 }
                             });
-
                         }
-
                     } else {
-                        //alert('2')
                         localStorage.setItem('actualState', actualstate);
                         if (localStorage.getItem('actualState')) {
-                            // console.log(localStorage.getItem('actualState'))
-                            // console.log('current')
-                            // console.log(localStorage.getItem('currentSate'))
                             var a_state = localStorage.getItem('actualState');
                             var c_state = localStorage.getItem('currentSate');
-                            //alert(c_state)
-                            $timeout(function() {
-                                if (c_state === 'campaignBrowse') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'contribution') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'addFund') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'thanksAfterContribution') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'profile') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'profileViewStats') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'account_settings') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'contactAdmin') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'myContribution') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'myContributionUserProfile') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'sponsorsAcquired') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'mySponsorsUserProfile') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'withdrawCaloryAndCash') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'chat') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'login') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else if (c_state === 'myCampaign') {
-                                    localStorage.setItem('actualState', a_state);
-                                } else {
-                                    localStorage.setItem('actualState', c_state);
-                                }
 
-                                if (c_state === 'endCampaignProfile') {
-                                    localStorage.removeItem('actualState');
-                                }
-                            }, 20);
+                            if (c_state === 'campaignBrowse') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'contribution') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'addFund') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'thanksAfterContribution') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'profile') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'profileViewStats') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'account_settings') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'contactAdmin') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'myContribution') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'myContributionUserProfile') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'sponsorsAcquired') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'mySponsorsUserProfile') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'withdrawCaloryAndCash') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'chat') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'login') {
+                                localStorage.setItem('actualState', a_state);
+                            } else if (c_state === 'myCampaign') {
+                                localStorage.setItem('actualState', a_state);
+                            } else {
+                                localStorage.setItem('actualState', c_state);
+                            }
 
-
-                            // alert(localStorage.getItem('actualState'))
+                            if (c_state === 'endCampaignProfile') {
+                                localStorage.removeItem('actualState');
+                            }
                         }
                     }
 
                 } else {
-                    toastr.error('Sorry,Something went wrong.Try again...');
                     return false;
                 }
             });
-
-
-
         } else {
             localStorage.removeItem('actualState');
-
         }
+
         $scope.user_list = function() {
             localStorage.setItem('statusCheck', $scope.status);
             if ($scope.status == 0) {
@@ -883,7 +882,6 @@ futronics.controller('ProfileCtrl',
 
 
         $scope.goodReport = function() {
-            //alert('goodreport')
             if (localStorage.getItem('otherUserCampaignId')) {
                 var otheruser_campaignid = localStorage.getItem('otherUserCampaignId');
 
@@ -894,7 +892,7 @@ futronics.controller('ProfileCtrl',
                                 if ($scope.videoId != 'profileImage') {
                                     $ionicPopup.show({
                                         template: 'You are about to give a “good” rating for this video, indicating that it abides by the Diet Money Policy',
-                                        // template: 'Are you want to report the video?',
+
                                         title: '<p style="color:black"><b>Attention!!!</b></p>',
                                         scope: $scope,
                                         buttons: [{
@@ -915,11 +913,8 @@ futronics.controller('ProfileCtrl',
                                                     var data = $rootScope.formatInputString(data);
                                                     GoodVideoService.goodVideo(data).then(function(response) {
 
-                                                        // console.clear();
-                                                        // console.log(response);
                                                         if (response.data.status == 1) {
                                                             var g_id = $scope.video_id;
-                                                            //alert(localStorage.getItem('goodVideo'));
                                                             if (!localStorage.getItem('goodVideo')) {
                                                                 localStorage.setItem('goodVideo', [g_id]);
                                                             } else {
@@ -1068,25 +1063,20 @@ futronics.controller('ProfileCtrl',
                         text: '<b>Save</b>',
                         type: 'button-calm',
                         onTap: function(e) {
-                            // localStorage.setItem('startnew', 'active');
-                            // $stateParams.fromEndCampaign = true;
-                            // $state.go("signup", { motivationAmount: $scope.slider.value, frontEndCampaign: 1 });
-                            // return;
-
                             StartNewCampaign.isActive($rootScope.formatInputString({ user_id: $rootScope.userId || $rootScope.user_id }))
                                 .then(function(res) {
-                                    if (res.data.status === 'inactive') {
+
+                                    if (res.data.status == 2) {
                                         StartNewCampaign.updateStatus($rootScope.formatInputString({ user_id: $rootScope.userId || $rootScope.user_id }))
                                             .then(function(res_p) {
-                                                localStorage.setItem('startnew', res_p.data.status);
-                                                $stateParams.fromEndCampaign = true;
-                                                $state.go("signup", { motivationAmount: $scope.slider.value, frontEndCampaign: 1 });
+                                                localStorage.setItem('startnew', "active");
+
+                                                $state.go("signup", { motivationAmount: $scope.slider.value, fromEndCampaign: 1 });
                                                 return;
                                             });
                                     } else {
-                                        localStorage.setItem('startnew', res.data.status);
-                                        $stateParams.fromEndCampaign = true;
-                                        $state.go("signup", { motivationAmount: $scope.slider.value, frontEndCampaign: 1 });
+                                        localStorage.setItem('startnew', "active");
+                                        $state.go("signup", { motivationAmount: $scope.slider.value, fromEndCampaign: 1 });
                                         return;
                                     }
                                 });
@@ -1100,26 +1090,13 @@ futronics.controller('ProfileCtrl',
             $scope.modal_video.videoUrl = $sce.trustAsResourceUrl(video_url);
             $scope.modal_video.show();
 
-            // remove multiple video modal instance
-
             var videoPlayerContainer = document.querySelector('.modal-backdrop .active #video-player-container');
             var videoDataId = parentEle[0];
-            //    var videoDataId = document.querySelector("[data-video-url]");
 
             var goodVideo = localStorage.getItem('goodVideo');
             var fakeVideo = localStorage.getItem('fakeVideo');
 
-            //    var goodVideo = JSON.parse(localStorage.getItem('goodVideo'));
-            //    var fakeVideo = JSON.parse(localStorage.getItem('fakeVideo'));
-
-
             var _videoId = id;
-            //    var _videoId = $scope.videoId || $scope.video_id;
-
-            // console.log(goodVideo, _videoId);
-            // console.log(fakeVideo, _videoId);
-
-            // console.log(videoDataId.classList.contains('both_null'))
 
             if (goodVideo || fakeVideo) {
 
@@ -1154,7 +1131,6 @@ futronics.controller('ProfileCtrl',
                         videoDataId.classList.remove('bad');
                     }
                     videoDataId.className += ' bad';
-                    // console.log("2",videoDataId);
 
                     videoPlayerContainer.className += ' videoBorderFake';
                 }
@@ -1163,22 +1139,26 @@ futronics.controller('ProfileCtrl',
 
         $scope.closeModal = function() {
             $scope.modal_video.hide();
-            //      var video = angular.element(document.querySelector('video'));
-            //        // Loop through each video element 
-            //        angular.forEach(video, function(obj) {
-            //            // Apply pause to the object
-            //            obj.pause();
-            //      });
         };
 
         $scope.reportFakeVideo = function(video_id) {
             $scope.video_id = video_id;
         };
-
-
         /***************************** video open on modal ************************************/
-        /* *****  user own profle end**** */
 
+        /****** myContribution Method Start************/
+
+        $scope.myContribution = function() {
+            if (localStorage.getItem('userInfo')) {
+                $state.go('myContribution');
+            } else {
+                toastr.error('Please login to see contribution list');
+                return false;
+            }
+        };
+
+        /****** myContribution Method End************/
+        /* *****  user own profle end**** */
 
         /* ***** check user login or not start***** */
         if (localStorage.getItem('userInfo') === null) {
@@ -1188,17 +1168,6 @@ futronics.controller('ProfileCtrl',
         }
         /* ***** check user login or not end***** */
 
-
-
-        /****** myContribution Method Start************/
-
-        $scope.myContribution = function() {
-            $state.go('myContribution');
-        };
-
-        /****** myContribution Method End************/
-
-
         /**
          * Firebase adding functionlity
          */
@@ -1206,17 +1175,20 @@ futronics.controller('ProfileCtrl',
         var fromUserInfo = $scope.userdata.userInfo;
         var toUserInfo = $scope.individual_user_details;
 
-        if (privateMsgSetupFlag === 1) {
-            fromId = fromUserInfo.result[0].user_id;
-            toId = toUserInfo.user_details.user_id;
+        if ($scope.privateMsgSetupFlag == 1) {
+            fromId = $rootScope.user_id || $rootScope.userId;
+            toId = $stateParams.id;
+        } else if ($scope.privateMsgSetupFlag == 2) {
+            fromId = $rootScope.user_id || $rootScope.userId;
+            toId = '';
         } else {
-            fromId = fromUserInfo.result[0].user_id;
+            fromId = $stateParams.id;
         }
 
         $scope.addMessage = function(msg) {
             if (msg) {
                 var msgObj = {
-                    to_id: (privateMsgSetupFlag === 1) ? '' : toId,
+                    to_id: toId,
                     from_id: fromId,
                     user_image: (fromUserInfo.result.profile_videos == undefined || fromUserInfo.result.profile_videos == '') ? '' : fromUserInfo.result.profile_videos[0].thumb_url,
                     text: msg,
@@ -1226,31 +1198,26 @@ futronics.controller('ProfileCtrl',
                 $scope.messages.push(msgObj);
                 $scope.campaign_text = '';
 
-                if (privateMsgSetupFlag != 1) {
+                if ($scope.privateMsgSetupFlag != 1) {
                     NotificationSettings.sendmail($rootScope.formatInputString({
                             sender_id: fromId,
                             receiver_id: toId
                         }))
                         .then(function(res) {
-                            if (res.data.status === 1) {
-                                //console.log(res.data.message)
-                            }
+                            if (res.data.status === 1) {}
                         });
                 }
             }
         };
 
-
         var newMessageArray = [];
-
         ref.once('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
                 var childData = childSnapshot.val();
-                if (privateMsgSetupFlag === 1 && childData.from_id == fromId && childData.toId == null) {
-                    // $scope.messages.$add(childData);
+                if ($scope.privateMsgSetupFlag === 1 && childData.from_id == fromId && childData.to_id == toId) {
                     newMessageArray.push(childData);
-                } else if (privateMsgSetupFlag === 2 && childData.from_id == fromId) {
-                    // $scope.messages.$add(childData);
+                }
+                if ($scope.privateMsgSetupFlag === 2 && childData.from_id == fromId) {
                     newMessageArray.push(childData);
                 }
             });
@@ -1281,6 +1248,63 @@ futronics.controller('ProfileCtrl',
                 return false;
             }
         };
+        if ($rootScope.previousState == "congrats_videoupload") {
+            $scope.myProfile = '0';
+        }
+        if (localStorage.getItem('userInfo')) {
+            var userInfo = JSON.parse(localStorage.getItem('userInfo')).userInfo;
+            if (userInfo.result.contributor.length > 0 && userInfo.result.campaign.length > 0) {
+                $scope.completecampaingstatus = userInfo.result.campaign[0].campaign_status;
+                localStorage.setItem('currentSate', 'questions');
+                localStorage.setItem('actualState', 'questions');
+            }
+            if (userInfo.result.campaign.length) {
 
+                $scope.campaign_status = userInfo.result.campaign[0].campaign_status;
+                //alert($scope.campaign_status + "1")
+                if ($scope.campaign_status == 0) {
+                    localStorage.setItem('currentSate', "campaignBrowse");
+                    if ($rootScope.previousState == 'questions' || $rootScope.previousState == 'thanksAfterContribution') {
+                        $scope.staus_on = true;
+                    } else {
+                        $scope.staus_on = false;
+                    }
+                }
+
+            } else {
+
+                if ($scope.campaign_status == 0 || $scope.campaign_status == undefined) {
+                    localStorage.setItem('currentSate', "campaignBrowse");
+                }
+            }
+            /** need to apply api */
+            if (localStorage.getItem('startnew')) {}
+        }
+        //alert(localStorage.getItem('startnew'))
+        if (localStorage.getItem('actualState')) {
+            if (localStorage.getItem('actualState') == 'questions' || localStorage.getItem('actualState') == 'upload-video') {
+                if (localStorage.getItem('startnew') == 'active') {
+                    if (localStorage.getItem('endCampaign')) {
+                        localStorage.removeItem('endCampaign');
+                    }
+                    $timeout(function() {
+                        $rootScope.unCompleteCampaign = 0;
+                        $scope.uncompleteStartnew = 1;
+                    }, 10);
+                }
+
+            }
+        }
+
+        if (localStorage.getItem('userInfo')) {
+            var userdetails = JSON.parse(localStorage.getItem('userInfo')).userInfo;
+            if (userdetails.result.campaign.length) {
+                var campaignStat = userdetails.result.campaign[0].campaign_status;
+            }
+            var profileVideo = userdetails.result.profile_videos.length;
+            if (campaignStat == 1 && profileVideo > 0) {
+                $scope.unCompleteCampaign = 0;
+            }
+        }
 
     });

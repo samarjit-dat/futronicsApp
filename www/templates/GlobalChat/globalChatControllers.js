@@ -1,8 +1,8 @@
 futronics.controller('globalChatControllers', function($scope, $ionicHistory,
-    stateFactory, StorageService, check_GlobalCommunity, UserListService, $q,
+    stateFactory, StorageService, check_GlobalCommunity, UserListService, $q, $ionicModal,
     $window, AccountService, $localstorage, $rootScope, $ionicPopup, ionPullUpFooterState,
     Loader, $timeout, $state, LogoutService, newsFeedServices, $ionicSlideBoxDelegate, $firebaseArray,
-    GlobalChatService, WeightLoseSuccessOrFail, MaintainService, $filter, $interval) {
+    GlobalChatService, WeightLoseSuccessOrFail, EndCampaignStatus, MaintainService, $filter, $interval, RefState) {
 
     $scope.newshow = 1;
     $scope.newsFeeds = [];
@@ -20,28 +20,39 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
 
     $scope.messages = $firebaseArray(ref);
 
-    // create a synchronized array
-
-    // ref.once('child_removed', function(snapshot) {
-    //     $scope.$apply()
-    // });
-
     $scope.itemOnLongPress = function() {
         $scope.myVar = 'showIt'
-        console.log('Long press');
     }
 
     $scope.itemOnTouchEnd = function() {
-
         $timeout(function() {
             $scope.myVar = 'hideIt';
         }, 7000);
-
-        console.log('Touch end');
     }
 
     if (localStorage.getItem('userInfo')) {
         var userInfo = JSON.parse(localStorage.getItem('userInfo')).userInfo;
+
+        if (userInfo.result.campaign.length > 0 && userInfo.result.contributor.length > 0) {
+            var ohter_user_campaign_id = userInfo.result.contributor[0]['contribute_campaign'][0].campaign_id;
+            var campaign_id = userInfo.result.campaign[0].campaign_id;
+            localStorage.setItem('ohter_user_campaign_id', ohter_user_campaign_id);
+            localStorage.setItem('myCampaignId', campaign_id);
+            var campaign_status = userInfo.result.campaign[0].campaign_status;
+            EndCampaignStatus.get($rootScope.formatInputString({ user_id: userInfo.result[0].user_id, campaign_id: campaign_id })).then(function(response) {
+
+                if (response.data.result.campaign_status == "Success" && response.data.result.end_campaign_stats == "true") {
+
+                    localStorage.setItem('endcampaign', "success");
+                } else {
+                    localStorage.removeItem('endcampaign');
+                }
+            });
+
+
+        }
+
+
 
         if (userInfo.status != 0) {
 
@@ -58,8 +69,7 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
                 };
 
                 GlobalChatService.giveCalory($rootScope.formatInputString(dataJson)).then(function(res) {
-                    console.log("Give Calory");
-                    console.log(res);
+
                 });
 
             }
@@ -86,8 +96,7 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
                     user_who_is_added: $scope.muteUserId
                 };
                 GlobalChatService.addFriend($rootScope.formatInputString(dataJson)).then(function(res) {
-                    console.log("Add Friend");
-                    console.log(res);
+
                 });
 
             }
@@ -99,8 +108,7 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
                 }
 
                 GlobalChatService.reportUser($rootScope.formatInputString(dataJson)).then(function(res) {
-                    console.log("Report user");
-                    console.log(res);
+
                 });
 
             }
@@ -121,7 +129,6 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
             }
         }, 1000);
     });
-
     $scope.newsfeed = function(link) {
         window.open('http://' + link, '_system', 'location=yes');
     };
@@ -131,10 +138,6 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
     } else {
         $scope.newshow = 1;
     }
-
-    // if($rootScope.userId == '' || $rootScope.userId === undefined){
-    //     document.getElementById('view_all').style.display = 'none';
-    // }
 
     $rootScope.slidingAmount = 0;
     $scope.steps = 5;
@@ -164,7 +167,6 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
         $ionicPopup.show({
             template: '<rzslider rz-slider-model="slider.value"    rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>',
             title: '<p style="color:black"><b>What amount motivates you?</b></p>',
-            // subTitle: 'Please enter your weight using a point to indicate decimals',
             scope: $scope,
             buttons: [
 
@@ -177,7 +179,7 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
                     type: 'button-calm',
                     onTap: function(e) {
 
-                        if ($rootScope.slideValue == undefined) {
+                        if ($rootScope.slideValue == undefined || $rootScope.slideValue == null || $rootScope.slideValue == 0) {
                             toastr.error('Motivation amount should be greater than 0');
                             return false;
                         }
@@ -188,16 +190,10 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
             ]
 
         });
-
-
-
     };
-    $scope.onFooterExpand = function() {
-        //console.log('Footer expanded');
-    };
-    $scope.onFooterCollapse = function() {
-        //console.log('Footer collapsed');
-    };
+
+    $scope.onFooterExpand = function() {};
+    $scope.onFooterCollapse = function() {};
 
     $scope.expand = function() {
         $scope.footerState = ionPullUpFooterState.EXPANDED;
@@ -212,13 +208,11 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
     $scope.userdata = '';
 
     $scope.userdata = AccountService.getUserInfo();
-    //console.log($scope.userdata);
     if ($scope.userdata == undefined) {
         $scope.check = 0;
     } else {
         $scope.check = $scope.userdata.userInfo.status;
     }
-    //$scope.check=$scope.userdata.userInfo.status;
 
     /*****************************Logout*************************************/
 
@@ -260,16 +254,17 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
     };
     var data = $rootScope.formatInputString(data);
 
-    if ($rootScope.previousState === 'login' || $rootScope.previousState === '') {
+    if ($rootScope.previousState === 'login' || $rootScope.previousState === '' || $rootScope.previousState == 'splash') {
         // Loader.showLoading();
         if (!localStorage.getItem('isMaintainPhaseButton')) {
             localStorage.setItem('isMaintainPhaseButton', false);
         }
         var countNosOfStatusOne = 0;
+        // $scope.$on("$ionicView.afterEnter", function(event) {
+
         UserListService.userListOnLoad(data)
             .then(function(res) {
                 $localstorage.set('allUserDetails', JSON.stringify(res.data.result));
-
                 if (res.data.result.length !== 0) {
                     for (var i = 0; i < res.data.result.length; i++) {
                         //   if(res.data.result[i].campaign.length>0 && res.data.result[i].profile_videos.length>0){ 
@@ -291,6 +286,7 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
                                 }
                                 if ($rootScope.user_id != res.data.result[i].user_details.user_id) {
                                     $scope.userListShowbeforeLogin.push(res.data.result[i]);
+                                    Loader.hideLoading();
                                 }
                             }
                         }
@@ -299,8 +295,9 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
                         $scope.loadMore();
                     }
                 }
-                // Loader.hideLoading();
+
             });
+        // });
     } else {
         var all_user_details = JSON.parse($localstorage.get('allUserDetails'));
         var userlistlength = Math.ceil(all_user_details.length / 20);
@@ -328,32 +325,20 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
             page: $scope.pageValue
         };
 
+
         var data = $rootScope.formatInputString(data);
 
         UserListService.userListOnLoad(data).then(function(res) {
-            console.log(res);
             if (res.data.result.length == 0 || res.data.message == "No result found" && res.data.status == 2) {
 
-                if ($rootScope.previousState != 'login' && $rootScope.previousState != '' && $rootScope.currentState == 'globalChat') {
+                if ($rootScope.previousState != 'login' && $rootScope.previousState != 'splash' && $rootScope.previousState != '' && $rootScope.currentState == 'globalChat') {
                     toastr.error('No more data available');
                 }
-
             }
             var all_details = $localstorage.getObject('allUserDetails');
 
 
             for (var i = 0; i < res.data.result.length; i++) {
-                // if(res.data.result[i].campaign.length>0 && res.data.result[i].profile_videos.length>0){ 
-                //   if(res.data.result[i].campaign[0].campaign_status=='1'){
-                //      if($rootScope.user_id != res.data.result[i].user_details.user_id) {
-                //         for(var j=0;j<$scope.userListShowbeforeLogin.length;j++){
-                //             allCorrectDetails.push($scope.userListShowbeforeLogin[j].user_details.user_id)
-                //         }
-                //         if(allCorrectDetails.indexOf(res.data.result[i].user_details.user_id) == -1)
-                //         $scope.userListShowbeforeLogin.push(res.data.result[i]);
-                //     }
-                //   }
-                // } 
 
                 if (res.data.result[i].campaign.length > 0) {
                     if (res.data.result[i].campaign[0].campaign_status == '1') {
@@ -370,14 +355,11 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
             }
 
             $localstorage.set('allUserDetails', JSON.stringify($scope.userListShowbeforeLogin));
-            // Loader.hideLoading();
+
         });
     };
 
     $scope.userprofile = function(userdata) {
-        console.clear()
-        console.log('userdata');
-        console.log(userdata);
         var otheruserId = userdata.user_details.user_id;
 
         var otherUser_campaignId = userdata.campaign[0].campaign_id;
@@ -385,64 +367,73 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
         var id = userdata.user_details.user_id;
 
         localStorage.setItem('otherProfileDetails', id);
-        console.log($rootScope.user_id)
-        console.log(id)
         if ($rootScope.user_id != id) {
             localStorage.removeItem('myProfile');
         } else {
             localStorage.setItem('myProfile', '1');
         }
         localStorage.setItem('viewIndividualProfile_globalChat', JSON.stringify(userdata));
-        //$state.go('profile');
+
         $state.go('profile', { id: otheruserId });
     };
 
     $scope.myOwnProfile = function() {
         localStorage.removeItem('viewIndividualProfile_globalChat');
         localStorage.setItem('myProfile', '1');
-
         if (localStorage.getItem('userInfo')) {
             var user = JSON.parse(localStorage.getItem('userInfo'));
 
-            console.log(user);
             if (user.userInfo.result.campaign.length) {
                 $scope.c_status = user.userInfo.result.campaign[0].campaign_status;
 
             }
             $scope.p_video = user.userInfo.result.profile_videos.length;
-
+            if ($scope.c_status == 2) {
+                $state.go('profile');
+            }
             if ($scope.c_status == 1 && $scope.p_video == 0) {
-                alert(localStorage.getItem("refrstate"))
-                var referStae = localStorage.getItem("refrstate");
-                var c_state = (localStorage.getItem('currentSate'));
-                var a_state = (localStorage.getItem('actualState'));
-                alert(localStorage.getItem('actualState') + "actual");
-                alert(localStorage.getItem('currentSate') + "currentSate");
-                alert(referStae)
-                if (referStae == 3) {
-                    localStorage.setItem('currentSate', "campaignBrowse");
-                    localStorage.setItem('actualState', 'campaignBrowse');
-                } else if (referStae == 2) {
-                    localStorage.setItem('currentSate', "questions");
-                    localStorage.setItem('actualState', 'questions');
-                } else if (referStae == 1) {
-                    localStorage.setItem('currentSate', "upload-video");
-                    localStorage.setItem('actualState', 'upload-video');
-                } else {
-                    localStorage.setItem('currentSate', "");
-                    localStorage.setItem('actualState', '');
-                }
+                var param = { user_id: $rootScope.user_id };
+                var data = $rootScope.formatInputString(param);
+                RefState.get(data).then(function(response) {
+                    if (response.data.status == 2) {
+                        var status = response.data.result.ref_status;
+                        localStorage.setItem("refrstate", status);
+                        var c_state = (localStorage.getItem('currentSate'));
+                        var a_state = (localStorage.getItem('actualState'));
+                        var refState = localStorage.getItem("refrstate");
+
+                        if (refState == 3) {
+                            localStorage.setItem('currentSate', "campaignBrowse");
+                            localStorage.setItem('actualState', 'campaignBrowse');
+                        } else if (refState == 2) {
+                            localStorage.setItem('currentSate', "questions");
+                            localStorage.setItem('actualState', 'questions');
+                        } else {
+                            localStorage.setItem('currentSate', "upload-video");
+                            localStorage.setItem('actualState', 'upload-video');
+                        }
+                        $state.go('profile');
+
+                    } else {
+                        toastr.error('Sorry,Something went wrong.Try again...');
+                        return false;
+                    }
+                })
 
 
             }
             if ($scope.c_status == 1 && $scope.p_video > 0) {
-
                 $scope.showOrhidenav = 1;
+                $state.go('profile');
+            }
 
+            if ($scope.c_status == 0 || $scope.c_status == undefined) {
+                localStorage.removeItem("refrstate");
+                $state.go('profile');
             }
         }
-        $state.go('profile');
-    }
+
+    };
     if (localStorage.getItem('userInfo') == null || localStorage.getItem('userInfo') == '') {
         $scope.check = 0;
         $scope.check1 = 1;
@@ -464,7 +455,6 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
                 };
 
                 msgRef.$add(myChatObj);
-                // $scope.messages.push(myChatObj);
                 $scope.campaign_text = '';
                 $scope.$broadcast('scroll');
             }
@@ -586,18 +576,17 @@ futronics.controller('globalChatControllers', function($scope, $ionicHistory,
         }
     };
 
-    // $interval(function(){
-    //     var now = Date.now();
-    //     var cutoff = now - (1 * 60 * 1000);
-    //     ref.on('value', function(snapshot) {
-    //         if(snapshot.val() !== null){
-    //             snapshot.forEach(function(childSnapshort){
-    //                 if(childSnapshort.val().createdAt < cutoff){
-    //                     snapshot.ref.remove();
-    //                 } 
-    //             });  
-    //         }
-    //     });
-    // },1000);
+    // Open cashout modal
+    $ionicModal.fromTemplateUrl('templates/cashout/cashoutModal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
 
+    if ($rootScope.wallet == 0) {
+        $timeout(function() {
+            $scope.modal.show();
+        }, 0);
+    }
 });

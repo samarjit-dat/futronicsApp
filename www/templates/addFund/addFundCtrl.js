@@ -13,7 +13,7 @@ futronics.controller('addFundCtrl',
 
         }
 
-        $scope.previoustate = $rootScope.previousState;
+        $scope.previoustate = $rootScope.previousState || 'profile';
         $scope.showRoller = false;
 
         $rootScope.slidingAmount = 0;
@@ -33,7 +33,6 @@ futronics.controller('addFundCtrl',
         $scope.$on("slideEnded", function() {
 
             $rootScope.slidingAmount = $scope.slider.value;
-            console.log($rootScope.slidingAmount);
 
         });
         $scope.rollerChange = function() {
@@ -96,7 +95,6 @@ futronics.controller('addFundCtrl',
                     inputType: 'password',
                     inputPlaceholder: 'Your password'
                 }).then(function(res) {
-                    console.log(res)
                     if (res == undefined) {
                         return;
                     } else {
@@ -109,12 +107,21 @@ futronics.controller('addFundCtrl',
                         var data = $rootScope.formatInputString(data);
 
                         AddFundServices.addFund(data).then(function(response) {
-                            console.log('add fund response*************');
-                            console.log(response);
 
                             if (response == undefined) {
                                 $ionicPopup.show({
-                                    template: 'Sorry!!!you entered password may not be matched',
+                                    template: 'Sorry!!!you entered password may be not matched',
+                                    title: '<p style="color:black"><b>Error!!!</b></p>',
+                                    scope: $scope,
+                                    buttons: [{
+                                        text: 'Ok',
+                                        type: 'button-calm'
+
+                                    }]
+                                });
+                            } else if (response.data.status == 0) {
+                                $ionicPopup.show({
+                                    template: 'Sorry!!!you entered password may be not matched',
                                     title: '<p style="color:black"><b>Error!!!</b></p>',
                                     scope: $scope,
                                     buttons: [{
@@ -158,12 +165,8 @@ futronics.controller('addFundCtrl',
 
                         // PaypalService.initPaymentUI().then(function () {
                         //     PaypalService.makePayment($rootScope.slidingAmount, "Total Amount").then(function (response) {
-                        //         // alert("success"+JSON.stringify(response));
-
 
                         //         AddFundServices.addFund(data).then(function(response){
-                        //         console.log('add fund response*************');
-                        //         console.log(response);
 
                         //             if(response==undefined){
                         //                 $ionicPopup.show({

@@ -1,0 +1,391 @@
+futronics.controller('campaignBrowseControllers',
+    function($scope, Loader, UserListService, AllUser_MyContribution, StorageService,
+        $localstorage, $state, $rootScope, AccountService, $ionicPopup,
+        $timeout, ionPullUpFooterState, stateFactory, LogoutService, IMAGE, $http,
+        $stateParams, ContributionServices) {
+
+        if (localStorage.getItem('userInfo')) {
+            var user = JSON.parse(localStorage.getItem('userInfo'));
+            if (user.userInfo.result[0].user_id != null || user.userInfo.result[0].user_id != '') {
+                var user_id = user.userInfo.result[0].user_id;
+            }
+            // For getting value stateFactory.getCurrentState()
+            stateFactory.setCurrentState($state.current.name, user_id);
+            stateFactory.getCurrentState(user_id);
+        }
+        if ($rootScope.isMaintain === undefined) {
+            $rootScope.isMaintain = null;
+        }
+        var contributedIdList = [];
+        Loader.showLoading();
+        ContributionServices.whomeIContributed($rootScope.formatInputString({ user_id: $rootScope.userId }))
+            .then(function(res) {
+                angular.forEach(res.data.result.all_contributors, function(value, key) {
+                    contributedIdList.push(value);
+                });
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+
+        if ($localstorage.get('Welcome')) {
+            $ionicPopup.show({
+                template: 'Support others to become part of the community”. Please restate this to “You’re on your way to a new life! We have credited your account with $' + $stateParams.motivationAmount + ' for the use of supporting others. Please take this time, prior to your campaign setup, to support your fellow Diet Money user. You can complete your campaign setup thereafter',
+                title: '<p style="color:black"><b>Welcome</b></p>',
+                scope: $scope,
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-calm'
+                }]
+            });
+            $localstorage.remove('Welcome');
+        }
+
+        $scope.noData = false;
+
+        $scope.onFooterExpand = function() {};
+        $scope.onFooterCollapse = function() {};
+
+        $scope.expand = function() {
+            $scope.footerState = ionPullUpFooterState.EXPANDED;
+        };
+        $scope.check = 0;
+        $scope.userdata = '';
+
+        $scope.userdata = AccountService.getUserInfo();
+        if ($scope.userdata == undefined) {
+            $scope.check = 0;
+        } else {
+            $scope.check = $scope.userdata.userInfo.status;
+        }
+
+        $scope.myOwnProfile = function() {
+            if ($rootScope.user_id == null || $rootScope.user_id == '' || $rootScope.user_id == undefined) {
+                $state.go('profile');
+            } else {
+                localStorage.removeItem('viewIndividualProfile_globalChat');
+                localStorage.setItem('myProfile', '1');
+                $state.go('profile');
+            }
+        };
+        /* ***** Logout **** */
+        $scope.logout = function() {
+            LogoutService.logout();
+        };
+        StorageService.storage();
+        $scope.noMoreItemsAvailable = false;
+        $scope.pageValue = 1;
+
+        $scope.usrId = function(data) {
+            return $rootScope.user_id !== data.user_details.user_id;
+        };
+
+        $rootScope.allUser = [];
+        var allCorrectDetails = [];
+        var countNosOfStatusOne = 0;
+        $scope.pageValue = 1;
+        $scope.userListShowbeforeLogin = [];
+
+        var data = {
+            page: $scope.pageValue
+        };
+        var data = $rootScope.formatInputString(data);
+
+
+        UserListService.userListOnLoad(data)
+            .then(function(res) {
+                if (res.data.status !== 2) {
+                    $localstorage.set('allUserDetails', JSON.stringify(res.data.result));
+                    if (res.data.result.length !== 0) {
+                        for (var i = 0; i < res.data.result.length; i++) {
+                            if (res.data.result[i].campaign.length > 0) {
+                                if (res.data.result[i].campaign[0].campaign_status == 1) {
+
+                                    if ($rootScope.user_id != res.data.result[i].user_details.user_id) {
+                                        $rootScope.allUser.push(res.data.result[i]);
+                                        Loader.hideLoading();
+                                    }
+
+                                    $scope.callLoadMore();
+
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                    if (localStorage.getItem('allUserDetails')) {
+                        AllUser_MyContribution.storage();
+
+                        $scope.userListShowbeforeLogin = [];
+
+                        var initialPageNo = Math.ceil($rootScope.all_user_details.length / 20);
+                        $scope.pageValue = initialPageNo;
+                        $scope.loadMoreX = function() {
+                            if ($scope.pageValue == 0) {
+                                $scope.pageValue++;
+                            } else {
+                                $scope.pageValue++;
+                            }
+                            var data = {
+                                page: $scope.pageValue
+                            };
+                            var data = $rootScope.formatInputString(data);
+                            UserListService.userListOnLoad(data).then(function(res) {
+
+                                if (res.data.message === "No result found") {
+                                    $timeout(function() {
+                                        $scope.noData = false;
+                                    }, 2500);
+                                    $scope.noMoreItemsAvailable = true;
+                                    $scope.pageValue = 0;
+
+                                } else {
+                                    for (var i = 0; i < res.data.result.length; i++) {
+                                        if (res.data.result[i].campaign.length > 0) {
+                                            if (res.data.result[i].campaign[0].campaign_status == 1) {
+                                                if ($rootScope.user_id != res.data.result[i].user_details.user_id) {
+                                                    for (var j = 0; j < $rootScope.allUser.length; j++) {
+                                                        allCorrectDetails.push($rootScope.allUser[j].user_details.user_id)
+                                                    }
+
+                                                    if (allCorrectDetails.indexOf(res.data.result[i].user_details.user_id) == -1)
+                                                        $rootScope.allUser.push(res.data.result[i]);
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    $localstorage.set('allUserDetails', JSON.stringify($rootScope.allUser));
+
+                                };
+                                $scope.$broadcast('scroll.infiniteScrollComplete');
+                            });
+
+                        };
+                    }
+                }
+            });
+
+        $scope.goToContribution = function(single_user) {
+            if (contributedIdList != undefined) {
+                if (localStorage.getItem('endcampaign')) {
+                    localStorage.setItem('campaignCompleteOrNot', $rootScope.userId);
+                    localStorage.removeItem('showGlobalChat_afterEndCampaign');
+                }
+                var userName = single_user.user_details.full_name;
+                var userId = single_user.user_details.user_id;
+
+                localStorage.setItem('single_user', JSON.stringify(single_user));
+                if (!$rootScope.userId) {
+
+                    $ionicPopup.show({
+                        template: 'Please Login to participate in campaign',
+                        title: '<p style="color:black"><b>Attention!!!</b></p>',
+                        scope: $scope,
+                        buttons: [{
+                            text: 'Ok',
+                            type: 'button-calm',
+                            onTap: function(e) {
+                                $state.go("login");
+                                return;
+
+                            }
+                        }]
+                    });
+                } else {
+                    if (contributedIdList.length === 0) {
+                        $ionicPopup.show({
+                            template: 'You’re about to contribute to ' + userName,
+                            title: '<p style="color:black"><b>Attention!!!</b></p>',
+                            scope: $scope,
+                            buttons: [{
+                                text: 'Back',
+                                type: 'button-dark',
+                                onTap: function(e) {
+                                    return;
+                                }
+                            }, {
+                                text: 'Yes',
+                                type: 'button-calm',
+                                onTap: function(e) {
+                                    $state.go('contribution', { id: single_user.user_details.user_id });
+                                    return;
+                                }
+                            }]
+                        });
+                    } else {
+                        if (contributedIdList.indexOf(userId) > -1) {
+                            $ionicPopup.show({
+                                template: 'You’ve supported ' + userName + ' already, would you like to support him more funds?',
+                                title: '<p style="color:black"><b>Attention!!!</b></p>',
+                                scope: $scope,
+                                buttons: [{
+                                    text: 'Back',
+                                    type: 'button-dark',
+                                    onTap: function(e) {
+                                        return;
+                                    }
+                                }, {
+                                    text: 'Yes',
+                                    type: 'button-calm',
+                                    onTap: function(e) {
+                                        $state.go('contribution', { id: single_user.user_details.user_id });
+                                        return;
+                                    }
+                                }]
+                            });
+                        } else {
+                            repeateContribuationPopup(userName);
+                        }
+                    }
+                }
+            } else {
+                localStorage.setItem('single_user', JSON.stringify(single_user));
+                $state.go('contribution', { id: single_user.user_details.user_id });
+            }
+        }
+
+        function repeateContribuationPopup(userName, userId) {
+            $ionicPopup.show({
+                template: 'You’re about to contribute to ' + userName,
+                title: '<p style="color:black"><b>Attention!!!</b></p>',
+                scope: $scope,
+                buttons: [{
+                    text: 'Back',
+                    type: 'button-dark',
+                    onTap: function(e) {
+                        return;
+                    }
+                }, {
+                    text: 'Yes',
+                    type: 'button-calm',
+                    onTap: function(e) {
+                        $state.go('contribution', { id: userId });
+                        return;
+                    }
+                }]
+            });
+        }
+        /* *****  user own profle start **** */
+        if (localStorage.getItem('myProfile') != null) {
+            $scope.totalCampaign = '';
+            $scope.myProfile = 0;
+            $scope.my_details = '';
+            $scope.my_details = JSON.parse(localStorage.getItem('userInfo'));
+            if ($scope.my_details.userInfo.result.campaign == []) {
+                $scope.totalCampaign = 0;
+            }
+
+            $scope.myProfile = '';
+        } else {
+            $scope.totalCampaign = 0;
+        }
+        $scope.callLoadMore = function() {
+
+            if (++countNosOfStatusOne <= 20) {
+
+                var initialPageNo = 1;
+                $scope.pageValue = initialPageNo;
+
+                if ($scope.pageValue == 0) {
+                    $scope.pageValue++;
+                } else {
+                    $scope.pageValue++;
+                }
+                var data = {
+                    page: $scope.pageValue
+                };
+                var data = $rootScope.formatInputString(data);
+                UserListService.userListOnLoad(data).then(function(res) {
+
+                    if (res.data.message === "No result found") {
+                        $timeout(function() {
+                            $scope.noData = false;
+                        }, 2500);
+                        $scope.noMoreItemsAvailable = true;
+                        $scope.pageValue = 0;
+
+                    } else {
+                        for (var i = 0; i < res.data.result.length; i++) {
+                            if (res.data.result[i].campaign.length > 0) {
+                                if (res.data.result[i].campaign[0].campaign_status == 1) {
+                                    if ($rootScope.user_id != res.data.result[i].user_details.user_id) {
+                                        for (var j = 0; j < $rootScope.allUser.length; j++) {
+                                            allCorrectDetails.push($rootScope.allUser[j].user_details.user_id)
+                                        }
+
+                                        if (allCorrectDetails.indexOf(res.data.result[i].user_details.user_id) == -1)
+                                            $rootScope.allUser.push(res.data.result[i]);
+                                    }
+                                }
+                            }
+
+                        }
+                        $localstorage.set('allUserDetails', JSON.stringify($rootScope.allUser));
+
+                    };
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                });
+            }
+        }
+
+        $rootScope.slidingAmount = 0;
+        $scope.steps = 5;
+        $scope.floorValue = 0;
+
+        $rootScope.slider = {
+            value: 0,
+            options: {
+                floor: $scope.floorValue,
+                ceil: 1000,
+                step: $scope.steps,
+                translate: function(value) {
+                    return '&dollar;' + value;
+                },
+                id: 'slideEnded',
+                onEnd: $scope.myEndListener,
+                value: 0
+            }
+        };
+
+        $scope.signUp = function() {
+
+            if (!localStorage.getItem('isMaintainPhaseButton')) {
+                localStorage.setItem('isMaintainPhaseButton', false);
+            }
+            $ionicPopup.show({
+                template: '<rzslider rz-slider-model="slider.value"    rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>',
+                title: '<p style="color:black"><b>What amount motivates you?</b></p>',
+                scope: $scope,
+                buttons: [
+
+                    {
+                        text: 'Cancel',
+                        type: 'button-dark'
+                    },
+                    {
+                        text: '<b>Save</b>',
+                        type: 'button-calm',
+                        onTap: function(e) {
+
+                            if ($rootScope.slideValue == undefined || $rootScope.slideValue == null || $rootScope.slideValue == 0) {
+                                toastr.error('Motivation amount should be greater than 0');
+                                return false;
+                            }
+                            $state.go("signup", { motivationAmount: $rootScope.slideValue });
+                            return;
+                        }
+                    }
+                ]
+
+            });
+        };
+
+        /*** ****************** Get Slide End Value 0-1000 signup button start ********************** */
+        $scope.$on("slideEnded", function() {
+            $rootScope.slidingAmount = $scope.slider.value;
+            $rootScope.slideValue = $scope.slider.value;
+        });
+        /*** ****************** Get Slide End Value 0-1000 signup button end ************************ */
+    });

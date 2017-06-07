@@ -1,74 +1,74 @@
 <ion-view id="chatOnly" view-title="Chat" class="screenBackground">
-   <ion-header-bar class="screenBackground">
-      <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="globalChat"></button>
-      <h1 class="title">Chat</h1>
-   </ion-header-bar>
-   <ion-content>
-    <div class="full-height">
-        <div class="profile-chat user-scroll height100 paddingBottom56" scroll-to-top>
-            <div class="list" ng-repeat="message in messages | mutedUser" open-chat-popup on-long-press="itemOnLongPress()" on-touch-end="itemOnTouchEnd()">
-               <div class="item item-avatar">
-                  <img ng-src="{{message.user_image || 'img/no-user.png'}}" alt="" image-exists>
-                  <div class="avater-content">
-                     <p ng-model="message.text"> {{message.text}}</p>
-                  </div>
-               </div>
+    <ion-header-bar class="screenBackground">
+        <button class="button-icon icon  ion-ios7-arrow-back ion-android-arrow-back" style="color:white" ui-sref="globalChat"></button>
+        <h1 class="title">Chat</h1>
+    </ion-header-bar>
+    <ion-content>
+        <div class="full-height">
+            <div class="profile-chat user-scroll height100 paddingBottom56" scroll-to-top>
+                <div class="list" ng-repeat="message in messages | mutedUser" open-chat-popup on-long-press="itemOnLongPress()" on-touch-end="itemOnTouchEnd()">
+                    <div class="item item-avatar">
+                        <img ng-src="{{message.user_image || 'img/no-user.png'}}" alt="" image-exists>
+                        <div class="avater-content">
+                            <p ng-model="message.text"> {{message.text}}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-         </div>
-    </div>
-   </ion-content>
+        </div>
+    </ion-content>
 
     <ion-footer-bar class="fixed-chatting">
         <div class="profile-more-fld" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}">
             <div class="left">
-               <a href="#"><i class="icon ion-plus" ng-class="{ 'gold-icon': $root.isMaintain == 'true'}"></i></a>
+                <a href="javascript:void(0)"><i class="icon ion-plus" ng-class="{ 'gold-icon': $root.isMaintain == 'true'}"></i></a>
             </div>
             <div class="right">
-               <input type="text" ng-model="campaign_text" on-tap="checkMember()" class="inputBox" placeholder="Add Comment" >
-               <input type="submit" ng-click="addMessage()" value="Send">
+                <input type="text" ng-model="campaign_text" on-tap="checkMember()" class="inputBox" placeholder="Add Comment">
+                <input type="submit" ng-click="addMessage()" value="Send">
             </div>
-         </div>
+        </div>
     </ion-footer-bar>
 
     <script id="reportUser.html" type="text/ng-template">
         <ion-header-bar style="background-image: url(img/body-background.jpg); background-size: cover;">
-            <h1 class="title">Contact Us</h1> 
+            <h1 class="title">Contact Us</h1>
             <button class="button button-icon ion-close" style="color: #ddd;" ng-click="closeReportUserModal()"></button>
-          </ion-header-bar>
-          <ion-content style="background-image: url(img/body-background.jpg); background-size: cover;">
-            
-         <ion-list>
-            <div class="user-report user-scroll profile-chat" id="userReport">
-               <div class="row noPadding" ng-repeat="reportUser in reportUsers">
-                   <div class="col" ng-class="{disabled : reportUser.user_reported === 'true', border_report : muteUserId == reportUser.user_id  }">
-                      <h5 class="left">{{reportUser.user_name}}</h5>
-                      <button class="button button-small right" ng-if="reportUser.user_reported !== 'true'" ng-click="report(reportUser.user_id)">Report User</button>
-                   </div>
-              </div>
-            </div>
-        </ion-list>
-        </ion-modal-view>
+        </ion-header-bar>
+        <ion-content style="background-image: url(img/body-background.jpg); background-size: cover;">
+
+            <ion-list>
+                <div class="user-report user-scroll profile-chat" id="userReport">
+                    <div class="row noPadding" ng-repeat="reportUser in reportUsers">
+                        <div class="col" ng-class="{disabled : reportUser.user_reported === 'true', border_report : muteUserId == reportUser.user_id  }">
+                            <h5 class="left">{{reportUser.user_name}}</h5>
+                            <button class="button button-small right" ng-if="reportUser.user_reported !== 'true'" ng-click="report(reportUser.user_id)">Report User</button>
+                        </div>
+                    </div>
+                </div>
+            </ion-list>
+            </ion-modal-view>
     </script>
 
     <div class="user-popup" ng-class="myVar">
         <div class="user-popup-close" ng-click="myVar = 'hideIt'">X</div>
         <ul>
-          <li ng-click="giveCalory()">
-           <img src="img/give-calorie.svg" alt="">
-           <p> Give Calorie </p>
-         </li>
-         <li ng-click="muteUser()">
-           <img src="img/Mute-user.svg" alt="">
-           <p> Mute User </p>
-         </li>
-         <li ng-click="addFriend()">
-           <img src="img/add-friend.svg" alt="">
-           <p> Add Friend </p>
-         </li>
-         <li ng-click="reportUser()">
-          <img src="img/report-user.svg" alt="">
-          <p> Report User </p>
-        </li>
+            <li ng-click="giveCalory()">
+                <img src="img/give-calorie.svg" alt="">
+                <p> Give Calorie </p>
+            </li>
+            <li ng-click="muteUser()">
+                <img src="img/Mute-user.svg" alt="">
+                <p> Mute User </p>
+            </li>
+            <li ng-click="addFriend()">
+                <img src="img/add-friend.svg" alt="">
+                <p> Add Friend </p>
+            </li>
+            <li ng-click="reportUser()">
+                <img src="img/report-user.svg" alt="">
+                <p> Report User </p>
+            </li>
         </ul>
-      </div>
+    </div>
 </ion-view>

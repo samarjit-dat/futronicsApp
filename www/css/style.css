@@ -2402,8 +2402,8 @@ ion-footer-bar.fixed-chatting.bottom {
 }
 
 video#video-player {
-    height: 100vh !important;
-    object-fit: cover;
+    height: 100%;
+    width: 100%;
 }
 
 .no-bar.has-footer {
@@ -3172,6 +3172,13 @@ h5.camp-btn {
     padding: 0;
     position: absolute;
     color: #ffff00;
+}
+
+.txt-hide {
+    color: rgb(203, 189, 199);
+    padding: 5px;
+    font-size: 18px;
+    border-radius: 5px;
 }
 
 

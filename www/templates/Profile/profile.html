@@ -27,7 +27,7 @@
                     <span class="profile-image" ng-class="{ 'profile-image-m': $root.isMaintain == 'true'}">
 
                     <img src="{{mainImage}}" class="profile-image circle" id="{{videoId || 'profileImage'}}" alt="" ng-click="openMainImageVideoModal()" image-exist/>
-                     <div ng-if="video_countdown" class="timer-part" countdown='' date='{{video_countdown}}'></div>
+                     <div  ng-if="video_countdown && myProfile=='0'" class="timer-part" countdown='' date='{{video_countdown}}'></div>
                 </span>
 
                     <div class="profile-des">
@@ -36,7 +36,7 @@
                             <ion-slide ng-repeat="profImage in profileImages track by $index">
                                 <div class="profImage" ng-repeat="pImage in profImage" ng-class="{ 'good' : pImage['user_whose_video_good'] !== null , 'bad' : pImage['user_whose_video_fake'] !== null ,'both_null' : pImage['user_whose_video_fake'] == null && pImage['user_whose_video_good'] == null }">
                                     <!--<img ng-repeat="pImage in profImage" ng-if="pImage['profile_image']" id="{{pImage['user_videos_id']}}" src="{{pImage['profile_image']}}" class="circle circleImage" alt="#1" image-swap/>-->
-                                    <img ng-if="pImage['thumb_url']" id="{{pImage['user_videos_id']}}" src="{{pImage['thumb_url']}}" data-video-url="{{pImage['video_url']}}" class="circle circleImage" image-swap/>
+                                    <img ng-if="pImage['thumb_url']" id="{{pImage['user_videos_id']}}" ng-src="{{pImage['thumb_url']}}" data-video-url="{{pImage['video_url']}}" class="circle circleImage" image-swap/>
                                     <span ng-if="pImage['thumb_url']" class="noti">{{(videoLength+1) - ($index+1)}}</span>
                                 </div>
                             </ion-slide>
@@ -44,7 +44,6 @@
 
                         <h4>{{individual_user_details.user_details.username || 'My' }} campaign</h4>
                         <span class="progress">Progress <strong>{{motivation_percentage || 0}}%</strong></span>
-                        <!--<span ng-if="profile_complete_show_progress==='1' || referState==='1' " class="progress">Progress <strong>50%</strong></span>-->
 
                         <div ng-if="$root.isMaintain == 'true'">
                             <img class="batch" alt="" ng-src="img/Batch.png">
@@ -119,21 +118,21 @@
                     <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="user_list()">+ Support Others</button></li>
 
                     <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="myProfile=='1'" ng-disabled="unCompleteCampaign==='1' || otheruserId!=='{{uid}}'" ui-sref="upload-video">+ Post Update</button></li>
-                    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign =='1' " ng-if="myProfile=='0'" ui-sref="upload-video">+ Post Update</button></li>
+                    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="unCompleteCampaign =='1' || campaign_status==0" ng-if="myProfile=='0'" ui-sref="upload-video">+ Post Update</button></li>
 
                     <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ui-sref="myCampaign">+ Market Campaign</button></li>
 
-                    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ui-sref="addFund">+ Add Funds</button></li>
+                    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-disabled="disabledAddbutton==1" ui-sref="addFund">+ Add Funds</button></li>
                     <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ui-sref="globalChat">+ Global Chat</button></li>
 
                     <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-click="myContribution()">+ Contributed Campaigns</button></li>
-                    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="endCampaignStatus" ng-click="startNewCampaign()">+ Start new campaign</button></li>
+                    <li><button class="button button-deep" ng-class="{ 'gold-button-deep': $root.isMaintain == 'true'}" ng-if="endCampaignStatus==1" ng-click="startNewCampaign()">+ Start new campaign</button></li>
                 </ul>
 
             </div>
 
 
-            <div class="profile-chat profile-scroll" id="profileChat" ng-if="myProfile=='1'">
+            <div class="profile-chat profile-scroll" id="profileChat" ng-if="privateMsgSetupFlag=='1'">
                 <!--               on-long-press="itemOnLongPress(message)" on-touch-end="itemOnTouchEnd()" -->
                 <div class="list" ng-repeat="message in messages">
                     <div class="item item-avatar">
@@ -222,8 +221,10 @@
                </div>
             </div>
          </div>-->
+
+
             <!--{{unCompleteCampaign}} {{completeOrNot}} {{uid}} {{myProfile}} -- {{showOrhidenav}}-->
-            <div class="profile-endcampaign" ng-show="unCompleteCampaign =='1' && completeOrNot =='{{uid}}'" ng-hide="showOrhidenav==1" ng-if="myProfile=='0' || myProfile == undefined" id="">
+            <div class="profile-endcampaign" ng-show="unCompleteCampaign =='1' && completeOrNot =='{{uid}}'" ng-hide="showOrhidenav==1 || staus_on==false" ng-if="myProfile=='0' || myProfile == undefined" id="">
 
                 <div class="profiletext" ng-if="referStae == 1 || referStae == 2">
                     <p style="color:yellow;">Your campaign is not fully set up yet</p>
@@ -236,6 +237,40 @@
                     <a ng-if="referStae==2" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
                     <a ng-if="referStae==3" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the campaign here</a>
                 </div>
+            </div>
+
+            <div class="profile-endcampaign" ng-if="completecampaingstatus==0 && endCampaignStatus==0" id="">
+
+                <div class="profiletext" ng-if="referStae == 1 || referStae == 2">
+                    <p style="color:yellow;">Your campaign is not fully set up yet</p>
+                    <p class="inCompleteCampaignMessage">Please Complete Your Campaign Setup to unlock all of our key features,tools and community</p>
+                </div>
+
+                <p class="inCompleteCampaignMessage profiletext" ng-if="referStae==3">Your campaign is not fully set up yet, please complete your campaign setup to unlock all Diet Monet features</p>
+                <div style="width: 300px; margin: 0 auto;">
+
+                    <a ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
+
+                </div>
+            </div>
+            <div class="profile-endcampaign" ng-show="uncompleteStartnew==1 && completeOrNot =='{{uid}}'" ng-hide="showOrhidenav==1 || staus_on==false" ng-if="myProfile=='0' || myProfile == undefined" id="">
+
+                <div class="profiletext" ng-if="referStae == 1 || referStae == 2">
+                    <p style="color:yellow;">Your campaign is not fully set up yet</p>
+                    <p class="inCompleteCampaignMessage">Please Complete Your Campaign Setup to unlock all of our key features,tools and community</p>
+                </div>
+
+                <p class="inCompleteCampaignMessage profiletext" ng-if="referStae==3">Your campaign is not fully set up yet, please complete your campaign setup to unlock all Diet Monet features</p>
+                <div style="width: 300px; margin: 0 auto;">
+                    <a ng-if="referStae==1" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="completeCampaignBtn" ng-click="completeCampaign()">Upload video to complete profile</a>
+                    <a ng-if="referStae==2" ng-class="{ 'gold-bg': $root.isMaintain == 'true'}" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the survey here</a>
+                    <a ng-if="referStae==3" class="completeCampaignBtn" ng-click="completeCampaign()">Complete the campaign here</a>
+                </div>
+            </div>
+
+
+            <div class="profile-endcampaign" ng-if="c_status==2">
+                <span class="txt-hide"><sup style="font-size:11px;color:red;">*</sup>you are now in hidden state.So,You are disconnected from all the current active campaigns</span>
             </div>
             <div class="profile-chat profile-scroll" id="profileChat" ng-show="hideOption==1">
                 <!--               on-long-press="itemOnLongPress(message)" on-touch-end="itemOnTouchEnd()" -->
@@ -291,7 +326,7 @@
 
 
             <!-- ng-show="unCompleteCampaign==='1' && completeOrNot==='_1' " ng-if="myProfile=='0'" -->
-            <div class="profile-chat profile-scroll" id="profileChat" ng-show="unCompleteCampaign !== '1' && completeOrNot !== '{{uid}}'" ng-if="myProfile=='0' || myProfile == undefined">
+            <div class="profile-chat profile-scroll" id="profileChat" ng-show="unCompleteCampaign !== '1' && completeOrNot !== '{{uid}}'" ng-if="privateMsgSetupFlag==2 || privateMsgSetupFlag == undefined">
                 <!--               on-long-press="itemOnLongPress(message)" on-touch-end="itemOnTouchEnd()" -->
                 <div class="list" ng-repeat="message in messages">
                     <div class="item item-avatar">

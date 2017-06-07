@@ -14,8 +14,6 @@ futronics.service("ContributionServices", function($http, $q, $localstorage, URL
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "contribution");
-            Loader.hideLoading();
             if ($rootScope.isMaintain == 'false') {
                 var userInfo = {
                     accessToken: response.data.access_token,
@@ -26,7 +24,6 @@ futronics.service("ContributionServices", function($http, $q, $localstorage, URL
             defered.resolve(response);
             return defered.promise;
         }, function(error) {
-            Loader.hideLoading();
             console.log(error + "error");
             defered.reject(error);
         });
@@ -57,15 +54,13 @@ futronics.service('AddFundServices', function($http, $q, URL, Loader, $localstor
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "fund");
             Loader.hideLoading();
-            var user_info = JSON.parse(localStorage.getItem("userInfo"));
-            user_info.userInfo.result.wallet = response.data.result.wallet;
-            var update_userInfo = JSON.stringify(user_info);
-            //            var userInfo = {
-            //                userInfo: update_userInfo
-            //            };
-            localStorage.setItem("userInfo", update_userInfo);
+            if (response.data.message == 'Fund Added Successfully!') {
+                var user_info = JSON.parse(localStorage.getItem("userInfo"));
+                user_info.userInfo.result.wallet = response.data.result.wallet;
+                var update_userInfo = JSON.stringify(user_info);
+                localStorage.setItem("userInfo", update_userInfo);
+            }
             defered.resolve(response);
             return defered.promise;
         }, function(error) {
@@ -87,7 +82,6 @@ futronics.service('ContactAdminCatagory', function($http, $q, URL, Loader, $loca
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 
         }).then(function(response) {
-            //console.log(response);
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -109,7 +103,6 @@ futronics.service('ContactAdminSend', function($http, $q, URL, Loader, $localsto
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            //console.log(response);
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -132,7 +125,6 @@ futronics.service('MaintainService', function($http, $q, URL, Loader, $localstor
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            //console.log(response);
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -160,7 +152,6 @@ futronics.service('FakeVideoService', function($http, $q, URL, Loader, $localsto
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            //console.log(response);
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -182,7 +173,6 @@ futronics.service('GoodVideoService', function($http, $q, URL, Loader, $localsto
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            //console.log(response);
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -202,7 +192,7 @@ futronics.service('FakevideoReportList', function($http, $q, URL, Loader, $local
         return $http({
             method: "GET",
             url: URL.BASE + "/fakeVideoReportOptions",
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }).then(function(response) {
             Loader.hideLoading();
             defered.resolve(response);
@@ -416,7 +406,6 @@ futronics.service('SponsorsAcquired', function($http, $q, URL, Loader, $localsto
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            //console.log(response);
             Loader.hideLoading();
             defered.resolve(response);
 
@@ -439,7 +428,6 @@ futronics.service('WeightLoseSuccessOrFail', function($http, $q, URL, Loader, $l
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "fund");
             Loader.hideLoading();
 
             defered.resolve(response);
@@ -507,8 +495,6 @@ futronics.directive('toggleColor', function() {
 
 futronics.service('HideCampaign', function($http, $q, $localstorage, URL, $rootScope) {
     this.userHideCampaign = function(data) {
-        //        console.log('HideCampaign');
-        //        console.log(data);
         var hideCampaignUrl;
         if ($rootScope.isMaintain == 'false') {
             hideCampaignUrl = "/hidetheCampain";
@@ -522,18 +508,9 @@ futronics.service('HideCampaign', function($http, $q, $localstorage, URL, $rootS
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log('response');
-            console.log(response);
             var user_info = JSON.parse(localStorage.getItem("userInfo"));
-            console.clear();
-            console.log(user_info);
-
-            //user_info.userInfo.result.campaign[0].campaign_status=response.data.status;
             user_info.userInfo.result.campaign[0].campaign_status = "2";
-
             var update_userInfo = JSON.stringify(user_info);
-            console.log('update_userInfo');
-            console.log(update_userInfo);
             localStorage.setItem("userInfo", update_userInfo);
 
             var all_user_details = JSON.parse(localStorage.getItem("allUserDetails"));
@@ -557,8 +534,6 @@ futronics.service('HideCampaign', function($http, $q, $localstorage, URL, $rootS
 
 futronics.service('ShowCampaign', function($http, $q, $localstorage, URL, $rootScope) {
     this.userShowCampaign = function(data) {
-        // console.log('ShowCampaign');
-        //        console.log(data);
         var showCampaignUrl;
         if ($rootScope.isMaintain == 'false') {
             showCampaignUrl = "/showtheCampain";
@@ -573,8 +548,6 @@ futronics.service('ShowCampaign', function($http, $q, $localstorage, URL, $rootS
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log('response');
-            console.log(response);
             var user_info = JSON.parse(localStorage.getItem("userInfo"));
             user_info.userInfo.result.campaign[0].campaign_status = "1";
             var update_userInfo = JSON.stringify(user_info);
@@ -609,7 +582,6 @@ futronics.service('CaloryHaveOrGiven', function($http, $q, URL, Loader, $localst
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response);
             Loader.hideLoading();
             defered.resolve(response);
 
@@ -633,7 +605,6 @@ futronics.service('FakeOrGood', function($http, $q, URL, Loader, $localstorage) 
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response);
             Loader.hideLoading();
             defered.resolve(response);
 
@@ -646,14 +617,13 @@ futronics.service('FakeOrGood', function($http, $q, URL, Loader, $localstorage) 
     };
 });
 
-futronics.service('check_GlobalCommunity', function($rootScope, $ionicPopup, $state) {
+futronics.service('check_GlobalCommunity', function($rootScope, $stateParams, $ionicPopup, $state) {
     this.check_memberOrNot = function() {
-
+        $stateParams.motivationAmount = null;
         if ($rootScope.user_id == null || $rootScope.user_id == '' || $rootScope.user_id == undefined) {
             $ionicPopup.show({
                 template: 'You must make an account to have access to the community. ',
                 title: '<p style="color:black"><b>Login/Signup</b></p>',
-                //scope: $scope,
                 buttons: [{
                         text: 'Back',
                         type: 'button-dark',
@@ -665,7 +635,31 @@ futronics.service('check_GlobalCommunity', function($rootScope, $ionicPopup, $st
                         text: 'Sign up',
                         type: 'button-calm',
                         onTap: function(e) {
-                            $state.go('signup');
+                            $ionicPopup.show({
+                                template: '<rzslider rz-slider-model="slider.value"    rz-slider-on-click="getSliderVal()" rz-slider-options="slider.options"></rzslider>',
+                                title: '<p style="color:black"><b>What amount motivates you?</b></p>',
+                                buttons: [
+
+                                    {
+                                        text: 'Cancel',
+                                        type: 'button-dark'
+                                    },
+                                    {
+                                        text: '<b>Save</b>',
+                                        type: 'button-calm',
+                                        onTap: function(e) {
+                                            if ($rootScope.slider.value == undefined || $rootScope.slider.value == null || $rootScope.slider.value == 0) {
+                                                toastr.error('Motivation amount should be greater than 0');
+                                                return false;
+                                            }
+                                            $state.go("signup", { motivationAmount: $rootScope.slider.value });
+                                            return;
+                                        }
+                                    }
+                                ]
+
+                            });
+
                         }
                     }
                 ]
@@ -678,9 +672,11 @@ futronics.service('check_GlobalCommunity', function($rootScope, $ionicPopup, $st
 futronics.service('check_hideOrShow', function($rootScope, $q, $localstorage, URL, Loader, $http) {
     this.hideShowLocalStorageValue = function(data) {
         var hideshow_storagevalue;
-        if ($rootScope.isMaintain == 'false') {
+
+        if ($rootScope.isMaintain == 'false' || $rootScope.isMaintain == undefined) {
             hideshow_storagevalue = "/checkIfHideShowCampaignWeightLoss";
-        } else {
+        }
+        if ($rootScope.isMaintain == 'true') {
             hideshow_storagevalue = "/checkIfHideShowCampaignMaintence";
         }
         var defered = $q.defer();
@@ -690,9 +686,8 @@ futronics.service('check_hideOrShow', function($rootScope, $q, $localstorage, UR
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "hideshow_storagevalue");
             Loader.hideLoading();
-            $localstorage.set("hideShowCampaign", response.data.result.weight_loss_hide_show_status);
+            //$localstorage.set("hideShowCampaign", response.data.result.weight_loss_hide_show_status);
             defered.resolve(response);
             return defered.promise;
         }, function(error) {
@@ -718,7 +713,6 @@ futronics.service('AfterEndCampaign', function($rootScope, $q, $localstorage, UR
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "end_storagevalue");
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -740,7 +734,6 @@ futronics.service('MotivationPercent', function($rootScope, $q, $localstorage, U
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "end_storagevalue");
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -884,12 +877,47 @@ futronics.service('NotificationSettings', function($rootScope, $q, $localstorage
     this.get = function(data) {
         var defered = $q.defer();
         return $http({
-            method: "GET",
+            method: "POST",
             url: URL.BASE + '/get_notification_data',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "end_storagevalue");
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            console.log(error + "error");
+            defered.reject(error);
+        });
+    };
+
+    this.set = function(data) {
+        var defered = $q.defer();
+        return $http({
+            method: "POST",
+            url: URL.BASE + '/upd_notification_data',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            console.log(error + "error");
+            defered.reject(error);
+        });
+    };
+
+    this.sendmail = function(data) {
+        var defered = $q.defer();
+        return $http({
+            method: "POST",
+            url: URL.BASE + '/send_email_notify_msg',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -902,6 +930,7 @@ futronics.service('NotificationSettings', function($rootScope, $q, $localstorage
 });
 
 futronics.service('checkingCurrentState', function($rootScope, $q, $localstorage, URL, Loader, $http) {
+    Loader.showLoading();
     this.post = function(data) {
         var defered = $q.defer();
         return $http({
@@ -930,8 +959,6 @@ futronics.service('checkingCurrentState', function($rootScope, $q, $localstorage
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log('get')
-            console.log(response)
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -944,7 +971,9 @@ futronics.service('checkingCurrentState', function($rootScope, $q, $localstorage
 });
 
 futronics.service('checkingActualState', function($rootScope, $q, $localstorage, URL, Loader, $http) {
+    Loader.showLoading();
     this.post = function(data) {
+
         var defered = $q.defer();
         return $http({
             method: "POST",
@@ -965,6 +994,7 @@ futronics.service('checkingActualState', function($rootScope, $q, $localstorage,
 
 
     this.get = function(data) {
+
         var defered = $q.defer();
         return $http({
             method: "POST",
@@ -972,8 +1002,6 @@ futronics.service('checkingActualState', function($rootScope, $q, $localstorage,
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log('get')
-            console.log(response)
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -994,7 +1022,6 @@ futronics.service('StartNewCampaign', function($rootScope, $q, $localstorage, UR
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "end_storagevalue");
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -1012,7 +1039,6 @@ futronics.service('StartNewCampaign', function($rootScope, $q, $localstorage, UR
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "end_storagevalue");
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -1025,7 +1051,9 @@ futronics.service('StartNewCampaign', function($rootScope, $q, $localstorage, UR
 });
 
 futronics.service('RefState', function($rootScope, $q, $localstorage, URL, Loader, $http) {
+    Loader.showLoading();
     this.post = function(data) {
+
         var defered = $q.defer();
         return $http({
             method: "POST",
@@ -1033,7 +1061,6 @@ futronics.service('RefState', function($rootScope, $q, $localstorage, URL, Loade
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "end_storagevalue");
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;
@@ -1044,6 +1071,7 @@ futronics.service('RefState', function($rootScope, $q, $localstorage, URL, Loade
         });
     };
     this.get = function(data) {
+
         var defered = $q.defer();
         return $http({
             method: "POST",
@@ -1051,7 +1079,960 @@ futronics.service('RefState', function($rootScope, $q, $localstorage, URL, Loade
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: data
         }).then(function(response) {
-            console.log(response + "end_storagevalue");
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            console.log(error + "error");
+            defered.reject(error);
+        });
+    };
+});
+
+futronics.service('EndCampaignStatus', function($rootScope, $q, $localstorage, URL, Loader, $http) {
+    Loader.showLoading();
+    this.post = function(data) {
+
+        var defered = $q.defer();
+        return $http({
+            method: "POST",
+            url: URL.BASE + '/upd_end_camp_stat',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            console.log(error + "error");
+            defered.reject(error);
+        });
+    };
+    this.get = function(data) {
+
+        var defered = $q.defer();
+        return $http({
+            method: "POST",
+            url: URL.BASE + '/get_camp_stat',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            console.log(error + "error");
+            defered.reject(error);
+        });
+    };
+});
+
+futronics.service('FingerprintServices', function($rootScope, $q, $localstorage, URL, Loader, $http) {
+    this.registerToken = function(data) {
+        var defered = $q.defer();
+        return $http({
+            method: "POST",
+            url: URL.BASE + '/fingerprint_token_register',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            console.log(error + "error");
+            defered.reject(error);
+        });
+    };
+});
+
+futronics.service("LocalStorageRemoveService",
+    function($localstorage, $ionicPopup, StorageService, $state, $rootScope) {
+        this.storageRemove = function() {
+            $localstorage.remove('otherProfileDetails');
+            $localstorage.remove('otherUserCampaignId');
+            $localstorage.remove('isMaintainPhase');
+            $localstorage.remove('campaignCompleteOrNot');
+            $localstorage.remove('campaign_id');
+            $localstorage.remove('ShowAlertForMaintenancePhase');
+            $localstorage.remove('newsFeed');
+            $localstorage.remove('hideShowCampaign');
+            $localstorage.remove('myProfile');
+            $localstorage.remove('viewIndividualProfile_globalChat');
+            $localstorage.remove('startNew');
+            $localstorage.remove('currentSate');
+            $localstorage.remove('actualState');
+            $localstorage.remove('refrstate');
+            $localstorage.remove('hideShowCampaign');
+        };
+    });
+
+futronics.service("LogoutService",
+    function($localstorage, $ionicPopup, StorageService,
+        LocalStorageRemoveService, $state, $rootScope) {
+        this.logout = function() {
+            var userInfo = null;
+            var buttonType = 'button-calm';
+
+            if ($rootScope.isMaintain == 'true') {
+                buttonType = 'button-calm gold-bg'
+            }
+
+            $localstorage.remove('userInfo');
+            if (userInfo == "" || userInfo == null) {
+                $ionicPopup.show({
+                    template: 'You successfully logged out',
+                    title: '<p style="color:black"><b>Logout</b></p>',
+                    buttons: [{
+                            text: 'Cancel',
+                            type: 'button-dark'
+                        },
+                        {
+                            text: 'Ok',
+                            type: buttonType,
+                            onTap: function(e) {
+                                StorageService.storage();
+                                LocalStorageRemoveService.storageRemove();
+                                $state.go('login');
+                                return;
+                            }
+                        }
+                    ]
+                });
+            }
+        };
+    });
+
+futronics.service("newsFeedServices", function($http, $q, $ionicPopup, URL, Loader) {
+    this.news = function() {
+        var defered = $q.defer();
+        return $http({
+            method: "POST",
+            url: URL.BASE + "/newsFeed",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+
+        }).then(function(response) {
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            defered.reject(error);
+        });
+    };
+});
+
+futronics.service("QuestionOneService", function($http, $q, URL, $localstorage, Loader) {
+    this.FirstQuestion = function(data) {
+        Loader.showLoading();
+        var defered = $q.defer();
+        $http({
+            method: "POST",
+            url: URL.BASE + "/newCampainQuestionAnswer",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            var userInfo = {
+                accessToken: response.data.access_token,
+                userInfo: response.data
+            };
+            $localstorage.setObject("userInfo", userInfo);
+            defered.resolve(response);
+            Loader.hideLoading();
+        }, function(error) {
+            defered.reject(error);
+            Loader.hideLoading();
+        });
+        return defered.promise;
+    };
+});
+
+futronics.service('QuestionListService', function($http, $q, URL, Loader, $localstorage) {
+    this.QuestionList = function() {
+        Loader.showLoading();
+        var defered = $q.defer();
+        $http({
+            method: "GET",
+            url: URL.BASE + "/questionList",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+
+        }).then(function(response) {
+            Loader.hideLoading();
+            defered.resolve(response);
+        }, function(error) {
+            Loader.hideLoading();
+            console.log(error + "error");
+            defered.reject(error);
+        });
+        return defered.promise;
+    };
+});
+futronics.service("CountryListService", function($http, $q, URL, Loader) {
+    this.getCountry = function(dataUrl) {
+        Loader.showLoading();
+        var defered = $q.defer();
+        return $http({
+            method: "POST",
+            url: URL.BASE + "/" + dataUrl,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+
+        }).then(function(response) {
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            defered.reject(error);
+        });
+    };
+
+});
+
+futronics.service("UserListService", function($http, $ionicPopup, $q, Loader, $localstorage, URL, $rootScope) {
+    this.userListOnLoad = function(data) {
+        var defered = $q.defer();
+        Loader.showLoading();
+        return $http({
+            method: "POST",
+            url: URL.BASE + "/userList",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            if (response.data.status == 2) {
+                if ($rootScope.currentState == "globalChat" && $rootScope.noMore++ < 1) {
+                    var loadMoreId = document.getElementById('loadMore');
+                    if ($rootScope.previousState != 'splash' || $rootScope.previousState != '') {
+                        toastr.error('No more data available');
+                    }
+                    $rootScope.nomoredata_flag = 1;
+                }
+            }
+            defered.resolve(response);
+            Loader.hideLoading();
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            $ionicPopup.show({
+                template: 'Sorry, Slow server connectivity detected. Please wait a while or try again.',
+                title: 'Slow  Connection',
+                buttons: [{
+                        text: 'Cancel',
+                        type: 'button-dark'
+                    },
+                    {
+                        text: '<b>Ok</b>',
+                        type: 'button-calm',
+                        onTap: function(e) {
+
+                            ionic.Platform.exitApp();
+                        }
+                    }
+                ]
+
+            });
+            defered.reject(error);
+        });
+
+    };
+});
+
+futronics.service("StorageService", function($rootScope, $localstorage, IMAGE, RefState) {
+    this.storage = function() {
+
+        if (localStorage.getItem('userInfo') !== null) {
+
+            $rootScope.user_id = '';
+            $rootScope.noImage = IMAGE.BASE_IMAGE;
+            $rootScope.user = JSON.parse(localStorage.getItem('userInfo'));
+            if ($rootScope.user.userInfo.result[0].user_id != null || $rootScope.user.userInfo.result[0].user_id != '') {
+                $rootScope.user_id = $rootScope.user.userInfo.result[0].user_id;
+                $rootScope.start_date = $rootScope.user.userInfo.result[0].add_date;
+                $rootScope.walletValue = $rootScope.user.userInfo.result.wallet;
+                $rootScope.checkloginuserornot = $rootScope.user_id;
+                /* 31.03 */
+                if ($rootScope.user.userInfo.result.campaign.length != 0) {
+                    $rootScope.campaign_datetime = $rootScope.user.userInfo.result.campaign[0].campaign_datetime;
+                    $rootScope.campaign_date = $rootScope.campaign_datetime.split(' ');
+                    $rootScope.goal = $rootScope.user.userInfo.result.campaign[0].proposed_weight;
+                    $rootScope.currentWeight = $rootScope.user.userInfo.result.campaign[0].current_weight;
+                    $rootScope.campaign_status = $rootScope.user.userInfo.result.campaign[0].campaign_status;
+                    $rootScope.runningCampaign_id = $rootScope.user.userInfo.result.campaign[0].campaign_id;
+
+                }
+                if ($rootScope.user.userInfo.result.profile_videos.length > 0) {
+
+                    $rootScope.profile_complete_show_progress = '1';
+                    if (localStorage.getItem('actualState')) {
+                        var _state = localStorage.getItem('actualState');
+
+                        var u = 1;
+                        var q = 2;
+                        var o = 3;
+                        if ((_state == 'upload-video')) {
+
+                            var param = { user_id: $rootScope.user_id, ref_status: u };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 1);
+                                } else {
+                                    return false;
+                                }
+                            });
+                        } else if ((_state == 'questions')) {
+                            var param = { user_id: $rootScope.user_id, ref_status: q };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 2);
+                                } else {
+                                    return false;
+                                }
+                            });
+
+                        } else if ((_state == 'campaignBrowse') || (_state == 'contribution') ||
+                            (_state == 'thanksAfterContribution')) {
+                            var param = { user_id: $rootScope.user_id, ref_status: o };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 3);
+                                } else {
+                                    return false;
+                                }
+
+                            })
+                        } else {
+
+                            if ($rootScope.user.userInfo.result.campaign.length != 0) {
+                                if ($rootScope.campaign_status == 0) {
+                                    var param = { user_id: $rootScope.user_id, ref_status: o };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 3);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+
+                                } else if ((_state == 'upload-video') && ($rootScope.campaign_status == 1)) {
+                                    var param = { user_id: $rootScope.user_id, ref_status: u };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 1);
+                                        } else {
+                                            return false;
+                                        }
+
+                                    })
+
+                                } else {
+                                    if (localStorage.getItem('actualState')) {
+                                        var _stateSub = localStorage.getItem('actualState');
+                                        if (_stateSub == 2 || _stateSub == 'questions') {
+                                            var param = { user_id: $rootScope.user_id, ref_status: q };
+                                            var data = $rootScope.formatInputString(param);
+                                            RefState.post(data).then(function(response) {
+                                                if (response.data.status == 1) {
+                                                    localStorage.setItem("refrstate", 2);
+                                                } else {
+                                                    return false;
+                                                }
+
+                                            })
+                                        }
+                                        if (_stateSub == 1 || _stateSub == 'upload-video') {
+                                            var param = { user_id: $rootScope.user_id, ref_status: u };
+                                            var data = $rootScope.formatInputString(param);
+                                            RefState.post(data).then(function(response) {
+
+                                                if (response.data.status == 1) {
+                                                    localStorage.setItem("refrstate", 1);
+                                                } else {
+                                                    return false;
+                                                }
+
+                                            })
+                                        }
+                                    } else {
+                                        var param = { user_id: $rootScope.user_id, ref_status: o };
+                                        var data = $rootScope.formatInputString(param);
+                                        RefState.post(data).then(function(response) {
+                                            if (response.data.status == 1) {
+                                                localStorage.setItem("refrstate", 3);
+                                            } else {
+                                                return false;
+                                            }
+                                        })
+                                    }
+
+                                }
+                            } else {
+                                var param = { user_id: $rootScope.user_id, ref_status: o };
+                                var data = $rootScope.formatInputString(param);
+                                RefState.post(data).then(function(response) {
+
+                                    if (response.data.status == 1) {
+                                        localStorage.setItem("refrstate", 3);
+                                    } else {
+                                        return false;
+                                    }
+                                })
+                            }
+                        }
+                    }
+                    if (localStorage.getItem('currentSate')) {
+                        var u = 1,
+                            q = 2,
+                            o = 3;
+                        var _state = localStorage.getItem('currentSate');
+
+                        if (_state == 'upload-video') {
+
+                            var param = { user_id: $rootScope.user_id, ref_status: u };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 1);
+                                } else {
+                                    return false;
+                                }
+                            })
+                        } else if ((_state == 'questions')) {
+
+                            var param = { user_id: $rootScope.user_id, ref_status: q };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 2);
+                                } else {
+                                    return false;
+                                }
+                            })
+                        } else if ((_state == 'campaignBrowse') || (_state == 'contribution') ||
+                            (_state == 'thanksAfterContribution')) {
+                            if (localStorage.getItem('actualState')) {
+                                var _stateSub = localStorage.getItem('actualState');
+                                if (_stateSub == 2 || _stateSub == 'questions') {
+                                    var param = { user_id: $rootScope.user_id, ref_status: q };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 2);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+                                }
+                                if (_stateSub == 1 || _stateSub == 'upload-video') {
+                                    var param = { user_id: $rootScope.user_id, ref_status: u };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 1);
+                                        } else {
+                                            return false;
+                                        }
+
+                                    })
+                                }
+                            } else {
+                                var param = { user_id: $rootScope.user_id, ref_status: o };
+                                var data = $rootScope.formatInputString(param);
+                                RefState.post(data).then(function(response) {
+                                    if (response.data.status == 1) {
+                                        localStorage.setItem("refrstate", 3);
+                                    } else {
+                                        return false;
+                                    }
+                                })
+                            }
+                        } else {
+
+                            if (localStorage.getItem('actualState')) {
+
+                                var current_state = localStorage.getItem('actualState');
+
+                            }
+                            if ($rootScope.user.userInfo.result.campaign.length != 0) {
+                                if ($rootScope.campaign_status == 0) {
+                                    var param = { user_id: $rootScope.user_id, ref_status: o };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 3);
+                                        } else {
+                                            return false;
+                                        }
+
+                                    })
+                                } else if ((current_state == 'upload-video') && ($rootScope.campaign_status == 1)) {
+                                    var param = { user_id: $rootScope.user_id, ref_status: u };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 1);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+                                } else {
+
+                                    if (localStorage.getItem('actualState')) {
+                                        var _stateSub = localStorage.getItem('actualState');
+                                        if (_stateSub == 2 || _stateSub == 'questions') {
+                                            var param = { user_id: $rootScope.user_id, ref_status: q };
+                                            var data = $rootScope.formatInputString(param);
+                                            RefState.post(data).then(function(response) {
+                                                if (response.data.status == 1) {
+                                                    localStorage.setItem("refrstate", 2);
+                                                } else {
+                                                    return false;
+                                                }
+                                            })
+                                        }
+                                        if (_stateSub == 1 || _stateSub == 'upload-video') {
+                                            var param = { user_id: $rootScope.user_id, ref_status: u };
+                                            var data = $rootScope.formatInputString(param);
+                                            RefState.post(data).then(function(response) {
+                                                if (response.data.status == 1) {
+                                                    localStorage.setItem("refrstate", 1);
+                                                } else {
+                                                    return false;
+                                                }
+                                            })
+                                        }
+                                    } else {
+                                        var param = { user_id: $rootScope.user_id, ref_status: o };
+                                        var data = $rootScope.formatInputString(param);
+                                        RefState.post(data).then(function(response) {
+                                            if (response.data.status == 1) {
+                                                localStorage.setItem("refrstate", 3);
+                                            } else {
+                                                return false;
+                                            }
+                                        })
+                                    }
+                                }
+                            } else {
+                                var param = { user_id: $rootScope.user_id, ref_status: o };
+                                var data = $rootScope.formatInputString(param);
+                                RefState.post(data).then(function(response) {
+                                    if (response.data.status == 1) {
+                                        localStorage.setItem("refrstate", 3);
+                                    } else {
+                                        return false;
+                                    }
+                                })
+                            }
+                        }
+                    }
+                } else {
+                    var u = 1,
+                        q = 2,
+                        o = 3;
+                    if (localStorage.getItem('actualState')) {
+                        var _state = localStorage.getItem('actualState');
+                        if ((_state == 'upload-video')) {
+                            var param = { user_id: $rootScope.user_id, ref_status: u };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 1);
+                                } else {
+                                    return false;
+                                }
+                            })
+
+                        } else if ((_state == 'questions')) {
+
+                            var param = { user_id: $rootScope.user_id, ref_status: q };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 2);
+                                } else {
+                                    return false;
+                                }
+                            })
+
+                        } else if ((_state == 'campaignBrowse') || (_state == 'contribution') ||
+                            (_state == 'thanksAfterContribution')) {
+                            var param = { user_id: $rootScope.user_id, ref_status: o };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 3);
+                                } else {
+                                    return false;
+                                }
+                            })
+                        } else {
+
+                            if ($rootScope.user.userInfo.result.campaign.length != 0) {
+                                if ($rootScope.campaign_status == 0) {
+                                    var param = { user_id: $rootScope.user_id, ref_status: o };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 3);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+
+                                } else if ((_state == 'upload-video') && ($rootScope.campaign_status == 1)) {
+                                    var param = { user_id: $rootScope.user_id, ref_status: u };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 1);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+
+                                } else {
+                                    if (localStorage.getItem('actualState')) {
+                                        var _stateSub = localStorage.getItem('actualState');
+                                        if (_stateSub == 2 || _stateSub == 'questions') {
+                                            var param = { user_id: $rootScope.user_id, ref_status: q };
+                                            var data = $rootScope.formatInputString(param);
+                                            RefState.post(data).then(function(response) {
+                                                if (response.data.status == 1) {
+                                                    localStorage.setItem("refrstate", 2);
+                                                } else {
+                                                    return false;
+                                                }
+                                            })
+                                        }
+                                        if (_stateSub == 1 || _stateSub == 'upload-video') {
+                                            var param = { user_id: $rootScope.user_id, ref_status: u };
+                                            var data = $rootScope.formatInputString(param);
+                                            RefState.post(data).then(function(response) {
+                                                if (response.data.status == 1) {
+                                                    localStorage.setItem("refrstate", 1);
+                                                } else {
+                                                    return false;
+                                                }
+                                            })
+                                        }
+                                    } else {
+                                        var param = { user_id: $rootScope.user_id, ref_status: o };
+                                        var data = $rootScope.formatInputString(param);
+                                        RefState.post(data).then(function(response) {
+                                            if (response.data.status == 1) {
+                                                localStorage.setItem("refrstate", 3);
+                                            } else {
+                                                return false;
+                                            }
+                                        })
+                                    }
+
+                                }
+                            } else {
+                                var param = { user_id: $rootScope.user_id, ref_status: o };
+                                var data = $rootScope.formatInputString(param);
+                                RefState.post(data).then(function(response) {
+                                    if (response.data.status == 1) {
+                                        localStorage.setItem("refrstate", 3);
+                                    } else {
+                                        return false;
+                                    }
+                                })
+                            }
+                        }
+                    }
+                    if (localStorage.getItem('currentSate')) {
+                        var u = 1,
+                            q = 2,
+                            o = 3;
+                        var _state = localStorage.getItem('currentSate');
+
+                        if (_state == 'upload-video') {
+
+                            var param = { user_id: $rootScope.user_id, ref_status: u };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 1);
+                                } else {
+                                    return false;
+                                }
+                            })
+                        } else if ((_state == 'questions')) {
+
+                            var param = { user_id: $rootScope.user_id, ref_status: q };
+                            var data = $rootScope.formatInputString(param);
+                            RefState.post(data).then(function(response) {
+                                if (response.data.status == 1) {
+                                    localStorage.setItem("refrstate", 2);
+                                } else {
+                                    return false;
+                                }
+                            })
+                        } else if ((_state == 'campaignBrowse') || (_state == 'contribution') ||
+                            (_state == 'thanksAfterContribution')) {
+                            if (localStorage.getItem('actualState')) {
+                                var _stateSub = localStorage.getItem('actualState');
+                                if (_stateSub == 2 || _stateSub == 'questions') {
+                                    var param = { user_id: $rootScope.user_id, ref_status: q };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 2);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+                                }
+                                if (_stateSub == 1 || _stateSub == 'upload-video') {
+                                    var param = { user_id: $rootScope.user_id, ref_status: u };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 1);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+                                }
+                            } else {
+                                var param = { user_id: $rootScope.user_id, ref_status: o };
+                                var data = $rootScope.formatInputString(param);
+                                RefState.post(data).then(function(response) {
+                                    if (response.data.status == 1) {
+                                        localStorage.setItem("refrstate", 3);
+                                    } else {
+                                        return false;
+                                    }
+                                })
+                            }
+                        } else {
+                            var u = 1,
+                                q = 2,
+                                o = 3;
+                            if (localStorage.getItem('actualState')) {
+
+                                var current_state = localStorage.getItem('actualState');
+
+                            }
+                            if ($rootScope.user.userInfo.result.campaign.length != 0) {
+                                if ($rootScope.campaign_status == 0) {
+                                    var param = { user_id: $rootScope.user_id, ref_status: o };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 3);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+                                } else if ((current_state == 'upload-video') && ($rootScope.campaign_status == 1)) {
+                                    var param = { user_id: $rootScope.user_id, ref_status: u };
+                                    var data = $rootScope.formatInputString(param);
+                                    RefState.post(data).then(function(response) {
+                                        if (response.data.status == 1) {
+                                            localStorage.setItem("refrstate", 1);
+                                        } else {
+                                            return false;
+                                        }
+                                    })
+                                } else {
+
+                                    if (localStorage.getItem('actualState')) {
+                                        var _stateSub = localStorage.getItem('actualState');
+                                        if (_stateSub == 2 || _stateSub == 'questions') {
+                                            var param = { user_id: $rootScope.user_id, ref_status: q };
+                                            var data = $rootScope.formatInputString(param);
+                                            RefState.post(data).then(function(response) {
+                                                if (response.data.status == 1) {
+                                                    localStorage.setItem("refrstate", 2);
+                                                } else {
+                                                    return false;
+                                                }
+                                            })
+                                        }
+                                        if (_stateSub == 1 || _stateSub == 'upload-video') {
+                                            var param = { user_id: $rootScope.user_id, ref_status: u };
+                                            var data = $rootScope.formatInputString(param);
+                                            RefState.post(data).then(function(response) {
+                                                if (response.data.status == 1) {
+                                                    localStorage.setItem("refrstate", 1);
+                                                } else {
+                                                    return false;
+                                                }
+                                            })
+                                        }
+                                    } else {
+                                        var param = { user_id: $rootScope.user_id, ref_status: o };
+                                        var data = $rootScope.formatInputString(param);
+                                        RefState.post(data).then(function(response) {
+                                            if (response.data.status == 1) {
+                                                localStorage.setItem("refrstate", 3);
+                                            } else {
+                                                return false;
+                                            }
+                                        })
+                                    }
+                                }
+                            } else {
+                                var param = { user_id: $rootScope.user_id, ref_status: o };
+                                var data = $rootScope.formatInputString(param);
+                                RefState.post(data).then(function(response) {
+                                    if (response.data.status == 1) {
+                                        localStorage.setItem("refrstate", 3);
+                                    } else {
+                                        return false;
+                                    }
+                                })
+                            }
+                        }
+                    }
+                    $rootScope.profile_complete_show_progress = '0';
+
+                }
+
+            }
+            $rootScope.check = '1';
+            $rootScope.user_details = JSON.parse(localStorage.getItem('userInfo'));
+            $rootScope.userId = $rootScope.user_details.userInfo.result[0].user_id;
+            $rootScope.wallet = $rootScope.user_details.userInfo.result.wallet;
+            $rootScope.total_campaign = $rootScope.user_details.userInfo.result.total_campaign;
+            $rootScope.username = $rootScope.user_details.userInfo.result[0].username;
+            $rootScope.other_user_details = JSON.parse(localStorage.getItem('userInfo'));
+            if ($rootScope.other_user_details.userInfo.result.profile_videos.length === 0) {
+                $rootScope.unCompleteCampaign = '1';
+            } else if (localStorage.getItem('endcampaign') && localStorage.getItem('campaignCompleteOrNot')) {
+
+                $rootScope.unCompleteCampaign = '1';
+            } else {
+                $rootScope.unCompleteCampaign = '0';
+            }
+
+            $rootScope.my_details_other_profile = $localstorage.getObject('userInfo');
+            $rootScope.my_details = '';
+            $rootScope.my_details = JSON.parse(localStorage.getItem('userInfo'));
+            $rootScope.contributions = [];
+            for (var i = 0; i < $rootScope.other_user_details.userInfo.result.contributor.length; i++) {
+
+
+                $rootScope.contributions.push($rootScope.other_user_details.userInfo.result.contributor[i]);
+            }
+
+            if ($rootScope.user.userInfo.result[0].user_id == null || $rootScope.user.userInfo.result[0].user_id == '') {
+
+                $rootScope.profileImg_blur = angular.element(document.querySelector('#profileMainImage'));
+                $rootScope.profileImg_blur.addClass('blur_image_and_campaign');
+            }
+
+        } else {
+            $rootScope.user_id = '';
+            $rootScope.userId = '';
+        }
+    };
+});
+
+futronics.service('AllUser_MyContribution', function($rootScope, $localstorage) {
+    this.storage = function() {
+        $rootScope.allUser = [];
+        $rootScope.all_user_details = JSON.parse(localStorage.getItem('allUserDetails'));
+        for (var i = 0; i < $rootScope.all_user_details.length; i++) {
+            if ($rootScope.all_user_details[i].campaign.length > 0 && $rootScope.all_user_details[i].profile_videos.length > 0) {
+                if ($rootScope.all_user_details[i].campaign[0].campaign_status === '1') {
+                    $rootScope.allUser.push($rootScope.all_user_details[i]);
+                }
+            }
+        }
+    };
+});
+futronics.service('endcampaign', function($http, $q, $localstorage, URL, $rootScope) {
+    this.userEndCampaign = function(data) {
+
+        var endCampaignUrl;
+        if ($rootScope.isMaintain == 'false') {
+            endCampaignUrl = "/endtheCampain";
+        } else {
+            endCampaignUrl = "/endtheCampainMaintence";
+        }
+        var defered = $q.defer();
+
+        return $http({
+            method: "POST",
+            url: URL.BASE + endCampaignUrl,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            var user_info = JSON.parse(localStorage.getItem("userInfo"));
+            user_info.userInfo.result.campaign[0].campaign_status = "0";
+            user_info.userInfo.result.wallet = response.data.result.wallet;
+            var update_userInfo = JSON.stringify(user_info);
+            localStorage.setItem("userInfo", update_userInfo);
+            var all_user_details = JSON.parse(localStorage.getItem("allUserDetails"));
+            for (var i = 0; i < all_user_details.length; i++) {
+                if (all_user_details[i].campaign.length > 0) {
+                    if (all_user_details[i].campaign[0].user_id == user_info.userInfo.result[0].user_id) {
+                        all_user_details[i].campaign[0].campaign_status = "0";
+                        var updated_allUserDetails = JSON.stringify(all_user_details);
+                        localStorage.setItem("allUserDetails", updated_allUserDetails);
+                    }
+                }
+            }
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            defered.reject(error);
+        });
+
+    };
+});
+
+futronics.service('SetHideOrShowActive', function($rootScope, $q, $localstorage, URL, Loader, $http) {
+    this.hide_show_post = function(data) {
+        var url;
+        if ($rootScope.isMaintain == 'false') {
+            url = "/upd_hideShowcamp_stat";
+        } else {
+            url = "/upd_hideShowcamp_stat_maintainence";
+        }
+        var defered = $q.defer();
+        return $http({
+            method: "POST",
+            url: URL.BASE + url,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            console.log(response + "upd_hideShowcamp_stat");
+            Loader.hideLoading();
+            defered.resolve(response);
+            return defered.promise;
+        }, function(error) {
+            Loader.hideLoading();
+            console.log(error + "error");
+            defered.reject(error);
+        });
+    };
+
+    this.hide_show_get = function(data) {
+        var defered = $q.defer();
+        var _url;
+        if ($rootScope.isMaintain == 'false') {
+            _url = "/get_hideShowcamp_stat";
+        } else {
+            _url = "/get_hideShowcamp_stat_maintainence";
+        }
+        return $http({
+            method: "POST",
+            url: URL.BASE + _url,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(response) {
+            console.log(response + "get_hideShowcamp_stat");
             Loader.hideLoading();
             defered.resolve(response);
             return defered.promise;

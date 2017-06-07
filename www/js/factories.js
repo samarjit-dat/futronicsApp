@@ -10,9 +10,7 @@ futronics.factory('$localstorage', ['$window', function($window) {
             $window.localStorage[key] = JSON.stringify(value);
         },
         getObject: function(key) {
-            if ($window.localStorage[key] != undefined)
-                return JSON.parse($window.localStorage[key] || false);
-
+            if ($window.localStorage[key] != undefined) return JSON.parse($window.localStorage[key] || false);
             return false;
         },
         remove: function(key) {
@@ -65,33 +63,28 @@ futronics.factory("stateFactory", ['$localstorage', 'checkingCurrentState', '$ro
                 return false;
             }
         });
-
     }
     thisObj.getCurrentState = function(user_id) {
-            var param = { user_id: user_id };
-            var data = $rootScope.formatInputString(param);
-            checkingCurrentState.get(data).then(function(response) {
-                console.log('stateget');
-                console.log(response);
-                if (response.data.status == 1) {
-                    name = response.data.result[0].curr_stat;
-                    $localstorage.set("currentSate", name);
-                    if ($localstorage.get("currentSate"))
-                        return $localstorage.get("currentSate");
-                } else if (response.data.status == 2) {
-                    name = response.data.result[0].curr_stat;
-                    $localstorage.set("currentSate", name);
-                    if ($localstorage.get("currentSate"))
-                        return $localstorage.get("currentSate");
-                } else {
-                    toastr.error('Sorry,Something went wrong.Try again...');
-                    return false;
-                }
-            });
-        }
-        // }
+        var param = { user_id: user_id };
+        var data = $rootScope.formatInputString(param);
+        checkingCurrentState.get(data).then(function(response) {
+            if (response.data.status == 1) {
+                name = response.data.result[0].curr_stat;
+                $localstorage.set("currentSate", name);
+                if ($localstorage.get("currentSate"))
+                    return $localstorage.get("currentSate");
+            } else if (response.data.status == 2) {
+                name = response.data.result[0].curr_stat;
+                $localstorage.set("currentSate", name);
+                if ($localstorage.get("currentSate"))
+                    return $localstorage.get("currentSate");
+            } else {
+                toastr.error('Sorry,Something went wrong.Try again...');
+                return false;
+            }
+        });
+    }
     return thisObj;
-
 }]);
 futronics.factory('TimeAndDateFactory', function($q) {
     return {
@@ -104,7 +97,6 @@ futronics.factory('TimeAndDateFactory', function($q) {
         },
         getTodayDate: function() {
             return this.today.getFullYear() + '-' + (this.today.getMonth() + 1) + '-' + this.today.getDate();
-            //return this.today.getDate() + '/' + (this.today.getMonth()+1) + '/' + this.today.getFullYear();
         }
     };
 
@@ -114,12 +106,10 @@ futronics.filter('mutedUser', function($localstorage) {
     return function(input) {
         var muteUserIdList = $localstorage.getObject('muteChatUser');
         var newArray = [];
-        // muteUserIdList = 26;
         input.forEach(function(v) {
             if (muteUserIdList && muteUserIdList.indexOf(parseInt(v.id)) === -1) {
                 newArray.push(v);
             }
-            // newArray.push(v);
             if (!muteUserIdList) {
                 newArray.push(v);
             }
@@ -127,3 +117,125 @@ futronics.filter('mutedUser', function($localstorage) {
         return newArray;
     };
 })
+
+futronics.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork) {
+    return {
+        isOnline: function() {
+            if (ionic.Platform.isWebView()) {
+                return $cordovaNetwork.isOnline();
+            } else {
+                return navigator.onLine;
+            }
+        },
+        isOffline: function() {
+            if (ionic.Platform.isWebView()) {
+                return !$cordovaNetwork.isOnline();
+            } else {
+                return !navigator.onLine;
+            }
+        }
+    }
+});
+
+futronics.factory("AccountService", function($http, $q, $localstorage, URL, Loader) {
+    var userInfo;
+
+    function login(data) {
+        var deferred = $q.defer();
+        $http({
+            method: "POST",
+            url: URL.BASE + "/userLogin",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(result) {
+            userInfo = {
+                accessToken: result.data.access_token,
+                userInfo: result.data
+            };
+            if (result.data.status !== 0) {
+                $localstorage.setObject("userInfo", userInfo);
+                deferred.resolve(userInfo);
+            }
+            if (result.data.status === 0) {
+
+                deferred.resolve(userInfo);
+            }
+
+        }, function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    }
+
+    function signup(data) {
+        var deferred = $q.defer();
+        $http({
+            method: "POST",
+            url: URL.BASE + "/campaignSignup",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(result) {
+            userInfo = {
+                accessToken: result.data.access_token,
+                userInfo: result.data
+            };
+            $localstorage.setObject("userInfo", userInfo);
+            deferred.resolve(userInfo);
+        }, function(error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+
+    function updateCardDetailsLogin(data) {
+        var deferred = $q.defer();
+        $http({
+            method: "POST",
+            url: URL.BASE + "/updateCardDetailsLogin",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        }).then(function(result) {
+            deferred.resolve(result);
+        }, function(error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+    function logout() {
+        var deferred = $q.defer();
+        $http({
+            method: "POST",
+            url: "/api/logout",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(function(result) {
+            userInfo = null;
+            $localstorage.remove('userInfo');
+            deferred.resolve(result);
+        }, function(error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+    function getUserInfo() {
+        return userInfo;
+    }
+
+    function init() {
+        if ($localstorage.getObject("userInfo")) {
+            userInfo = $localstorage.getObject("userInfo");
+        }
+    }
+    init();
+
+    return {
+        login: login,
+        signup: signup,
+        logout: logout,
+        getUserInfo: getUserInfo,
+        updateCardDetailsLogin: updateCardDetailsLogin
+    };
+});
